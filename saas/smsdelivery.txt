@@ -1,0 +1,2377 @@
+Array
+(
+    [phoneNumber] => +254733403335
+    [retryCount] => 0
+    [id] => ATXid_c7d63fb2ed51749e8a0ae369f288a8f6
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_f7783ca3ac460d3e5f8497281c1e35b5
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_3accf3a5f2a57fd844a723536551eeb0
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_f89ff12d81ee75a790b926aadd9be073
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_733010c7c5e3822fa8aae11b499de82c
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_591298dca053561de4cfde49e9d05001
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_7e8848e635c3f1902ac3243a068c3f91
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254776963770
+    [retryCount] => 0
+    [id] => ATXid_d50e58a9710f58a6d2907038441e8dda
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_fcdc64314f900bcf17fa7ffaad3c241d
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254776963770
+    [retryCount] => 0
+    [id] => ATXid_5a5bd498136883cb25fa23ae5d95441d
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_0bf349bc2d474500d9c3b9eafb18ad98
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254776963770
+    [retryCount] => 0
+    [id] => ATXid_767fe57638510ffe1b178eccfe564a8b
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_30eae54311fb2a020d18c9b908aa3f04
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_52574da123be4f96955969db3d79bf9d
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726567357
+    [retryCount] => 0
+    [id] => ATXid_504aca2d174bce47afe729d3a007c567
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726567357
+    [retryCount] => 0
+    [id] => ATXid_417b5a9b752b20ce5e616cd251d1f689
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254722352327
+    [retryCount] => 0
+    [id] => ATXid_342eb516182fc0f4e80433381307ed9e
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_939284bc73b7b26a8d243b7c3548cb5d
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254788093040
+    [retryCount] => 0
+    [id] => ATXid_52aec5b172cbd04d7af7ded72ece37e1
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_7bf52b960d630afa2b3510b173580a3b
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726567357
+    [retryCount] => 0
+    [id] => ATXid_8f0456886dd9340dc37740bc470bab73
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726567357
+    [retryCount] => 0
+    [id] => ATXid_ed5e2115fe31e703c666bc138422c473
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726567357
+    [retryCount] => 0
+    [id] => ATXid_e31ecc2349dce25ac732d106c9539898
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254725513518
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_2609171e4a75a78e8d7ed49f82449fa9
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_0bb89186c295dc2d8e80e8c86aab7ced
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_98d2cb16bc251dae04fa65e8f07f8d0b
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254724486286
+    [retryCount] => 0
+    [id] => ATXid_b85d1d317396107f81a8e50760db5314
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254725513518
+    [retryCount] => 0
+    [id] => ATXid_fc32daf725c7a4a56b2c858beeb002dd
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254722352327
+    [retryCount] => 0
+    [id] => ATXid_9c7453795beba9a7ace5aad62303ccdd
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_b20a1adc98e65fa2a67907ec511a73d5
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254788093040
+    [retryCount] => 0
+    [id] => ATXid_eada3864392ccfae5aa5903b0a2e9c2e
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254771511349
+    [retryCount] => 0
+    [id] => ATXid_2348ff8f9a702cb9bb0b76e4e453f072
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_dac0af7fc193b4d025e287aefb40756b
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_7f57f81567b0735bdbfd628c940bcb85
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_d7cbc016b64b4b00c4a77e4155ae35ec
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_bcd75186563011935e77487ee1d8278a
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254722352327
+    [retryCount] => 0
+    [id] => ATXid_ecd3913ed340676a23a90651bf7fb9d9
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254725513518
+    [retryCount] => 0
+    [id] => ATXid_1bd7813a0eae6b47e3494986dba2771e
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254771479871
+    [retryCount] => 0
+    [id] => ATXid_04d22cd72a6801df17291335add8522e
+    [status] => Failed
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_4fac1f7ce50506817399c85dbc9fefff
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_8d1cf57dd3f2ff9f7222e0904559462e
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_bee4ceeb91018cffa4dc6d2746bdee31
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_7497b6644adb848d776f91200c4d72a7
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254719436136
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_7e522fabb836b442068bd0e9f82bf752
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_201b6da3d836dc80241ccb54df5b9960
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254719436136
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_2ca0026be4aefbcaac26e15b982f2a2b
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254753407565
+    [retryCount] => 0
+    [id] => ATXid_3f3e6f43952f3067da14a9bae3a202a3
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_a9dbcfbe546ea9445145044f71788c41
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_afdd6c6c7305b6f6cd0448e7c37f4d76
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_645bb7c30e000f4844daf3c52e9aee8a
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_90676b1e472bcd363f8130001391c6c9
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254721557254
+    [retryCount] => 0
+    [id] => ATXid_54c160b9b4bd0e45b5f9c1da07012fef
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254781958499
+    [retryCount] => 0
+    [id] => ATXid_4cbcfcd610bdc7aab40b71ace167d1b7
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_0bbdbbe9f944530dd80e7d9ba48d6824
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_db19c49af94d1d9e9f23ebb9417ade26
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254737098450
+    [retryCount] => 0
+    [id] => ATXid_824502c512bb58598e4e9697f599d64d
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_5a687581d2f463ef91754c8afd3b26d5
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_857bd3ee15e11519bd48d270daeacd81
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254772551986
+    [retryCount] => 0
+    [id] => ATXid_f3a57d149a14ec2079a7655404f5406d
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_d7d10b8ca56a1b9ccf83505980b72086
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254772551986
+    [retryCount] => 0
+    [id] => ATXid_782d70a5b7dda1b364426557b5dfe357
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_51aac1a00e8e0754bc5d4e565d51bd2a
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733503335
+    [retryCount] => 0
+    [id] => ATXid_c126858bd0398b717db8dc6dc8dda1bc
+    [status] => Expired
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254721557254
+    [retryCount] => 0
+    [id] => ATXid_186696520b7e516ebad58d1a8e99b0e7
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733403335
+    [retryCount] => 0
+    [id] => ATXid_80bcd525911197f79da4aa60f594aae4
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_78f0e3247dd39a6cecdd31ce1b8a564f
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254769550550
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_e73c44567c2ee1ca316ae8342c1db8a4
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_7f38182c9cc4b1bcf8147c779b353d45
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_3f3e439b555cb7b8e3bfe681dea81f13
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254772551986
+    [retryCount] => 0
+    [id] => ATXid_0d9fdcfc4a3b2c68be3349d1b7d2aea9
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254769550550
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_a54f5a0deab822e2f2c6c03d84be13a8
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726647501
+    [retryCount] => 0
+    [id] => ATXid_0e1c0c108f03292d27c6b5228a352b7e
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_cb0b48b81d52d030120a1a9a8d399683
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_bef263536dcf30432714a34826e79693
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254753407565
+    [retryCount] => 0
+    [id] => ATXid_c2e196a592614fe5420b22d18794e8f2
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254785314458
+    [retryCount] => 0
+    [id] => ATXid_58aef801db50ac6c08256eb3995133ad
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_7660b145e5c5353485f5d559a1899052
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726647501
+    [retryCount] => 0
+    [id] => ATXid_bcfd14676141b1a679e385c78ada60d8
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254780085813
+    [retryCount] => 0
+    [id] => ATXid_5ad2150cc0c17492b292609b21c88194
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_406ced8a2681631c96cb0521ee59e047
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254759940126
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_8820b84d7a15ba8334d1155efa71b144
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254769550550
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_4f2948c71c80dac7d369861915a71b69
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_5e947502d49b15de91e571ac4fef4b95
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254731773565
+    [retryCount] => 0
+    [id] => ATXid_f3d90e5d19db300426b1c48be5c91702
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254721142532
+    [retryCount] => 0
+    [id] => ATXid_91531f59559a1f69466f12892456ce9e
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_830e4ea0255bac7360d89275d9055738
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254780085813
+    [retryCount] => 0
+    [id] => ATXid_183eb85ef8976c348d76adf94c4fa0ce
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_5f028ef71398a6ad8d4f8e75cfaf01f1
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254769550550
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_9444290d0d4079f3182bf51ed7c3df5e
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254772551986
+    [retryCount] => 0
+    [id] => ATXid_8fef8d1e5f95cb43200a4051632208eb
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_d2a24a4bd305265c8d5c197dc73536ca
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_a2513607b67c3d8f00cff8232d347dcf
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_7018f1ca16c6247be46c8d9a1a3ab4da
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_3ecd86eaa0d9d10da554947aa754ee4d
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254729364763
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_0c9f353b30d3e1fdfc19af9ad302a03e
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254759940126
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_03d719ecef74a797b01e32ca1966ebba
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_28a2265a07179e4ecb988ec8df08ade4
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_832a3d0bf78a2d0d45f0d499fb6c8d08
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_dbf72000a3f1d74b1f9382acb426fd05
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_19e1f70a1414951e5f15bee2aac13df5
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [retryCount] => 0
+    [id] => ATXid_a67db3df52946c59fa1eb1956977a1e1
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_c387da8f7ff282eb27021abf2ef6a041
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_d463c63cdf50637c9c37907568ce8f1a
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254771511349
+    [retryCount] => 0
+    [id] => ATXid_bd37d2c0963c0820de68f3e981f83fb2
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_345a76d169182078512a5c0f643aeedd
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254771511349
+    [retryCount] => 0
+    [id] => ATXid_e0492448c9997f08f46b9abfebf79d19
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_f4cb63543f11c09d878f6ca5fc4519d9
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_59b637f846e9815cded015c5ef395a21
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254771511349
+    [retryCount] => 0
+    [id] => ATXid_603511e5e13dc3028b8ee79d4bf610eb
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_8921de175814bb4e828bd0b6e2a0239c
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713603507
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_0a9c5faa7d1ce5727531ca244c14dc84
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254729364763
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_00400be5d0cd54e44952074f61f1e7aa
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_0c66429f06c824484c02936a80c49c0c
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_4d0e064ea35f3248aad766c96ae663fe
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_2494dd37f565cc0fd7320b68a4116466
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_0b86493fe637f5cd2b5b10d30a59ef66
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_2bc94eec948c8ad269610380ab9f93c0
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_4fe92fe56b1936d55fc8a35aebb0ddca
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254715834408
+    [retryCount] => 0
+    [id] => ATXid_58cd32703bd34363cd2c09106b0e20e2
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_f6858669072a4035e1335e0383cb7e52
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254715834408
+    [retryCount] => 0
+    [id] => ATXid_d3bd5ab7d3556d83990a897b6dc6bc97
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254718615507
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_46232a57628c931d284c52ed8f0a9bf6
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_1e0f3d4364334d8fdf1bc888f4f3a5d0
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_83bb134b5bcadebfc64aa14884d00176
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_a73260c4d05317c09562d402b8187b75
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254716403600
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_5c231bba8dd3c1c3400100e60e0e8d01
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [retryCount] => 0
+    [id] => ATXid_e2e5c689dd99022106189b4655d443df
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_b77cb04d4d3ceacbe7a4672ea4c1c056
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733469955
+    [retryCount] => 0
+    [id] => ATXid_7120ce02eb973fa84f47058ead71ff7e
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254726497615
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_05b9ff4c6387c12db2a5b58e54de0ad0
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254702122116
+    [retryCount] => 0
+    [id] => ATXid_12aafe01bb994e1380911acc8396644b
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713603507
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_0e2592e8df4316319bc1723e6a2210c8
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_c42983173b947396093c01e73e4c4efc
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733403335
+    [retryCount] => 0
+    [id] => ATXid_61dcdcb0b149a66b3aca831ad8c87665
+    [status] => Rejected
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_50c377805f848ffe70c7feb53281a514
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733403335
+    [retryCount] => 0
+    [id] => ATXid_c85dacbc4f1f0e8a4c3707c17e6889af
+    [status] => Rejected
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_afd1132c0171ce34de43008e525a12d1
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733403335
+    [retryCount] => 0
+    [id] => ATXid_e58e07fde7c25df522f021302537ebec
+    [status] => Rejected
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254708661266
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_aaaf7147b184cb23448749f3e55cd2ff
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_930c28f61447e1ce85957d5faa07c246
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_5b51582067f4ecf8bb6cecc9bdf81ff6
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254718615507
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_90d684f31d89b8dc5bda6732aaf0ab78
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254702122116
+    [retryCount] => 0
+    [id] => ATXid_142c9f9d75f551a88c5369333bf6ecc2
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254708661266
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_328e735e12405822a550d9da7b25c35b
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254711214118
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_d4500245e21d8206670edcf818076ed7
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_530cb81200021db78fd867c890147df5
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733403335
+    [retryCount] => 0
+    [id] => ATXid_72a064fd562c77bdb382f2e898ba1959
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_97f959e6cf61910d854834e335480b16
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [retryCount] => 0
+    [id] => ATXid_05dde215076342ad8294a6cbaf560e62
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720990115
+    [retryCount] => 0
+    [id] => ATXid_ef0910c7becd7f8e6a40753a32b77be8
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733403335
+    [retryCount] => 0
+    [id] => ATXid_548d00ed82d754a4d05db0b0e5de141d
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254726647501
+    [retryCount] => 0
+    [id] => ATXid_b4e2a967cf0e5843f47896826ac38109
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_710bedbf6adc1a24b799e3de0f6b5ceb
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254745442994
+    [retryCount] => 0
+    [id] => ATXid_df3f2c6af24abe917f6a08c2a315a254
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720990115
+    [retryCount] => 0
+    [id] => ATXid_02717e3c295cc5925567a25682ce5a17
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_6d577eed0d038a316ce0d48f54fb0633
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_ecc4d296711b28760e309e1635f3ad43
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254721906992
+    [retryCount] => 0
+    [id] => ATXid_5f05eea240b6264da41c5b993517bb09
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254725788400
+    [retryCount] => 0
+    [id] => ATXid_d5c655ef4dc3a32ac4f1d6cc2452bd26
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254745442994
+    [retryCount] => 0
+    [id] => ATXid_588584222ba7a5387eecfeea080bf651
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254724572695
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_14f452eff52ced0c7820c92bdfcaf4e8
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254790152722
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_ea0100464472502ece5b8c2526202a9d
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254721906992
+    [retryCount] => 0
+    [id] => ATXid_e7ca48e51d5f0512009650dbef4f44ed
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_0afc6e7468c426a4419b95fa300f1028
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254725788400
+    [retryCount] => 0
+    [id] => ATXid_6ebf22e51996227e2bc07e6ae1c086b3
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254724572695
+    [retryCount] => 0
+    [id] => ATXid_9206bcfa4c96ab4c3b45bcc692291164
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_d3ed9c42e28ae1fb4e0283fb4dd5fe07
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_7e7c5924ac35744b0d44e56e326e2d12
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_7d8cf9a61de73a8da69037198f91dc98
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254737825105
+    [retryCount] => 0
+    [id] => ATXid_3931876922c827808cb942e45fda0926
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_813681883fd0cfec14028b50b9cb013c
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_826cce72bb036e6d23157e644afb1e20
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_fa6f7dd7930b21f947d5e888e03f957e
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254711770502
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_36ae7d5a83207da68f253e5ce2cc2461
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254725788400
+    [retryCount] => 0
+    [id] => ATXid_a5398b230c3c111874cb086738bb3814
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254725788400
+    [retryCount] => 0
+    [id] => ATXid_758412ad5e9303be43ada1a0d44d566b
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726564660
+    [retryCount] => 0
+    [id] => ATXid_b41c0af46e55e94b9988c4de8e17ccae
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254711649866
+    [retryCount] => 0
+    [id] => ATXid_a11aff2e120d607326583ffd66832b06
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254771511349
+    [retryCount] => 0
+    [id] => ATXid_6928e5eac3624d9fcb9737ce8e63242b
+    [status] => Success
+    [networkCode] => 63907
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_ee8f4cfd9ecb55b193c1a698f53e5e2f
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254711649866
+    [retryCount] => 0
+    [id] => ATXid_c4ee7a4199c7fffc24f75b15d4caeedc
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726564660
+    [retryCount] => 0
+    [id] => ATXid_46d5b05537163d8e85328061e4f2804e
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726564660
+    [retryCount] => 0
+    [id] => ATXid_e69cf1b9d8cd687df9e4ecf01634959c
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [retryCount] => 0
+    [id] => ATXid_f75a778372b0113966b750ce813d6730
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733730571
+    [retryCount] => 0
+    [id] => ATXid_455f2bac259705045176afa843781ef5
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_1916e122a0808d0c945a0a2b6169cb2a
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733730571
+    [retryCount] => 0
+    [id] => ATXid_01b245b05cca39f6a22b36377d38db0b
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254796911628
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_fb2ccb6ca78d5c6c27ecdaaeaab67220
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254796911628
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_96e1e7057c10ab8d97d98cb8de1947e5
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254714544034
+    [retryCount] => 0
+    [id] => ATXid_850d4bb9d49dae322f37c503ecf512f5
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_c2f707fe06ee61a050ab392d992ee70e
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726567357
+    [retryCount] => 0
+    [id] => ATXid_0b675af325668b401414065b197e3de3
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_9a3c9a4eb7f3cec74aa2bd4779730d09
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_7a837b3d450dc9e5b3baa2261e3bf5b3
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720792755
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_89bdc811c840e4ffbfa0a7919c62b910
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254714544034
+    [retryCount] => 0
+    [id] => ATXid_2d71f45b1b4c5a8e3677c0185118230d
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [retryCount] => 0
+    [id] => ATXid_5bc88db79e5a16ed2ccd87376115d52a
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254790152722
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_25813049747e886db1cc32252e89f8b3
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254716403600
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_a78de113fb21acb561f9ab0aa6e18d91
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_c5206f33d4ce65207d738a42d938c954
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254700477031
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_2b24d77635368b5b5208aaaeefd4608d
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726567357
+    [retryCount] => 0
+    [id] => ATXid_721864ee77cdd14ab4a6e8009889e576
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720792755
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_13a59a66f26da24eb913cd44700457bf
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_023f094c76ee0e16b09c623e7b0dd8c7
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254797272321
+    [retryCount] => 0
+    [id] => ATXid_ea978ed585c318fe80c59e1ac9841971
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_6698b6c7ce69a4eeb6a59d2ba32c6e85
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254716403600
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_b8292b9c387ccbe68bc82d629baf25e6
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254700477031
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_0f20fad84eb616ae0e02f39e8a1fe9dc
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_3af2b3da1f0af3dc85220c38af427d65
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_6db748a2886f2a4e240a8c79e1b381a8
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254797272321
+    [retryCount] => 0
+    [id] => ATXid_4c53bb08afe443dc001829b64e548b08
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254716403600
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_7d9eb541852db2c517752f09fed45187
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733403335
+    [retryCount] => 0
+    [id] => ATXid_b06fa681a39d249c0a658218d5fc456e
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254726647501
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_e9b88d8431152954fd6081b7fdec0bfd
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_013464cb3566a9867d965c2cb023d3a5
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_86b17d00405aa12abc098be99e98a1b6
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_1f96f088ad5cbee646a8e04bbea4acdc
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_f380f84d83dfb940f06c169091b6ca41
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_5011622460a9b53c9cd05661a882b735
+    [status] => Failed
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254733825680
+    [retryCount] => 0
+    [id] => ATXid_5f5d39a37ca38e5c3185f07c20b5516b
+    [status] => Failed
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_947b92cad00f550590173c74dd67a589
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_325f66075f63a7fd5e836f166f73fb9b
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254711214118
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_0cc73ac876c3c119d3474c1019328fdf
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254711214118
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_241668286ea2e4ea7ea9ea042f2e6066
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254711214118
+    [failureReason] => UserInBlacklist
+    [retryCount] => 0
+    [id] => ATXid_5fd9a13dd5b653221108c92760684705
+    [status] => Failed
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733825680
+    [retryCount] => 0
+    [id] => ATXid_457a8f5c9bc922a243e0cfa8fdb4e8d5
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254722726800
+    [retryCount] => 0
+    [id] => ATXid_ee5704ffa8b2f900aba1d0b3d36ed513
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_36d8770e83daaba7ab12ff580a34c598
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_ee4ed657d1b3b8cbcbfd678dc8475e6f
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_8a5589bfcf3b99bc7b0e9c21215dbd97
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254733825680
+    [retryCount] => 0
+    [id] => ATXid_805bab4ff29e74c5046c473c3d41acae
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254732332000
+    [retryCount] => 0
+    [id] => ATXid_8cd315a457765923e566a0b374fadcb5
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_78c29794506126056d9211600c93b275
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_c19c8bfac61e9da3d83dc56dad3f5583
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_d7db4e97f3bdf2dcd136774ac96d938a
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [retryCount] => 0
+    [id] => ATXid_7ab891ecf6ab47520f1f0cc562a1948c
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_33700e9dba06c33185d1789c9f269aa3
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254716403600
+    [retryCount] => 0
+    [id] => ATXid_1e30cfbc08478ffd1d5c40c3d8380db6
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254711214118
+    [retryCount] => 0
+    [id] => ATXid_e8b44bfd89ceb79d26cecd6368eda468
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726647501
+    [retryCount] => 0
+    [id] => ATXid_38737ca3371a29d63148ad0115e3923b
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254782652310
+    [retryCount] => 0
+    [id] => ATXid_353b5a3717355e51881aa925eea794e8
+    [status] => Success
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [retryCount] => 0
+    [id] => ATXid_7b1e898389433a6ea39f15f358b03760
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254727327745
+    [retryCount] => 0
+    [id] => ATXid_2e2060c8a117ac86a45556306acfd548
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254712341929
+    [retryCount] => 0
+    [id] => ATXid_612583f00055f2a29144e58b47d95181
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_a25e2a9f52d739411e0c119a081fb8ed
+    [status] => Success
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_544767f9da8bc154ae1ff6d469fa42bd
+    [status] => Success
+    [deliveryTime] => 2026-07-28T05:20:07Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254733754115
+    [retryCount] => 0
+    [id] => ATXid_e958e016e8ec54cbea48e5ba2363a3a9
+    [status] => Success
+    [deliveryTime] => 2026-07-28T09:56:14Z
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_fcecfd1fe4cbc063bf1c59a8b0b337be
+    [status] => Success
+    [deliveryTime] => 2026-07-28T11:43:10Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_c5277f866e83b4330feba50ae81b4d52
+    [status] => Success
+    [deliveryTime] => 2026-07-29T08:26:49Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_2a9416ec64343dae48e229019180a8e0
+    [status] => Success
+    [deliveryTime] => 2026-07-29T10:24:31Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_d9291b69d738ce20921f01c6f7d7163e
+    [status] => Success
+    [deliveryTime] => 2026-07-29T11:51:04Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_beae57bf5f0b4fdccf76c819dc342024
+    [status] => Success
+    [deliveryTime] => 2026-07-29T12:35:52Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_c46cd9ab03986fd69f480fabdbd20ffb
+    [status] => Success
+    [deliveryTime] => 2026-07-30T20:10:36Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254727327745
+    [retryCount] => 0
+    [id] => ATXid_591cc413e65a25e30a08046daa84ac28
+    [status] => Success
+    [deliveryTime] => 2026-07-31T06:03:00Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_d704d0428a0f7cfb6e70dd5777f8bd9b
+    [status] => Success
+    [deliveryTime] => 2026-07-31T10:51:36Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_a2d2ee367d5377a8ac6cc64d5a775c32
+    [status] => Success
+    [deliveryTime] => 2026-07-31T11:21:24Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_0c1e0b4aaaf3b6dfa51957d101e75cf2
+    [status] => Success
+    [deliveryTime] => 2026-07-31T12:34:48Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_bc2b66cf6b0bb67660973b70d47c9bb3
+    [status] => Success
+    [deliveryTime] => 2026-07-31T12:47:31Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_e92f79b6411e17109490f222fd864bb1
+    [status] => Success
+    [deliveryTime] => 2026-07-31T20:16:48Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_37cf7ac34e0f665c10416eb6bcff6354
+    [status] => Success
+    [deliveryTime] => 2026-07-31T20:54:28Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_808905f3fe6794e6a9e5629f434d6b73
+    [status] => Success
+    [deliveryTime] => 2026-07-31T21:04:21Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_c3bee07735ac01caaf52998a56c9a19d
+    [status] => Success
+    [deliveryTime] => 2026-07-31T21:19:57Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254712341929
+    [retryCount] => 0
+    [id] => ATXid_19fd6f5c56c5d21bb4728293bc3d6ad9
+    [status] => Success
+    [deliveryTime] => 2026-08-01T06:00:27Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_756199cbf651e54e2b3130b2e665b8ac
+    [status] => Success
+    [deliveryTime] => 2026-08-01T14:21:01Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_00a315dff082638c5ad63e7409f05ba8
+    [status] => Success
+    [deliveryTime] => 2026-08-02T06:00:23Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726647501
+    [retryCount] => 0
+    [id] => ATXid_455ca7b651ae7d32b74d9c52591721a3
+    [status] => Success
+    [deliveryTime] => 2026-08-02T16:41:30Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254101993854
+    [retryCount] => 0
+    [id] => ATXid_255b7d9c7bd3e4cdab18f4d66f50c094
+    [status] => Success
+    [deliveryTime] => 2026-08-02T18:31:42Z
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_060c9bfdf4084383bf61296d48e5b800
+    [status] => Success
+    [deliveryTime] => 2026-08-03T08:31:53Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_51be399ba1b642c6d23f60a03e654c79
+    [status] => Success
+    [deliveryTime] => 2026-08-03T14:31:52Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254782163703
+    [retryCount] => 0
+    [id] => ATXid_6fd9b7162d41049b03172a8bdd56a82b
+    [status] => Success
+    [deliveryTime] => 2026-08-06T05:21:07Z
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_32c69b8317ab1f54427ae111df636756
+    [status] => Success
+    [deliveryTime] => 2026-08-06T05:21:09Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254753547763
+    [retryCount] => 0
+    [id] => ATXid_a55825912026b6c252d085aef7a81184
+    [status] => Success
+    [deliveryTime] => 2026-08-06T05:43:48Z
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_2be84a48d3fa4471701ce939bd0f94a1
+    [status] => Success
+    [deliveryTime] => 2026-08-06T05:43:49Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254721383533
+    [retryCount] => 0
+    [id] => ATXid_4d10ec3f4033aee3f2572ee6bd70f1ad
+    [status] => Success
+    [deliveryTime] => 2026-08-07T05:20:08Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_66c9c9648d645fde9e84c86abb79f255
+    [status] => Success
+    [deliveryTime] => 2026-08-08T07:47:58Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_ea8fd19ed239efee04fd9ddd1805b215
+    [status] => Success
+    [deliveryTime] => 2026-08-09T13:08:05Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254721477552
+    [retryCount] => 0
+    [id] => ATXid_0a096c2a2c328632679cd1b3bb49421d
+    [status] => Success
+    [deliveryTime] => 2026-08-10T05:20:13Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_90eeca2ff89eaf511a48821f42d68698
+    [status] => Success
+    [deliveryTime] => 2026-08-10T08:07:42Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254713974667
+    [retryCount] => 0
+    [id] => ATXid_c227b392e07b2b9b0a84bb28a7c9a969
+    [status] => Success
+    [deliveryTime] => 2026-08-11T13:33:48Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254721383533
+    [retryCount] => 0
+    [id] => ATXid_dcdc56289f6c414d56b56baef672e5bc
+    [status] => Success
+    [deliveryTime] => 2026-08-12T06:02:32Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_5ae4a752a76cfad866fa4e65f50888fc
+    [status] => Success
+    [deliveryTime] => 2026-08-13T10:11:25Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_59fbebe62779ae406a1c61492713a20b
+    [status] => Success
+    [deliveryTime] => 2026-08-14T05:20:28Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254721477552
+    [retryCount] => 0
+    [id] => ATXid_8873dcb8b875084028bd808998b3a514
+    [status] => Success
+    [deliveryTime] => 2026-08-15T06:00:31Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254731595551
+    [retryCount] => 0
+    [id] => ATXid_0eef9105d7a7e4b11f2cc21ae5d02c0f
+    [status] => Success
+    [deliveryTime] => 2026-08-15T13:04:16Z
+    [networkCode] => 63903
+)
+Array
+(
+    [phoneNumber] => +254727078279
+    [failureReason] => AbsentSubscriber
+    [retryCount] => 0
+    [id] => ATXid_b93365aabf4e7af4c4a1c0251f433158
+    [status] => Failed
+    [deliveryTime] => 2026-08-16T08:19:07Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254720401869
+    [retryCount] => 0
+    [id] => ATXid_b4f604675a06d8fe74886627ed67cec1
+    [status] => Success
+    [deliveryTime] => 2026-08-16T08:19:10Z
+    [networkCode] => 63902
+)
+Array
+(
+    [phoneNumber] => +254726567357
+    [retryCount] => 0
+    [id] => ATXid_2cb6f1cb9d145178968856af40c6caee
+    [status] => Success
+    [deliveryTime] => 2026-08-16T15:10:18Z
+    [networkCode] => 63902
+)

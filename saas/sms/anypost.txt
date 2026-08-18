@@ -1,0 +1,1168 @@
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254781958499
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 15 airtime failed (Ref: UCEDQ95T5T). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Ibrahim Accx: 822490 100.00 UCF4N9IIWV Bal: 100.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254737098450
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 25 for +254737098450 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254733503335
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 40 for +254733503335 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254772551986
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 10 airtime failed (Ref: UCHEF9KP3P). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254772551986
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 10 airtime failed (Ref: UCHEF9KIO7). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254733403335
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 100 for +254733403335 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 150 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254772551986
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 100 for +254772551986 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254726647501
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 660 for +254726647501 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254726647501
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 660 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254785314458
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 5 airtime failed (Ref: UCOQHA9IQ8). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254753407565
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 50 airtime failed (Ref: UCOLNAAI1N). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 305 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254731773565
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 60 for +254731773565 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => STEPHEN Accx: MFALME 6000.00 UCS3FB2L4O Bal: 6841.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254772551986
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 10 airtime failed (Ref: UCUNMAUIZ9). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => PAUL Accx: ECURIO 3000.00 UCV4HBF4QP Bal: 10011.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => PesaPal Ltd Accx: MF2026 117720.00 UCVSI923KX Bal: 117720.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => TENDE B2C Accx: HV34 6500.00 UD1TC037U9 Bal: 6744.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254732332000
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 265 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => ATHMAN Accx: 2026 2000.00 UD2LMB45O9 Bal: 9169.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 1000 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254732332000
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 305 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254771511349
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 22 airtime failed (Ref: UD4RBBM7TR). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254771511349
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 20 airtime failed (Ref: UD4RBBM863). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254500046529
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 100 airtime failed. Expect a refund soon. Contact 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254771511349
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 5 airtime failed (Ref: UD6RBBR6PA). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => CONSERAY Accx: HV21 1700.00 UD6OLBV8O3 Bal: 12139.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Hellen Accx: 20 20.00 UD8RB06G7C Bal: 12696.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254732332000
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 265 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => JOSEPH Accx: HV21 1700.00 UD9QQ03D0O Bal: 14916.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 305 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254715834408
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 100 airtime failed (Ref: UDA300FZBY). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254715834408
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 100 airtime failed (Ref: UDA300FZIF). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 1010 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => MARGARET Accx: OPTIMAR 1500.00 UDAQL0CPQ0 Bal: 18091.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254720401869
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 50 airtime failed (Ref: UDA300GXL1). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254716403600
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 505 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254733469955
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 40 for +254733469955 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254720401869
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 20 for +254720401869 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254733403335
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 110 for +254733403335 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254733403335
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 50 for +254733403335 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733403335
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 160 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => hellen Accx: 20 20.00 UDCCH0MO0S Bal: 19408.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => MUNTHALI Accx: HV276 12500.00 UDE070H1AL Bal: 32469.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254733403335
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 110 for +254733403335 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254141080863
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 30 airtime failed. Expect a refund soon. Contact 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 500 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733403335
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254726647501
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 405 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => MICHAEL Accx: HV212 2500.00 UDQQR21BAV Bal: 2649.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254720401869
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 10 airtime failed (Ref: UDS302HMS9). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254790152722
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 300 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => ABDULATIF Accx: JOMAKI 2500.00 UE8BB3NXRN Bal: 2909.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 743 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Daniel Accx: 255637649019 20.00 UE9HC3L09G Bal: 823.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254737825105
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 20 airtime failed (Ref: UEAFB48V2J). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 435 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Elizabeth Accx: 525900 50.00 UEBGY3QT84 Bal: 390.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254771511349
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 10 airtime failed (Ref: UEIRB4PNKN). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 405 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => ROBERT Accx: DONGA 2500.00 UEQ6M5YXEO Bal: 2846.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254733730571
+    [mpesaapi] => hawlast
+    [message] => Your airtime of KES 1115 for +254733730571 will be topped up ASAP. Hawlast.com Support: 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733730571
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 1115 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => MERCELINE Accx: 54400825169 25.00 UF6Q56V8GG Bal: 225.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254726567357
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 60 airtime failed (Ref: UF70X6RFU8). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254720401869
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 100 airtime failed (Ref: UF73075IME). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 500 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254790152722
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 500 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254716403600
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 195 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254726567357
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 1085 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254692757185
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 10 airtime failed. Expect a refund soon. Contact 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254716403600
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => DAMIR Accx: MICLAD 3000.00 UFH378FA0J Bal: 4458.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733403335
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254716403600
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254726647501
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 505 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => AFTIN Accx: FREIGHT 6000.00 UFQM29DYZH Bal: 6390.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254173021726
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 20 airtime failed. Expect a refund soon. Contact 0720401869.
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 200 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254732332000
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 500 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713189764
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 200 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Paul Accx: HV41 14000.00 UG8BTAGAC3 Bal: 14210.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254732332000
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 10 airtime failed (Ref: UGB6NAX6CS). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 255 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => ESTHER Accx: VCEC 2000.00 UGCOUAZE2V Bal: 2755.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 501 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 1010 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254716403600
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254726647501
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 405 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254782652310
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 610 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => ANNASTACIA Accx: NRBCITY 1700.00 UGRHX0MS81 Bal: 2939.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 165 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 258 5.00 UGS3013XG0 Bal: 275.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733403335
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 260 5.00 UGT3017DRO Bal: 5.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 268 5.00 UGT3017TL0 Bal: 40.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 277 5.00 UGT3018355 Bal: 45.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 280 5.00 UGT3018BX0 Bal: 190.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => JAMES Accx: HV1918 1000.00 UGUA8179SR Bal: 1460.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 19190
+    [phone] => 0721442531
+    [message] => Hello James. Your domain  biotimecloud.co.ke is now registred. Do you have a hosting account? support@hawlast.com Tel: 0720401869
+    [Submit] => Send SMS
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 281 5.00 UGV301GAGM Bal: 1652.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 282 5.00 UGV301GKCT Bal: 1657.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 283 5.00 UGV301GSHH Bal: 1662.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 284 5.00 UGV301GR8X Bal: 1667.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => COSMAS Accx: HV305 6500.00 UGV4D1PO6I Bal: 8167.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: A123 5.00 UGV301J3QK Bal: 5.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: A1223 5.00 UGV301J6OV Bal: 10.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: A1323 5.00 UH1301J1FW Bal: 15.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 285 5.00 UH1301J45V Bal: 20.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => CHRIS Accx: HVAC 6000.00 UH1OW1OAU6 Bal: 6311.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254726647501
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 305 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254101993854
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 288 5.00 UH3301SOVR Bal: 1015.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => COOP TO PAYBILL Accx: HV50 3500.00 UH3SB3ED9I Bal: 4535.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254782163703
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 40 airtime failed (Ref: UH67N1YV8W). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869,+254753547763
+    [mpesaapi] => hawlast
+    [message] => Sorry! Ksh 70 airtime failed (Ref: UH6NP20WX2). Refund to MPESA soon. Try again later. Thanks, Hawlast Ventures 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 200 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733403335
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 255 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => Winfred Accx: 045509353 10.00 UH90M237D5 Bal: 564.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => STELLAMARIS Accx: HV190 2500.00 UHA6Q249OE Bal: 3117.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254713974667
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 550 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254733754115
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 1010 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => JAMES Accx: ACCOUNTHV30 2500.00 UHD8A2EK77 Bal: 3762.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => RICHARD Accx: 072401869 35.00 UHE3032V86 Bal: 105.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254731595551
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 205 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254720401869
+    [mpesaapi] => hawlast
+    [message] => NCBA  Bank M-pesa Accx: HV266 2500.00 UHGSG54EAF Bal: 3268.00
+)
+Array
+(
+    [user_id] => 1
+    [bal] => 20
+    [phone] => +254726567357
+    [mpesaapi] => hawlast
+    [message] => Success! Ksh 155 airtime sent. We truly value your business. Thanks for choosing Hawlast Ventures! Support: 0720401869
+)

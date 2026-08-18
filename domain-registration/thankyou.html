@@ -1,0 +1,61 @@
+<?php
+require '../hawlastke.php';
+require '../config.php';
+ob_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+<link rel=icon href=images/favicon.ico type=image/x-icon />
+<title>Thank you - Hosting Kenya</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta name=Description content="Register a domain name instantly for free with our hosting plans.We make it easy to reach a larger audience."/>
+<meta name=Keywords content="domain Kenya, SSL, cheap domains, Domain registration Kenya"/>
+<link rel=stylesheet type=text/css href=../style.css />
+<link rel="stylesheet" href="../font-awesome.min.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="../responsive.css">
+<?php
+require("includes/header.txt");
+?>
+</div>
+<div class=center_content>
+<div class=left_content><h1>Thank you</h1><div class=feat_prod_box_details>
+
+<p style="font-size: 15px;"><b>We are verifying your payments.<br />
+For any urgent inquiry WhatsApp or call +254720401869</b>.
+<?php
+if (isset($_COOKIE['affiliate'])) { 
+echo "bado";
+
+setcookie("affiliate", "", time() - 3600, "/");
+}
+?>
+</p>
+<br />
+
+</div><div class=clear></div></div>
+<div class=right_content>
+<div class=about>
+<br />
+<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like href="www.hawlast.com/" show_faces="false" width="250" action="recommend"></fb:like></div>
+<div class=about>
+<br />
+<br />
+<br />
+Free Joomla or Wordpress set up <br />
+Free email autoresponder <br />
+Free Microsoft Outlook set up<br />
+Read emails on your mobile phone<br />
+Free email marketing set up (500 Subscribers)<br />
+24/7 support <br />
+Pay via MPESA /Cheque /Direct deposit<br />
+<br /><br />
+<br /><br />
+</div>
+<br /><br />
+</div><div class=clear></div>
+</div>
+<?php
+require("includes/footer.txt");
+?></body></html>

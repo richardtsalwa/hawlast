@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /includes/ 
+Disallow: /admin/ 
+Disallow: /domain-registration/includes/ 
+Disallow: /js/ 
+Disallow: /blog/wp-admin/ 

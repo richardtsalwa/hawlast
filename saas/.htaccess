@@ -1,0 +1,5 @@
+#parse php in html files
+RemoveHandler .html .htm
+AddType application/x-httpd-php .php .htm .html
+
+ErrorDocument 404 https://www.hawlast.com/saas/

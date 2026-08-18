@@ -1,0 +1,86 @@
+<form class="appnitro" method="post" action="addnewtodb.php">
+<div class="form_description"><h2>New client info</h2></div>							
+<ul>
+<li id="li_1"><label class="description" for="element_1">First name:</label>
+<div><input id="element_1" name="firstname" class="element text medium" type="text" maxlength="255" value=""/> 
+</div> 
+</li>	
+	
+<li id="li_2" >
+<label class="description" for="element_2">Second Name:</label>
+
+<div>
+<input id="element_2" name="lastname" class="element text medium" type="text" maxlength="255" value=""/> 
+</div> 
+</li>	
+	
+<li id="li_4" >
+<label class="description" for="element_4">Date of sign up: </label>
+<div>
+<?php
+//get class into the page
+require_once('classes/tc_calendar.php');
+//instantiate class and set properties
+	  $myCalendar = new tc_calendar("date1", true);
+	  $myCalendar->setIcon("images/iconCalendar.gif");
+        $myCalendar->setDate(date('d'), date('m'), date('Y'));
+	  $myCalendar->setPath("./");
+	  $myCalendar->setYearInterval(2010, 2025);
+	  $myCalendar->dateAllow('2009-12-31', '2025-01-01');
+//output the calendar
+$myCalendar->writeScript();?>
+</div>
+</li>
+           <li id="li_5" >
+		<label class="description" for="element_5">Phone number:</label>
+		<div>
+			<input id="element_5" name="phone" class="element text medium" type="text" maxlength="10" value=""/> 
+		</div> 
+		</li>	
+<li id="li_7" >
+<label class="description" for="element_7">Email:</label>
+<div>
+<input id="element_7" name="email" class="element text medium" type="text" maxlength="255" value=""/> 
+</div> 
+<label class="description" for="element_7">Alternative email:</label>
+<div>
+<input id="element_7" name="emailalt" class="element text medium" type="text" maxlength="255" value=""/> 
+</div> 
+</li>		
+
+<li id="li_6" >
+		<label class="description" for="element_6">Web Site:</label>
+		<div>
+<input id="element_6" name="url" class="element text medium" type="text" maxlength="255" value="www."/> 
+		</div> 
+		</li>		
+<li id="li_9" >
+<label class="description" for="element_9">Service <a href="admin.php?addservices">Add new</a> or <a href="admin.php?services">Edit</a></label>
+<div>
+<select class="element select medium" id="element_9" name="service"> 
+<?php
+//Get the list of services and cost
+$query = "SELECT service_name, service_cost from dservices ORDER BY service_cost  ASC";
+$result = mysqli_query($db,$query) or die ("Error in query: $query. " . mysqli_error());
+
+
+while (list($service_name, $service_cost) = mysqli_fetch_row($result))
+   {
+   echo "<option value=\"$service_name\">$service_name $service_cost</option>";   
+   }
+mysqli_free_result($result); ?></select>		
+</div> 
+		</li>	
+<li id="li_8" >
+<label class="description" for="element_8">Cost:</label>
+<div>
+<span class="symbol">Ksh.</span>
+<input id="element_8_1" name="cost" class="element text currency" size="10" value="" type="text" /> 
+</div>
+</li>				
+<li class="buttons">
+<input type="hidden" name="form_id" value="122314" />	    
+<input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+</li>
+</ul>
+</form>

@@ -1,0 +1,21 @@
+# Exclude uploads/media if not needed in version control
+
+/blog/wp-config.php 
+/blog/wp-content/uploads
+/blog/wp-content/cache
+/blog/wp-content/wfcache
+/blog/wp-content/w3tc-config
+/blog/wp-content/w3tc
+
+
+# Exclude environment or runtime logs
+.env
+*.log
+config.php
+ads.txt
+.user.ini
+domain.jpg
+google2b6743f3a9759d6d.html
+php.ini
+to do.txt
+y_key_73f73ef4036b5aa6.html

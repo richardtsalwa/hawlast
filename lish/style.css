@@ -1,0 +1,424 @@
+/* Basic Reset and Typography */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    background: #004d40; /* Dark Teal/Green */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Navigation Bar Styling */
+header nav {
+    margin-top: 15px; /* Space below the h2 */
+    padding-bottom: 5px; /* Small padding at the bottom of the nav area */
+    border-top: 1px solid #00695c; /* A subtle separator line */
+    padding-top: 15px;
+}
+
+header nav ul {
+    list-style: none; /* Removes bullets */
+    padding: 0;
+    margin: 0;
+    display: flex; /* Arranges list items horizontally */
+    justify-content: center; /* Centers the links */
+    gap: 25px; /* Space between links */
+    flex-wrap: wrap; /* Allows links to wrap on small screens */
+}
+
+header nav ul li {
+    margin: 0;
+}
+
+header nav ul li a {
+    color: white; /* White text for visibility */
+    text-decoration: none; /* Removes underline */
+    font-weight: 500; /* Slightly heavier font */
+    font-size: 1.1em;
+    padding: 8px 15px; /* Padding for click area */
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover and Focus Effect */
+header nav ul li a:hover,
+header nav ul li a:focus {
+    background-color: #00695c; /* Slightly lighter/more vibrant teal on hover */
+    color: #fff;
+}
+
+/* Optional: Highlight the active/current link */
+/* If you are on the Notes page/section, you might add an 'active' class to its <li> */
+header nav ul li a.active {
+    background-color: #b2dfdb; /* Light teal background */
+    color: #004d40; /* Dark teal text */
+    font-weight: bold;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+h2 {
+    margin: 5px 0 0;
+    font-size: 1.5em;
+    font-weight: 500;
+    color: #000000; 
+}
+
+main {
+    padding: 5px;
+    max-width: 1200px;
+    margin: 10px auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.category-block h3 {
+  font-size: 1.1rem;
+  color: #2b7a78;
+  border-bottom: 2px solid #def;
+  margin-top: 15px;
+}
+
+.category-block ul {
+  margin-left: 10px;
+}
+
+.category-block label {
+  cursor: pointer;
+}
+
+.image-gallery-new-layout {
+    display: flex; /* Makes direct children (long-image & stacked-images) flex items */
+    justify-content: center; /* Center content horizontally */
+    align-items: flex-start; /* Align items to the top if they have different heights */
+    gap: 10px; /* Space between the long image and the stacked group */
+    margin: 30px auto;
+    max-width: 1500px; /* Constrain max width for gallery */
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+/* Style for the long image (new photo) */
+.image-gallery-new-layout .long-image {
+    flex: 1 1 45%; /* Takes up roughly 45% of the available space */
+    text-align: center;
+    margin: 0;
+    min-width: 250px; /* Minimum width before wrapping */
+}
+
+.image-gallery-new-layout .long-image img {
+    width: 100%;
+    height: auto; /* Allow natural height, making it "twice the length" */
+    max-height: 500px; /* Max height to prevent it from becoming too long */
+    object-fit: contain; /* Ensures the image fits within its box without cropping */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Container for the two stacked images */
+.image-gallery-new-layout .stacked-images {
+    display: flex;
+    flex-direction: column; /* Stacks children vertically */
+    gap: 15px; /* Space between the two stacked images */
+    flex: 1 1 45%; /* Takes up roughly 45% of the available space */
+    min-width: 250px; /* Minimum width before wrapping */
+}
+
+/* Styles for the individual stacked images */
+.image-gallery-new-layout .stacked-images figure {
+    margin: 0;
+    text-align: center;
+}
+
+.image-gallery-new-layout .stacked-images img {
+    width: 100%;
+    max-width: 350px; /* Adjusted max-width for individual stacked images */
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+figcaption {
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+}
+
+/* --- START of NEW Service Grid and Total Box Styles for Horizontal Layout --- */
+
+/* Note: .service-grid is NOT the direct parent of .service-item. 
+The form is. We will apply flex to the form ID. */
+
+.service-grid {
+    /* Kept this empty for now, the form below handles the flex layout */
+    margin-bottom: 20px;
+}
+
+#service-form {
+    display: flex; /* FIX: Apply flex to the container wrapping the service items */
+    flex-wrap: wrap; 
+    gap: 20px; 
+    justify-content: space-between; /* Distributes items evenly */
+}
+
+.service-item {
+    flex: 1 1 300px; /* Allows items to grow, shrink, and have a base width of 300px */
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    max-width: calc(33.333% - 15px); /* Ensures three fit in a row */
+}
+
+/* Ensure images scale correctly within the new flexible layout */
+.service-item img {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.total-box {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px dashed #004d40;
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    max-width: 500px; /* Restrict width for emphasis */
+    margin: 20px auto; /* Center the box */
+}
+
+/* Style for selected checkbox */
+.pdf-checkbox:checked {
+    outline: 2px solid #004d40;
+}
+
+/* --- END of NEW Service Grid and Total Box Styles --- */
+
+
+/* Contact Buttons */
+.contact-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.contact-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+}
+
+.phone-link {
+    background-color: #3f51b5; /* Indigo */
+}
+
+.whatsapp-link {
+    background-color: #25d366; /* WhatsApp Green */
+}
+
+.email-link {
+    background-color: #e57373; /* Light Red/Coral for Email */
+}
+
+.contact-button:hover {
+    opacity: 0.9;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background: #ccc;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* MODAL STYLES */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding doesn't affect total width */
+}
+
+#submit-btn {
+    background-color: #00796b; /* Darker Teal */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+}
+
+#submit-btn:hover {
+    background-color: #004d40;
+}
+
+#form-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    display: none; /* Hidden until message is needed */
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* --- NEW About Us Section Layout FIX --- */
+
+/* 1. Container setup: Centers and limits width */
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 2. Row setup: Enables side-by-side layout (Flexbox) */
+.about-row {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    justify-content: space-between; /* Ensures columns stretch across the width */
+    align-items: flex-start; /* Aligns content to the top */
+    margin-top: 30px;
+}
+
+/* 3. Column Definitions: Forces 50% width on large screens */
+.col-50-left, .col-50-right {
+    flex: 1 1 48%; /* Allows growth/shrink, but maintains a base width of 48% (leaving 4% for margin/gap) */
+    max-width: 48%;
+}
+
+/* Image Styling */
+.about-image {
+    /* Set fixed, equal dimensions for a square/circular image */
+    width: 300px; /* NEW: Fixed width */
+    height: 400px; /* NEW: Fixed height */
+    
+    /* Ensure it remains fully contained */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+
+    border-radius: 30%; /* Maintains the circular style */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    display: block;
+    margin: 0 auto; /* Center the image within its 30% column */
+}
+
+/* Responsive Breakpoint: Stack on smaller screens */
+@media (max-width: 768px) {
+    .about-row {
+        flex-direction: column; /* Stack them vertically */
+    }
+    .col-50-left, .col-50-right {
+        flex: 1 1 100%; /* Full width */
+        max-width: 100%;
+        padding: 0 0 20px 0; /* Add space below each stacked item */
+    }
+    
+    /* Ensure image is centered and text is left-aligned on mobile */
+    .about-text-content {
+        order: 1; /* Puts the text first */
+    }
+    .col-50-right {
+        order: 2; /* Puts the image second (below the text) */
+        text-align: center;
+    }
+    .about-image {
+        max-width: 250px;
+        margin-top: 15px;
+    }
+}

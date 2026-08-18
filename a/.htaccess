@@ -1,0 +1,5 @@
+ErrorDocument 404 http://www.hawlast.com/dated.html
+
+#parse php in html fles
+RemoveHandler .html .htm
+AddType application/x-httpd-php .php .htm .html
