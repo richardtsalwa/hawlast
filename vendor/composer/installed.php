@@ -3,7 +3,7 @@
         'name' => 'hawlast/hawlast',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'ce26809087921ec8e5e8c9e2a35c6865c0101373',
+        'reference' => 'd56487d17d5636600dee6ae61f43e270d02aab8b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -76,7 +76,7 @@
         'hawlast/hawlast' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'ce26809087921ec8e5e8c9e2a35c6865c0101373',
+            'reference' => 'd56487d17d5636600dee6ae61f43e270d02aab8b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
