@@ -128,17 +128,17 @@ jobs:
           BASE="ftp://${FTP_HOST}:${FTP_PORT}/${FTP_DIR}"
           AUTH="${FTP_USERNAME}:${FTP_PASSWORD}"
 
-          # cPanel normally requires explicit TLS (FTPS). Try the configured
-          # mode first, then fall back to plain FTP so the error tells us which.
-          SSL_FLAG="--ssl-reqd"
-          if [ "$FTP_SSL" = "none" ]; then
-            SSL_FLAG="--ssl-no"
-          fi
+          # cPanel uses EXPLICIT FTPS on port 21 (ftp:// + --ssl-reqd, not
+          # ftps://). The server certificate does not match FTP_HOST, so
+          # verification would fail with exit code 60. --insecure skips only
+          # the certificate CHECK; the connection stays encrypted because
+          # --ssl-reqd remains in force.
+          CURL_OPTS=(--ssl-reqd --insecure --user "$AUTH")
 
-          echo "### Testing ${BASE}  (ssl=$FTP_SSL)"
+          echo "### Testing ${BASE}  (ssl=$FTP_SSL, cert check skipped)"
 
           # mkdir -p on the target is harmless and proves we can write there.
-          out=$(curl -sS --user "$AUTH" $SSL_FLAG \
+          out=$(curl -sS "${CURL_OPTS[@]}" \
                   --ftp-create-dirs -Q "-mkdir $FTP_DIR" \
                   "$BASE/" 2>&1)
           rc=$?
@@ -194,7 +194,9 @@ jobs:
 
           PROTECTED='^(config\.php|saas/config\.php|deliveries/config\.php|lish/config\.php|teachers/config\.php|\.env|\.user\.ini|php\.ini|ads\.txt|vendor/.*|.*\.log)$'
 
-          BASE_SHA=$(curl -sS --user "$AUTH" --ssl-reqd --ftp-method nocwd \
+          CURL_OPTS=(--ssl-reqd --insecure --user "$AUTH")
+
+          BASE_SHA=$(curl -sS "${CURL_OPTS[@]}" --ftp-method nocwd \
                         "$REMOTE" \
                      | tr -d '\r' | grep -Eo '^[0-9a-f]{40}' | head -n1 || true)
           echo "base_sha=${BASE_SHA}" >> "$GITHUB_OUTPUT"
@@ -270,8 +272,9 @@ jobs:
           FTP_SSL="${FTP_SSL:-required}"
           BASE="ftp://${FTP_HOST}:${FTP_PORT}/${FTP_DIR}"
           AUTH="${FTP_USERNAME}:${FTP_PASSWORD}"
-          SSL_FLAG="--ssl-reqd"
-          [ "$FTP_SSL" = "none" ] && SSL_FLAG="--ssl-no"
+          # Explicit FTPS on port 21. --insecure skips the certificate check
+          # only; the session is still encrypted via --ssl-reqd.
+          CURL_OPTS=(--ssl-reqd --insecure --user "$AUTH")
 
           TOTAL=$(wc -l < /tmp/upload_list.txt | tr -d ' ')
           if [ "$TOTAL" -eq 0 ]; then
@@ -297,7 +300,7 @@ jobs:
               printf '[%d/%d] %s\n' "$n" "$TOTAL" "$f"
             fi
 
-            if err=$(curl -sS --user "$AUTH" $SSL_FLAG --ftp-create-dirs \
+            if err=$(curl -sS "${CURL_OPTS[@]}" --ftp-create-dirs \
                       --connect-timeout 30 --max-time 300 \
                       -T "$f" "${BASE}/${enc}" 2>&1 >/dev/null); then
               uploaded=$((uploaded+1))
@@ -340,12 +343,13 @@ jobs:
           FTP_SSL="${FTP_SSL:-required}"
           MARKER=".hawlast-deploy-state-DO-NOT-DELETE-this-file-holds-the-last-deployed-commit-sha.txt"
           AUTH="${FTP_USERNAME}:${FTP_PASSWORD}"
-          SSL_FLAG="--ssl-reqd"
-          [ "$FTP_SSL" = "none" ] && SSL_FLAG="--ssl-no"
+          # Explicit FTPS on port 21. --insecure skips the certificate check
+          # only; the session is still encrypted via --ssl-reqd.
+          CURL_OPTS=(--ssl-reqd --insecure --user "$AUTH")
 
           printf '%s\n' "${{ github.sha }}" > /tmp/marker.txt
-          if err=$(curl -sS --user "$AUTH" \
-                    $SSL_FLAG -T /tmp/marker.txt \
+          if err=$(curl -sS "${CURL_OPTS[@]}" \
+                    -T /tmp/marker.txt \
                     "ftp://${FTP_HOST}:${FTP_PORT}/${FTP_DIR}/${MARKER}" 2>&1 >/dev/null); then
             echo "### State saved -> ${{ github.sha }}"
             echo "### Do not delete ${MARKER} on the server."
