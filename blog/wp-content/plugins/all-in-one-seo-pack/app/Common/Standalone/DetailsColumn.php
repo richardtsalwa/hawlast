@@ -270,20 +270,51 @@ class DetailsColumn {
 		// Only enable for post list pages (not media library), and only when TruSEO analysis is
 		// turned on — otherwise the list would run (and persist) analysis for a disabled feature.
 		// The Trash view lists only trashed posts, which aren't editable content, so skip it too.
+		// Eligibility rather than just the master switch: a post type the user excluded from TruSEO
+		// must not be scanned from its list either, or unscored rows get analysed and persisted behind
+		// the user's back. It also covers the never-analysable types (attachments, web stories).
 		$isBatchScanSupported = 'edit' === $screen->base &&
-			'attachment' !== $postType &&
 			aioseo()->options->advanced->truSeo &&
-			! aioseo()->helpers->isTrashListView();
+			! aioseo()->helpers->isTrashListView() &&
+			in_array( $postType, aioseo()->helpers->getTruSeoEligiblePostTypes(), true );
+
+		// Term lists back the same scan, gated on the taxonomy being TruSEO-eligible rather than on
+		// the post type, which a term screen doesn't have.
+		if ( 'edit-tags' === $screen->base ) {
+			$isBatchScanSupported = aioseo()->options->advanced->truSeo &&
+				! empty( $screen->taxonomy ) &&
+				in_array( $screen->taxonomy, aioseo()->helpers->getTruSeoEligibleTaxonomies(), true );
+		}
 
 		// Lets Quick Edit recompute the column's noindex badge after a save without a
 		// round trip: a post on defaults resolves the same way for its whole post type.
 		$data['postTypeIsNoindexed'] = $postType ? $this->isPostTypeNoindexed( $postType ) : false;
+
+		// Nouns for anything on the list that names what it is working on, e.g. the batch scan's
+		// "Successfully analyzed 3 categories." Taken from the registered labels so a term list
+		// doesn't say "posts" and a product list doesn't either.
+		$data['objectNouns'] = $this->getScreenObjectNouns( $screen, $postType );
 
 		$data['batchScanEnabled']     = apply_filters( 'aioseo_truseo_batch_scan_enabled', $isBatchScanSupported, $postType, $screen );
 		$data['batchScanConcurrency'] = apply_filters( 'aioseo_truseo_batch_scan_concurrency', 3, $postType );
 		$data['batchScanStartDelay']  = apply_filters( 'aioseo_truseo_batch_scan_start_delay', 2000, $postType ); // milliseconds
 
 		aioseo()->core->assets->load( $this->scriptSlug, [], aioseo()->helpers->filterPrivilegedVueData( $data ) );
+	}
+
+	/**
+	 * Returns the nouns describing what the current list screen holds, e.g. "category"/"categories".
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  \WP_Screen|null $screen   The current screen.
+	 * @param  string          $postType The current post type.
+	 * @return array                     The singular and plural nouns.
+	 */
+	private function getScreenObjectNouns( $screen, $postType ) {
+		return ! empty( $screen->taxonomy )
+			? aioseo()->helpers->getTaxonomyContentNouns( $screen->taxonomy )
+			: aioseo()->helpers->getPostTypeContentNouns( $postType );
 	}
 
 	/**
@@ -419,6 +450,10 @@ class DetailsColumn {
 			'defaultDescription' => aioseo()->meta->description->getPostTypeDescription( $postType ),
 			'showDescription'    => apply_filters( 'aioseo_details_column_post_show_description', true, $postId ),
 			'value'              => ! empty( $thePost->seo_score ) ? (int) $thePost->seo_score : 0,
+			// Only posts TruSEO actually analyses show a score. Excluding a post type used to hide just
+			// the Optimization tab, leaving a stale score sitting in this column with no way to refresh
+			// it. Mirrors what the term column does.
+			'showScore'          => aioseo()->helpers->isTruSeoEligible( $postId ),
 			'showMedia'          => false,
 			'isSpecialPage'      => aioseo()->helpers->isSpecialPage( $postId ),
 			'postType'           => $postType,

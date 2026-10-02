@@ -136,5 +136,4 @@ class OMAPI_WPForms extends OMAPI_Integrations_Base {
 			$this->rest = new OMAPI_WPForms_RestApi( $this );
 		}
 	}
-
 }

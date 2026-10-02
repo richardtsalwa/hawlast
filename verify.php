@@ -27,12 +27,12 @@ if ($db->connect_error) {
 <head><meta charset="utf-8">
 <meta name="author" content="HawlasT">
 <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
-<title>Affiliate program that works for you</title><meta name=keywords content="affiliates , hawlast affiliate, money online" /><meta name="description" content="Our affiliate works to make money for you automatically. Join to enjoy easy cash" /><link rel=stylesheet type=text/css href=style.css />
-<link rel="stylesheet" type="text/css" href="responsive.css"><link rel="shortcut icon" href=images/favicon.ico type=image/x-icon /></head><body>
+<title>Affiliate program that works for you</title><meta name=keywords content="affiliates , hawlast affiliate, money online" /><meta name="description" content="Our affiliate works to make money for you automatically. Join to enjoy easy cash" /><link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="style.css"><link rel="shortcut icon" href=images/favicon.ico type=image/x-icon /></head><body>
 <div id=wrap>
 <div class=header>
 <?php
-require("includes/header.txt");
+require __DIR__ . "/includes/header.php";
 ?>
 </div>
 <div class=center_content><div class=left_content>
@@ -141,10 +141,10 @@ echo "</b><br />";
 
 <div class=right_content>
 <?php
-require("includes/affiliates_left.txt");
+require __DIR__ . "/includes/affiliates_left.php";
 ?>
 </div>
 <?php
-require("includes/footer.txt");
+require __DIR__ . "/includes/footer.php";
 ?>
 </body></html>

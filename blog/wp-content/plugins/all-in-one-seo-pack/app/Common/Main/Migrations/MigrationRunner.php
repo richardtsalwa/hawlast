@@ -38,14 +38,23 @@ class MigrationRunner {
 	private $log;
 
 	/**
-	 * Lock name. MySQL GET_LOCK is per-connection, so this serializes across
-	 * concurrent PHP processes for the same site.
+	 * Lock name. GET_LOCK is held per connection, so this serializes concurrent PHP processes.
 	 *
-	 * @since 4.9.7.2
+	 * NOTE: Deliberately the same name {@see \AIOSEO\Plugin\Common\Main\Updates::runUpdates()}
+	 * takes, and it must stay that way. Both issue DDL against the same tables, and a lock of
+	 * its own would not exclude the other: dbDelta introspects every table, queues its ALTERs,
+	 * then executes them all afterwards, so a migration's ALTER landing in that gap turns the
+	 * queue into "Duplicate column name" and "Multiple primary key defined" errors. The two
+	 * never nest — the runner releases during preLoad, well before `init` — so one plain name
+	 * is enough. Also note the name is server-wide rather than per-database, so subsites on one
+	 * network do serialize with each other here.
+	 *
+	 * @since   4.9.7.2
+	 * @version 5.0.1 Shared with the updaters instead of a private lock domain.
 	 *
 	 * @var string
 	 */
-	private $lockName = 'aioseo_migration_runner';
+	private $lockName = 'aioseo_run_updates_lock';
 
 	/**
 	 * @since 4.9.7.2

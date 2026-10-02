@@ -77,7 +77,7 @@ class OMAPI_MemberPress_Rules extends OMAPI_Rules_Base {
 			return;
 		}
 
-		if( ! empty( $_GET['action'] ) && 'checkout' === $_GET['action'] ) {
+		if ( ! empty( $_GET['action'] ) && 'checkout' === $_GET['action'] ) {
 			$this->set_is_checkout( true );
 		}
 
@@ -373,7 +373,6 @@ class OMAPI_MemberPress_Rules extends OMAPI_Rules_Base {
 		$product = $this->get_product( $product_id );
 
 		return ! empty( $product->ID );
-
 	}
 
 	/**

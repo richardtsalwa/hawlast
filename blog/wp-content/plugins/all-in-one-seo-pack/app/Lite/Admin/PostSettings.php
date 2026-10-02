@@ -39,7 +39,8 @@ class PostSettings extends CommonAdmin\PostSettings {
 	/**
 	 * Add upsell to terms.
 	 *
-	 * @since 4.0.0
+	 * @since   4.0.0
+	 * @version 5.0.1 Skips taxonomies whose metabox is disabled.
 	 *
 	 * @return void
 	 */
@@ -50,7 +51,8 @@ class PostSettings extends CommonAdmin\PostSettings {
 			foreach ( $taxonomies as $taxObject ) {
 				if (
 					empty( $taxObject->label ) ||
-					! is_taxonomy_viewable( $taxObject )
+					! is_taxonomy_viewable( $taxObject ) ||
+					! $this->taxonomyUpsellCanRender( $taxObject )
 				) {
 					unset( $taxonomies[ $taxObject->name ] );
 				}
@@ -61,6 +63,38 @@ class PostSettings extends CommonAdmin\PostSettings {
 				add_action( 'after-' . $taxonomy->name . '-table', [ $this, 'addTaxonomyUpsell' ] );
 			}
 		}
+	}
+
+	/**
+	 * Returns whether the taxonomy upsell can render for a taxonomy.
+	 *
+	 * NOTE: The upsell is the real metabox blurred behind the CTA, so the Vue app refuses to mount
+	 * where the metabox is switched off, leaving the CTA without the styles the app brings with it.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  \WP_Taxonomy $taxObject The taxonomy object.
+	 * @return bool                    Whether the upsell can render.
+	 */
+	private function taxonomyUpsellCanRender( $taxObject ) {
+		$taxonomy = aioseo()->helpers->isWooCommerceProductAttribute( $taxObject )
+			? 'product_attributes'
+			: $taxObject->name;
+
+		// A taxonomy with no options of its own is absent from the localized dynamic options too,
+		// so shouldShowMetaBox() can never resolve it.
+		if ( ! aioseo()->dynamicOptions->noConflict()->searchAppearance->taxonomies->has( $taxonomy ) ) {
+			return false;
+		}
+
+		// NOTE: Each read walks the full path — the options getter resets its group state after
+		// returning a leaf.
+		$showMetaBox = aioseo()->dynamicOptions->noConflict()
+			->searchAppearance->taxonomies->{$taxonomy}->advanced->showMetaBox;
+
+		// NOTE: `advanced` stays unhydrated for the synthetic product_attributes group, so null
+		// means "not configured" - the shipped default is on - and not "switched off".
+		return null === $showMetaBox || (bool) $showMetaBox;
 	}
 
 	/**

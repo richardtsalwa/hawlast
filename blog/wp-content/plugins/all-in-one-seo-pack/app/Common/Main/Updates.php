@@ -11,6 +11,12 @@ use AIOSEO\Plugin\Common\Models;
 /**
  * Updater class.
  *
+ * NOTE: Legacy migration system — do not add new migrations here. Use
+ * {@see \AIOSEO\Plugin\Common\Main\Migrations\MigrationRunner} and add a definition under
+ * `Main/Migrations/Definitions/`. Gating on `$lastActiveVersion` gives a migration one attempt
+ * with no record of whether it worked; the runner decides via `verify()` and logs each
+ * migration's status, attempts and last error. The methods below are history.
+ *
  * @since 4.0.0
  */
 class Updates {

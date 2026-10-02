@@ -102,7 +102,6 @@ class OMAPI_Validate {
 
 		// Provide action to refresh optins.
 		do_action( 'optin_monster_api_validate_api' );
-
 	}
 
 	/**
@@ -172,7 +171,6 @@ class OMAPI_Validate {
 		} else {
 			set_transient( '_omapi_validate', true, DAY_IN_SECONDS );
 		}
-
 	}
 
 	/**
@@ -200,8 +198,7 @@ class OMAPI_Validate {
 		} elseif ( isset( $option['is_expired'] ) && $option['is_expired'] ) {
 			echo '<div class="notice notice-error"><p>' . esc_html__( 'The subscription to this OptinMonster account has expired. Please renew your subscription to use the OptinMonster API.', 'optin-monster-api' ) . '</p>';
 			echo '<p><a href="' . esc_url( OPTINMONSTER_APP_URL ) . '/account/billing/?utm_source=orgplugin&utm_medium=link&utm_campaign=wpdashboard" class="button button-primary button-large omapi-new-optin" title="' . esc_html__( 'Renew Subscription', 'optin-monster-api' ) . '" target="_blank">' . esc_html__( 'Renew Subscription', 'optin-monster-api' ) . '</a></p></div>';
-		} else {
-			if ( $this->should_user_see_connect_nag() ) {
+		} elseif ( $this->should_user_see_connect_nag() ) {
 
 				echo '
 				<div id="omapi-please-connect-notice" class="notice notice-success is-dismissible">
@@ -214,9 +211,7 @@ class OMAPI_Validate {
 					</p>
 				</div>
 				';
-			}
 		}
-
 	}
 
 	/**

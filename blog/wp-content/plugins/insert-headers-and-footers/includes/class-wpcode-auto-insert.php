@@ -25,12 +25,13 @@ class WPCode_Auto_Insert {
 	 */
 	public $type_categories = array();
 
+	public $categories_with_labels;
+
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		$this->hooks();
-		$this->define_categories();
 	}
 
 	/**
@@ -47,21 +48,19 @@ class WPCode_Auto_Insert {
 	 *
 	 * @return void
 	 */
-	public function define_categories() {
-		$this->type_categories = array(
-			'global'    => array(
-				'label' => __( 'Global', 'insert-headers-and-footers' ),
-				'types' => array(),
-			),
-			'page'      => array(
-				'label' => __( 'Page-Specific', 'insert-headers-and-footers' ),
-				'types' => array(),
-			),
-			'ecommerce' => array(
-				'label' => __( 'eCommerce', 'insert-headers-and-footers' ),
-				'types' => array(),
-			),
+	public function define_category_label() {
+		$categories_labels = array(
+			'global'    => __( 'Global', 'insert-headers-and-footers' ),
+			'page'      => __( 'Page-Specific', 'insert-headers-and-footers' ),
+			'ecommerce' => __( 'eCommerce', 'insert-headers-and-footers' ),
 		);
+
+		// Add the labels to the $this->type_categories array.
+		foreach ( $categories_labels as $key => $category ) {
+			$this->type_categories[ $key ]['label'] = $category;
+		}
+
+		$this->categories_with_labels = true;
 	}
 
 	/**
@@ -86,9 +85,11 @@ class WPCode_Auto_Insert {
 	 * @return void
 	 */
 	public function register_type( $type ) {
-		$this->types[ $type->name ] = $type;
+		$type_name                 = $type->name ?? '';
+		$this->types[ $type_name ] = $type;
 		if ( isset( $type->category ) ) {
-			$this->type_categories[ $type->category ]['types'][ $type->name ] = $type;
+			$type_category = $type->category ?? '';
+			$this->type_categories[ $type_category ]['types'][ $type_name ] = $type;
 		}
 	}
 
@@ -107,6 +108,10 @@ class WPCode_Auto_Insert {
 	 * @return array
 	 */
 	public function get_type_categories() {
+		if ( ! isset( $this->categories_with_labels ) ) {
+			$this->define_category_label();
+		}
+
 		return $this->type_categories;
 	}
 
@@ -118,6 +123,7 @@ class WPCode_Auto_Insert {
 	public function get_type_categories_for_sidebar() {
 		$sidebar_categories = array();
 		$categories         = $this->get_type_categories();
+
 		foreach ( $categories as $key => $category ) {
 			$sidebar_categories[] = array(
 				'slug' => $key,
@@ -142,11 +148,12 @@ class WPCode_Auto_Insert {
 			 *
 			 * @var WPCode_Auto_Insert_Type $type
 			 */
-			if ( isset( $type->locations[ $location ] ) ) {
-				if ( isset( $type->locations[ $location ]['label'] ) ) {
-					return $type->locations[ $location ]['label'];
+			$locations = $type->get_locations();
+			if ( isset( $locations[ $location ] ) ) {
+				if ( isset( $locations[ $location ]['label'] ) ) {
+					return $locations[ $location ]['label'];
 				} else {
-					return $type->locations[ $location ];
+					return $locations[ $location ];
 				}
 			}
 		}

@@ -74,7 +74,7 @@ class OMAPI_ConstantContact {
 		// Set our object.
 		$this->set();
 
-		// Pages
+		// Pages.
 		add_action( 'admin_menu', array( $this, 'register_cc_page' ) );
 		add_action( 'admin_notices', array( $this, 'constant_contact_cta_notice' ) );
 		add_action( 'wp_ajax_om_constant_contact_dismiss', array( $this, 'constant_contact_dismiss' ) );
@@ -89,7 +89,6 @@ class OMAPI_ConstantContact {
 
 		self::$instance = $this;
 		$this->base     = OMAPI::get_instance();
-
 	}
 
 	/**
@@ -98,7 +97,7 @@ class OMAPI_ConstantContact {
 	 * @since 1.6.0
 	 */
 	public function register_cc_page() {
-		$slug        = 'optin-monster-constant-contact';
+		$slug = 'optin-monster-constant-contact';
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$is_current  = isset( $_GET['page'] ) && $slug === sanitize_key( wp_unslash( $_GET['page'] ) );
 		$parent_slug = $this->base->menu->parent_slug();
@@ -119,7 +118,6 @@ class OMAPI_ConstantContact {
 		if ( $this->hook ) {
 			add_action( 'load-' . $this->hook, array( $this, 'assets' ) );
 		}
-
 	}
 
 	/**
@@ -217,7 +215,13 @@ class OMAPI_ConstantContact {
 				jQuery( function ( $ ) {
 					$( document ).on( 'click', '.om-constant-contact-notice button', function ( event ) {
 						event.preventDefault();
-						$.post( ajaxurl, { action: 'om_constant_contact_dismiss' } );
+						$.post(
+							ajaxurl,
+							{
+								action: 'om_constant_contact_dismiss',
+								_wpnonce: '<?php echo esc_js( wp_create_nonce( 'om_constant_contact_dismiss' ) ); ?>',
+							}
+						);
 						$( '.om-constant-contact-notice' ).remove();
 					} );
 				} );
@@ -232,7 +236,16 @@ class OMAPI_ConstantContact {
 	 * @since 1.6.0
 	 */
 	public function constant_contact_dismiss() {
+		// Verify the nonce.
+		check_ajax_referer( 'om_constant_contact_dismiss' );
 
+		// Make sure the user can dismiss the notice.
+		$can_dismiss = $this->base->access_capability( 'optin-monster-constant-contact' );
+		if ( ! $can_dismiss ) {
+			wp_send_json_error();
+		}
+
+		// Update the option to dismiss the notice.
 		update_option( 'optinmonster_constant_contact_dismiss', 1, false );
 		wp_send_json_success();
 	}
@@ -253,6 +266,10 @@ class OMAPI_ConstantContact {
 	 * Add body classes.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @param string $classes Body classes.
+	 *
+	 * @return string Body classes.
 	 */
 	public function add_body_classes( $classes ) {
 		$classes .= ' omapi-constant-contact ';
@@ -273,7 +290,6 @@ class OMAPI_ConstantContact {
 		$url  = 'https://wordpress.org/support/plugin/optinmonster/reviews?filter=5#new-post';
 		$text = sprintf( __( 'Please rate <strong>OptinMonster</strong> <a href="%1$s" target="_blank" rel="noopener">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href="%1$s" target="_blank" rel="noopener noreferrer">WordPress.org</a> to help us spread the word. Thank you from the OptinMonster team!', 'optin-monster-api' ), $url );
 		return $text;
-
 	}
 
 	/**
@@ -290,5 +306,4 @@ class OMAPI_ConstantContact {
 			)
 		);
 	}
-
 }

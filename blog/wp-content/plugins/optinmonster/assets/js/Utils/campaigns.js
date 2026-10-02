@@ -4,14 +4,14 @@ import { hasSites } from './sites';
 /**
  * Get available inline campaign select options.
  *
- * @since  [since]
+ * @since  1.0.0
  *
- * @param  {string}  type       The campaign generic type (inline or other).
- * @param  {string}  slug       The campaign slug.
- * @param  {boolean} checkSites Whether to check for sites (return empty result if no sites connected).
+ * @param {string} type The campaign generic type (inline or other).
+ * @param {string} slug The campaign slug.
+ * @param {boolean} checkSites Whether to check for sites (return empty result if no sites connected).
  *
- * @returns {Array}              Array of campaign options for select elements.
- *                              Includes value, label, and selected/disabled properties.
+ * @returns {Array} Array of campaign options for select elements.
+ *         Includes value, label, and selected/disabled properties.
  */
 export const getOptions = (type, slug = null, checkSites = true) => {
 	if (checkSites && !hasSites()) {
@@ -47,9 +47,9 @@ export const getOptions = (type, slug = null, checkSites = true) => {
  *
  * @since 2.3.0
  *
- * @param  {string} slug The campaign slug.
+ * @param {string} slug The campaign slug.
  *
- * @returns {Object|null} The global campaign object or null.
+ * @returns {object|null} The global campaign object or null.
  */
 export const getCampaign = (slug = '') => {
 	const key = `om${slug}`;

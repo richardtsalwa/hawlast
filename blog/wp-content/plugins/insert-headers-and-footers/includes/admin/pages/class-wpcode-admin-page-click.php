@@ -94,7 +94,7 @@ class WPCode_Admin_Page_Click extends WPCode_Admin_Page {
 			if ( isset( $_GET['message'] ) && 'wpcode-deploy' === $_GET['message'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				if ( ! wpcode()->library_auth->has_auth() ) {
 					?>
-					<h3><?php esc_html_e( 'Connect your site to the WPCode Library', 'insert-headers-and-footer' ); ?></h3>
+					<h3><?php esc_html_e( 'Connect your site to the WPCode Library', 'insert-headers-and-footers' ); ?></h3>
 					<p><?php esc_html_e( 'You\'re almost there! To finish installing the snippet, you need to connect your site to your account on the WPCode Library. This will allow you to install snippets directly to your site in the future.', 'insert-headers-and-footers' ); ?></p>
 					<p><?php esc_html_e( 'You\'ll also get access to tens of free expert-curated snippets that can be installed with 1-click from inside the plugin.', 'insert-headers-and-footers' ); ?></p>
 					<div class="wpcode-buttons-row">
@@ -282,6 +282,11 @@ class WPCode_Admin_Page_Click extends WPCode_Admin_Page {
 		if ( ! isset( $snippet_data['status'] ) || 'success' !== $snippet_data['status'] ) {
 			// This should not happen if you did not manually change the hash, so we can just return.
 			return;
+		}
+
+		// Drop cloud_id so we don't write My Library meta for a public-library install.
+		if ( isset( $snippet_data['data'] ) && is_array( $snippet_data['data'] ) ) {
+			unset( $snippet_data['data']['cloud_id'] );
 		}
 
 		// Let's create a new snippet.

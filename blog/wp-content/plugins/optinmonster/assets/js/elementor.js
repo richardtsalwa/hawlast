@@ -17,7 +17,7 @@ window.OMAPI_Elementor.instances = window.OMAPI_Elementor.instances || [];
 	 *
 	 * @since  2.2.0
 	 *
-	 * @param  {Object} evt Event
+	 * @param {object} evt Event
 	 *
 	 * @returns {void}
 	 */
@@ -31,7 +31,7 @@ window.OMAPI_Elementor.instances = window.OMAPI_Elementor.instances || [];
 	 *
 	 * @since  2.2.0
 	 *
-	 * @param  {Object} evt Event
+	 * @param {object} evt Event
 	 *
 	 * @returns {void}
 	 */
@@ -48,9 +48,9 @@ window.OMAPI_Elementor.instances = window.OMAPI_Elementor.instances || [];
 	 *
 	 * @since  2.2.0
 	 *
-	 * @param  {[type]} evt [description]
+	 * @param {object} evt Event
 	 *
-	 * @returns {[type]}     [description]
+	 * @returns {void}
 	 */
 	app.triggerError = (evt) => {
 		let { Campaign, Main, error } = evt.detail;
@@ -77,7 +77,7 @@ window.OMAPI_Elementor.instances = window.OMAPI_Elementor.instances || [];
 	 *
 	 * @since  2.2.0
 	 *
-	 * @param  {Object} evt Event
+	 * @param {object} evt Event
 	 *
 	 * @returns {void}
 	 */

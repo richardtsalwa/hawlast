@@ -129,8 +129,8 @@ class OMAPI_MemberPress_Courses {
 	 * @since 2.13.0
 	 *
 	 * @return array
-	 */	
+	 */
 	public function get_entities( $slug ) {
-		return $this->mp->format_data( $this->retrieve_data( $slug ) );		
+		return $this->mp->format_data( $this->retrieve_data( $slug ) );
 	}
 }

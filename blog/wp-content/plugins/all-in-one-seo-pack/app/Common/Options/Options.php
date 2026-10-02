@@ -69,6 +69,20 @@ class Options {
 		],
 		'advanced'         => [
 			'truSeo'           => [ 'type' => 'boolean', 'default' => true ],
+			// Which object types TruSEO analyses. Taxonomies default to product categories only —
+			// a term carries no body content, so the analysis only makes sense where the
+			// description doubles as landing-page copy. Unregistered types are filtered out at
+			// read time, so this default is inert without WooCommerce.
+			'truSeoObjects'    => [
+				'postTypes'  => [
+					'all'      => [ 'type' => 'boolean', 'default' => true ],
+					'included' => [ 'type' => 'array', 'default' => [ 'post', 'page', 'product' ] ]
+				],
+				'taxonomies' => [
+					'all'      => [ 'type' => 'boolean', 'default' => false ],
+					'included' => [ 'type' => 'array', 'default' => [ 'product_cat' ] ]
+				]
+			],
 			'headlineAnalyzer' => [ 'type' => 'boolean', 'default' => true ],
 			'seoAnalysis'      => [ 'type' => 'boolean', 'default' => true ],
 			'spellChecker'     => [ 'type' => 'boolean', 'default' => true ],

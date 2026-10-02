@@ -1,0 +1,19 @@
+{
+    "name": "hawlast/hawlast",
+    "description": "Hawlast - shared hosting, airtime, SMS, domains and SaaS platform",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.0",
+        "ext-mbstring": "*",
+        "ext-dom": "*",
+        "ext-gd": "*",
+        "phpmailer/phpmailer": "^6.9",
+        "dompdf/dompdf": "^2.0 || ^3.0",
+        "africastalking/africastalking": "^3.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

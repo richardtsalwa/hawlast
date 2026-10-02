@@ -20,6 +20,15 @@ use Elementor\Controls_Manager;
 class OMAPI_Elementor_Widget extends Widget_Base {
 
 	/**
+	 * Holds the base class object.
+	 *
+	 * @since {{ next }}
+	 *
+	 * @var object
+	 */
+	public $base;
+
+	/**
 	 * Widget constructor.
 	 *
 	 * Initializing the widget class.
@@ -448,7 +457,7 @@ class OMAPI_Elementor_Widget extends Widget_Base {
 			<div class="om-elementor-editor-no_campaigns">
 				' . ( $icon ? '<img src="' . $this->base->url . 'assets/css/images/icons/archie-color-icon.svg">' : '' ) . '
 				<p class="om-elementor-editor-no_campaigns-help">
-					<strong>' . $data['i18n']['no_campaigns'] . '</strong>
+					<strong>' . $data['i18n']['no_inline_campaigns'] . '</strong>
 					<br>
 					' . $data['i18n']['no_campaigns_help'] . '
 				</p>
@@ -540,9 +549,9 @@ class OMAPI_Elementor_Widget extends Widget_Base {
 		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		printf(
 			$this->get_render_format(),
-			'{{{ settings.campaign_id.replace(/[^a-zA-Z0-9]/g, "") }}}',
+			'{{{ ( settings.campaign_id || "" ).replace(/[^a-zA-Z0-9]/g, "") }}}',
 			'<# if ( ! settings.campaign_id ) { #>' . $this->get_campaign_select_html() . '<# } #>',
-			'<# if ( settings.campaign_id ) { #>' . $this->get_campaign_holder( '{{{ settings.campaign_id.replace(/[^a-zA-Z0-9]/g, "") }}}' ) . '<# } #>'
+			'<# if ( settings.campaign_id ) { #>' . $this->get_campaign_holder( '{{{ ( settings.campaign_id || "" ).replace(/[^a-zA-Z0-9]/g, "") }}}' ) . '<# } #>'
 		);
 		// phpcs:enable
 	}
@@ -595,5 +604,4 @@ class OMAPI_Elementor_Widget extends Widget_Base {
 
 		return ! empty( $campaigns['inline'] );
 	}
-
 }

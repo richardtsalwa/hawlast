@@ -9,11 +9,11 @@ require 'hawlastke.php';
 <title>FAQ on Hosting &ndash; hawlast</title>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
 <meta name=description content="Check our FAQ on domains, web design, web hosting and software developementa" />
-<meta name=keywords content="web hosting kenya, hosting portfolio " />
+<meta name=keywords content="web hosting kenya" />
 <link rel="shortcut icon" href=images/favicon.ico type=image/x-icon />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
 type="text/css">
-<link rel=stylesheet type=text/css href=style.css /><link rel="stylesheet" type="text/css" href="responsive.css">
+<link rel="stylesheet" type="text/css" href="style.css" /><link rel="stylesheet" type="text/css" href="style.css">
 <script src="jquery.min.js"></script>
 <!-- JS -->
 <script type="text/javascript">
@@ -38,7 +38,7 @@ type="text/css">
 </style>
 
 <?php
-require("includes/header.txt");
+require __DIR__ . "/includes/header.php";
 ?>
 </div>
 <div class=center_content>
@@ -56,7 +56,7 @@ require("includes/header.txt");
   <h3 class="accordion-toggle">+ Domain names </h3>
   <div class="accordion-content">
   <p>You can choose to register domains with extensions such as .com, .net, .biz, .info, .org, and also the Kenya cTLD domains aka .ke with options to register a domain like .co.ke,or.ke and ac.ke.</p>
-  <p>You can search and register a domain at <a href="/domain-registration/">domain registration page</a></div>
+  <p>You can search and register a domain at <a href="<?php echo hawlast_url('domain-registration/'); ?>">domain registration page</a></div>
   
 
 <h3 class="accordion-toggle">+ Email management : Webmail : Outlook : Change password</h3>
@@ -132,7 +132,7 @@ Enter Till no. 773599<br/>
 
 <div class=right_content>
 <?php
-require("includes/other_left.txt");
+require __DIR__ . "/includes/other_left.php";
 ?>
 </div>
-<?php require("includes/footer.txt"); ?></body></html>
+<?php require __DIR__ . "/includes/footer.php"; ?></body></html>

@@ -142,7 +142,7 @@ echo " class=\"selected\"";
 function thispage($current){
 $page = basename($_SERVER['PHP_SELF']);  
 if ($current == $page){
-require 'domain-registration/includes/domainsearchform.txt'; }
+require __DIR__ . "/domain-registration/includes/domainsearchform.php"; }
 }
 
 //Given an email address ...get the domain name
@@ -320,8 +320,8 @@ function dateDiff($dformat, $endDate, $beginDate)
 
 function sendEmail($email, $companyName, $subject, $mailContent, $attachments,$emailalt = null) {
 
-  // Require PHPMailer library
-  require_once 'PHPMailer/PHPMailerAutoload.php';
+  // Require PHPMailer via the central library loader
+  require_once __DIR__ . '/libraries.php';
 
   $mail = new PHPMailer(true); // Enable exceptions
 

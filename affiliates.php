@@ -12,9 +12,10 @@ ob_start();
 <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
 <meta name=keywords content="affiliates , hawlast affiliate, money online" /><meta name=description content="Our affiliate works to make money for you automatically. Join to enjoy easy cash" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
-<link rel=stylesheet type=text/css href=style.css /><link rel="stylesheet" type="text/css" href="responsive.css" /><link rel="shortcut icon" href=images/favicon.ico type=image/x-icon />
+<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="shortcut icon" href=images/favicon.ico type=image/x-icon />
 <?php
-require("includes/header.txt");
+require __DIR__ . "/includes/header.php";
 ?>
 </div>
 <div class=center_content>
@@ -243,10 +244,10 @@ echo "</form></table>\n";
 </div>
 <div class=right_content>
 <?php
-require("includes/affiliates_left.txt");
+require __DIR__ . "/includes/affiliates_left.php";
 ?>
 </div>
 <?php
-require("includes/footer.txt");
+require __DIR__ . "/includes/footer.php";
 ?>
 </body></html>

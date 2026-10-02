@@ -69,17 +69,17 @@ class DLM_Frontend_Templates {
 	public function add_template_attributes( $attributes, $download, $template ) {
 		switch ( $template ) {
 			case 'box':
-				$attributes['link_attributes']['class'][] = 'download-button';
+				$attributes['link_attributes']['class'][] = 'dlm-download-button';
 				break;
 			case 'button':
-				$attributes['link_attributes']['class'][] = 'download-button';
-				$attributes['link_attributes']['class'][] = 'aligncenter';
+				$attributes['link_attributes']['class'][] = 'dlm-download-button';
+				$attributes['link_attributes']['class'][] = 'wp-block-button__link';
+				$attributes['link_attributes']['class'][] = 'wp-element-button';
 				break;
 			case 'filename':
-				$attributes['link_attributes']['filetype-icon'] = 'filetype-' . esc_html( $download->get_version()->get_filetype() );
 				break;
 			case 'no-version':
-				$attributes['link_attributes']['title']  = esc_html__( 'Please set a version in your WordPress admin', 'download-monitor' );
+				$attributes['link_attributes']['title'] = esc_html__( 'Please set a version in your WordPress admin', 'download-monitor' );
 				$attributes['link_attributes']['href'] = '#';
 				break;
 			case 'title':
@@ -87,10 +87,21 @@ class DLM_Frontend_Templates {
 			case 'version-list':
 				$attributes['link_attributes']['title'] = sprintf( esc_attr( _n( 'Downloaded 1 time', 'Downloaded %d times', $download->get_download_count(), 'download-monitor' ) ), esc_html( $download->get_download_count() ) );
 				break;
+			default:
+				$attributes['link_attributes']['class'][] = 'dlm-download-default';
+				$attributes['link_attributes']['class'][] = 'wp-block-button__link';
+				$attributes['link_attributes']['class'][] = 'wp-element-button';
+				break;
 		}
+		$attributes['link_attributes']['data-redirect'] = 'false';
 		// Check if the download is redirect only and if we need to open the download in a new tab
 		if ( $download->is_redirect_only() && $download->is_new_tab() ) {
-			$attributes['link_attributes']['target'] = '_blank';
+			// Add the data-redirect attribute to the link, so we can check it with JavaScript if we need to redirect the user
+			$attributes['link_attributes']['data-redirect'] = 'true';
+			if ( $download->is_new_tab() ) {
+				// Add the target attribute to the link
+				$attributes['link_attributes']['target'] = '_blank';
+			}
 		}
 
 		return $attributes;

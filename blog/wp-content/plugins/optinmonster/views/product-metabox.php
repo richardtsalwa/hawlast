@@ -11,19 +11,19 @@ $svgpath = plugin_dir_path( OMAPI_FILE ) . '/assets/images/icons/';
 		<ul>
 			<li>
 				<a href="#increase-conversions" title="Sticky Bar" class="active">
-					<?php include $svgpath . 'increase-conversions.svg'; ?>
+					<?php require $svgpath . 'increase-conversions.svg'; ?>
 					<?php esc_html_e( 'Increase Conversions', 'optin-monster-api' ); ?>
 				</a>
 			</li>
 			<li>
 				<a href="#reduce-abandonment" title="Popup">
-					<?php include $svgpath . 'reduce-abandonment.svg'; ?>
+					<?php require $svgpath . 'reduce-abandonment.svg'; ?>
 					<?php esc_html_e( 'Reduce Abandonment', 'optin-monster-api' ); ?>
 				</a>
 			</li>
 			<li>
 				<a href="#cross-sell" title="Gamified">
-					<?php include $svgpath . 'cross-sell.svg'; ?>
+					<?php require $svgpath . 'cross-sell.svg'; ?>
 					<?php esc_html_e( 'Cross Sell Popup', 'optin-monster-api' ); ?>
 				</a>
 			</li>

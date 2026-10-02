@@ -247,8 +247,10 @@ namespace AIOSEO\Plugin {
 			// Runs after preUpdates so legacy version-gated work has already had its turn.
 			$this->migrationRunner = new Common\Main\Migrations\MigrationRunner();
 			$this->migrationRunner->register( new Common\Main\Migrations\Definitions\DropLegacyCacheIndexes() );
+			$this->migrationRunner->register( new Common\Main\Migrations\Definitions\UnscheduleAiCreditFetch() );
 			if ( $this->pro ) {
 				$this->migrationRunner->register( new Pro\Main\Migrations\Definitions\AddUploadFilesCapability() );
+				$this->migrationRunner->register( new Pro\Main\Migrations\Definitions\AddTruSeoTermColumns() );
 			}
 			$this->migrationRunner->run();
 		}

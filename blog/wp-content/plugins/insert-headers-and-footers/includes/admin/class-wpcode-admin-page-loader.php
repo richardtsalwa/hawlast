@@ -58,6 +58,8 @@ class WPCode_Admin_Page_Loader {
 	 */
 	public function require_files() {
 		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/trait-wpcode-revisions-display.php';
+		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/trait-wpcode-my-library-markup.php';
+		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/trait-wpcode-wpconsent-notice.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page-headers-footers.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page-code-snippets.php';
@@ -69,6 +71,9 @@ class WPCode_Admin_Page_Loader {
 		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page-click.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page-pixel.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page-file-editor.php';
+		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page-search-replace.php';
+		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page-duplicator.php';
+		require_once WPCODE_PLUGIN_PATH . 'includes/admin/pages/class-wpcode-admin-page-live-preview.php';
 	}
 
 	/**
@@ -91,9 +96,12 @@ class WPCode_Admin_Page_Loader {
 		$this->pages['library']         = 'WPCode_Admin_Page_Library';
 		$this->pages['generator']       = 'WPCode_Admin_Page_Generator';
 		$this->pages['file_editor']     = 'WPCode_Admin_Page_File_Editor';
+		$this->pages['search-replace']  = 'WPCode_Admin_Page_Search_Replace';
+		$this->pages['duplicator']      = 'WPCode_Admin_Page_Duplicator';
 		$this->pages['tools']           = 'WPCode_Admin_Page_Tools';
 		$this->pages['settings']        = 'WPCode_Admin_Page_Settings';
 		$this->pages['click']           = 'WPCode_Admin_Page_Click';
+		$this->pages['live_preview']    = 'WPCode_Admin_Page_Live_Preview';
 	}
 
 	/**
@@ -267,7 +275,6 @@ class WPCode_Admin_Page_Loader {
 		if ( 'wpcode_snippets_per_page' === $option ) {
 			return absint( $value );
 		}
-
 
 		return $status;
 	}

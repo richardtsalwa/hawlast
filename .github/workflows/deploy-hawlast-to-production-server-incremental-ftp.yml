@@ -1,0 +1,198 @@
+---
+# =============================================================================
+#  HAWLAST - INCREMENTAL, NON-DESTRUCTIVE PRODUCTION DEPLOY
+# =============================================================================
+#
+#  WHAT THIS DOES
+#    Uploads ONLY the files that changed in git since the last successful
+#    deploy. It NEVER deletes anything on the server, and it NEVER overwrites
+#    credential files. Everything lands in /public_html.
+#
+#  REQUIRED REPOSITORY SECRETS
+#    (Settings > Secrets and variables > Actions)
+#      FTP_HOST       e.g. ftp.yourdomain.com
+#      FTP_USERNAME   the cPanel / FTP user
+#      FTP_PASSWORD   the FTP password
+#
+#  OPTIONAL SECRET
+#      FTP_DIR        target folder relative to the FTP login root
+#                     (defaults to "public_html")
+#
+#  SAFE TO RUN TWICE
+#    If a deploy is interrupted, the next run simply re-uploads the files that
+#    were not confirmed. It can never delete or corrupt anything.
+#
+#  MANUAL RUN OPTIONS (Actions > this workflow > Run workflow)
+#    dry_run : true  -> list the files that WOULD be uploaded, upload nothing
+#    full    : true  -> upload every tracked file, ignoring the saved state
+# =============================================================================
+name: Deploy Hawlast To Production Server (Incremental FTP)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Preview only - list the files, upload nothing"
+        type: boolean
+        default: false
+      full:
+        description: "Full deploy - upload every tracked file, ignore saved state"
+        type: boolean
+        default: false
+
+# Only one deploy may run at a time, and a running deploy is never cancelled
+# half way through an upload.
+concurrency:
+  group: hawlast-production-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Upload changed files to public_html
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+        with:
+          # Full history is required so git can diff against the last deployed commit.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate FTP secrets are present
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          missing=""
+          [ -z "$FTP_HOST"     ] && missing="$missing FTP_HOST"
+          [ -z "$FTP_USERNAME" ] && missing="$missing FTP_USERNAME"
+          [ -z "$FTP_PASSWORD" ] && missing="$missing FTP_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing GitHub secret(s):$missing"
+            echo "Add them under: Settings > Secrets and variables > Actions > Repository secrets"
+            exit 1
+          fi
+          echo "FTP secrets are present."
+
+      - name: Deploy changed files (incremental, never deletes)
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_DIR: ${{ secrets.FTP_DIR }}
+          DEPLOY_SHA: ${{ github.sha }}
+          DRY_RUN: ${{ inputs.dry_run == true && '1' || '0' }}
+          FULL: ${{ inputs.full == true && '1' || '0' }}
+        run: |
+          set -euo pipefail
+
+          FTP_DIR="${FTP_DIR:-public_html}"
+          MARKER=".hawlast-deploy-state-DO-NOT-DELETE-this-file-holds-the-last-deployed-commit-sha.txt"
+          REMOTE="ftp://${FTP_HOST}/${FTP_DIR}/${MARKER}"
+          AUTH="${FTP_USERNAME}:${FTP_PASSWORD}"
+
+          # Files that must never be uploaded, even if someone force-adds them
+          # to git. These hold database credentials and must stay exactly as
+          # they are on the live server.
+          PROTECTED='^(config\.php|saas/config\.php|deliveries/config\.php|lish/config\.php|teachers/config\.php|\.env|\.user\.ini|php\.ini|ads\.txt|vendor/.*|.*\.log)$'
+
+          # Read the last deployed commit from the state file on the server.
+          # Returns an empty string on a first-ever deploy.
+          read_state() {
+            curl -sS --user "$AUTH" --ftp-method nocwd "$REMOTE" 2>/dev/null \
+              | tr -d '\r' | grep -Eo '^[0-9a-f]{40}' | head -n1 || true
+          }
+
+          BASE_SHA="$(read_state)"
+
+          if [ "$FULL" = "1" ]; then
+            echo "### FULL deploy - uploading every tracked file"
+            mapfile -t FILES < <(git ls-files | grep -Ev "$PROTECTED" || true)
+          elif [ -n "$BASE_SHA" ]; then
+            if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+              echo "::error::The server state (${BASE_SHA}) is not a commit this build knows about."
+              echo "Re-run this workflow manually with full = true to resync."
+              exit 1
+            fi
+            echo "### Incremental deploy"
+            echo "###   previous : ${BASE_SHA}"
+            echo "###   current  : ${DEPLOY_SHA}"
+            # --diff-filter=d EXCLUDES deletions, so a file removed from git is
+            # left untouched on the live server.
+            mapfile -t FILES < <(
+              git diff --name-only --diff-filter=d "${BASE_SHA}" "${DEPLOY_SHA}" -- . \
+                | grep -Ev "$PROTECTED" || true
+            )
+          else
+            echo "### No state file on the server yet - FIRST deploy of all tracked files"
+            mapfile -t FILES < <(git ls-files | grep -Ev "$PROTECTED" || true)
+          fi
+
+          TOTAL="${#FILES[@]}"
+          echo "### ${TOTAL} file(s) to upload into /${FTP_DIR}"
+
+          if [ "$TOTAL" -eq 0 ]; then
+            echo "### Nothing changed - nothing to upload."
+          else
+            printf '%s\n' "${FILES[@]}" | head -n 40 | sed 's/^/    /'
+            if [ "$TOTAL" -gt 40 ]; then
+              echo "    ... and $((TOTAL - 40)) more"
+            fi
+          fi
+
+          {
+            echo "### Deploy summary"
+            echo ""
+            echo "| Item | Value |"
+            echo "|---|---|"
+            echo "| Files to upload | ${TOTAL} |"
+            echo "| Target | /${FTP_DIR} |"
+            echo "| Commit | \`${DEPLOY_SHA}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$DRY_RUN" = "1" ]; then
+            echo "### DRY RUN - nothing was uploaded."
+            exit 0
+          fi
+
+          # Upload. -T sends one file, --ftp-create-dirs creates folders as needed.
+          uploaded=0
+          for f in "${FILES[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "    skip (not in this build): $f"
+              continue
+            fi
+            if curl -sS --user "$AUTH" --ftp-create-dirs -T "$f" \
+                  "ftp://${FTP_HOST}/${FTP_DIR}/${f}" >/dev/null 2>&1; then
+              uploaded=$((uploaded + 1))
+              if [ $((uploaded % 25)) -eq 0 ]; then
+                echo "    ... ${uploaded}/${TOTAL} uploaded"
+              fi
+            else
+              echo "::error::Upload failed: $f"
+              exit 1
+            fi
+          done
+
+          echo "### Uploaded ${uploaded}/${TOTAL} file(s)."
+
+          # Save the deployed commit on the server for the next run.
+          printf '%s\n' "$DEPLOY_SHA" > "$MARKER.tmp"
+          if curl -sS --user "$AUTH" -T "$MARKER.tmp" "$REMOTE" >/dev/null 2>&1; then
+            echo "### State file updated -> ${DEPLOY_SHA}"
+            echo "###    (${MARKER})"
+          else
+            echo "::warning::Could not update the state file; the next run will re-upload these files."
+          fi
+          rm -f "$MARKER.tmp"
+
+          echo "### Deploy finished. No files were deleted on the server."
+          echo "### Please do not delete ${MARKER} - it is the deploy state."

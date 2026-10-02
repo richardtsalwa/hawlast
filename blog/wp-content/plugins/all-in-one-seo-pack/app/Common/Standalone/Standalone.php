@@ -112,7 +112,7 @@ class Standalone {
 	public function __construct() {
 		$this->headlineAnalyzer = new HeadlineAnalyzer();
 		$this->flyoutMenu       = new FlyoutMenu();
-		$this->seoPreview       = new SeoPreview();
+		$this->seoPreview       = aioseo()->pro ? new ProStandalone\SeoPreview() : new SeoPreview();
 		$this->setupWizard      = new SetupWizard();
 		$this->primaryTerm      = aioseo()->pro ? new ProStandalone\PrimaryTerm() : new PrimaryTerm();
 		$this->userProfileTab   = new UserProfileTab();

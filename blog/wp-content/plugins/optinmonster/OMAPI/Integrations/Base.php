@@ -95,5 +95,4 @@ abstract class OMAPI_Integrations_Base {
 	public static function is_minimum_version() {
 		return static::version_compare( static::MINIMUM_VERSION );
 	}
-
 }

@@ -158,18 +158,9 @@ class OMAPI_AssetLoader {
 			return $resources[ $assetPath ];
 		}
 
-		$url      = filter_var( $assetPath, FILTER_VALIDATE_URL );
 		$contents = '';
 
-		if ( $url ) {
-			$results  = wp_remote_get(
-				$assetPath,
-				array(
-					'sslverify' => false,
-				)
-			);
-			$contents = wp_remote_retrieve_body( $results );
-		} elseif ( file_exists( $assetPath ) ) {
+		if ( file_exists( $assetPath ) ) {
 			ob_start();
 			include_once $assetPath;
 			$contents = ob_get_clean();
@@ -222,7 +213,6 @@ class OMAPI_AssetLoader {
 			return plugin_dir_url( __FILE__ ) . substr( $path, strlen( $pluginPath ) );
 		}
 		return '';
-
 	}
 
 	/**

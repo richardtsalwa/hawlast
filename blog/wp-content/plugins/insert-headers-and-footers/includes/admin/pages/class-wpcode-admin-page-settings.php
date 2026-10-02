@@ -149,6 +149,8 @@ class WPCode_Admin_Page_Settings extends WPCode_Admin_Page {
 
 		$this->common_settings();
 
+		$this->php_load_as_file_setting_upsell();
+
 		$this->metabox_row(
 			__( 'Allow Usage Tracking', 'insert-headers-and-footers' ),
 			$this->get_checkbox_toggle(
@@ -237,6 +239,47 @@ class WPCode_Admin_Page_Settings extends WPCode_Admin_Page {
 	}
 
 	/**
+	 * Output the PHP load as file setting upsell for lite users.
+	 *
+	 * @return void
+	 */
+	public function php_load_as_file_setting_upsell() {
+		$description = esc_html__( 'When enabled, all active PHP, HTML, and Universal snippets will be loaded from files instead of the database. Files are stored in ', 'insert-headers-and-footers' );
+
+		// Show site-specific path in multisite.
+		if ( function_exists( 'is_multisite' ) && is_multisite() && function_exists( 'get_current_blog_id' ) ) {
+			$blog_id = get_current_blog_id();
+			if ( $blog_id > 0 ) {
+				$file_path = str_replace( ABSPATH, '', WP_CONTENT_DIR . '/wpcode/snippets/site-' . absint( $blog_id ) . '/' );
+			} else {
+				$file_path = str_replace( ABSPATH, '', WP_CONTENT_DIR . '/wpcode/snippets/' );
+			}
+		} else {
+			$file_path = str_replace( ABSPATH, '', WP_CONTENT_DIR . '/wpcode/snippets/' );
+		}
+
+		$description .= '<code>' . esc_html( $file_path ) . '</code>';
+
+		if ( is_multisite() ) {
+			$description .= ' <strong>' . esc_html__( 'Note: In multisite networks, each site has its own file directory to prevent cross-site conflicts.', 'insert-headers-and-footers' ) . '</strong>';
+		}
+
+		$this->metabox_row(
+			__( 'Load PHP Snippets as Files', 'insert-headers-and-footers' ),
+			$this->get_checkbox_toggle(
+				false,
+				'wpcode-php-load-as-file',
+				$description
+			),
+			'wpcode-php-load-as-file',
+			'',
+			'',
+			'',
+			true
+		);
+	}
+
+	/**
 	 * Get an input to connect or disconnect from the snippet library.
 	 *
 	 * @return string
@@ -319,7 +362,7 @@ class WPCode_Admin_Page_Settings extends WPCode_Admin_Page {
 
 		wpcode()->settings->bulk_update_options( $settings );
 
-		if ( true === $settings['headers_footers_mode'] ) {
+		if ( isset( $settings['headers_footers_mode'] ) && true === $settings['headers_footers_mode'] ) {
 			wp_safe_redirect(
 				add_query_arg(
 					array(
@@ -391,9 +434,7 @@ class WPCode_Admin_Page_Settings extends WPCode_Admin_Page {
 		ob_start();
 		?>
 		<div class="wpcode-metabox-form">
-			<p><?php esc_html_e( 'You\'re using WPCode Lite - no license needed. Enjoy!', 'insert-headers-and-footers' ); ?>
-				<img draggable="false" role="img" class="emoji" alt="🙂" src="https://s.w.org/images/core/emoji/14.0.0/svg/1f642.svg">
-			</p>
+			<p><?php esc_html_e( 'You\'re using WPCode Lite - no license needed. Enjoy!', 'insert-headers-and-footers' ); ?> 🙂</p>
 			<p>
 				<?php
 				printf(
@@ -444,7 +485,7 @@ class WPCode_Admin_Page_Settings extends WPCode_Admin_Page {
 		echo '<div class="wpcode-blur-area">';
 		$this->access_view_content();
 		echo '</div>';
-		echo $this->get_access_overlay();
+		echo $this->get_access_overlay(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -489,7 +530,7 @@ class WPCode_Admin_Page_Settings extends WPCode_Admin_Page {
 				?>
 			</div>
 			<?php
-			echo self::get_upsell_box(
+			echo self::get_upsell_box( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_html__( 'Email Notifications is a Pro Feature', 'insert-headers-and-footers' ),
 				'<p>' . esc_html__( 'Do you want to get email notifications the moment your snippets throw an error or are automatically deactivated? Upgrade today and improve your workflow with WPCode Error Email Notifications.', 'insert-headers-and-footers' ) . '</p>',
 				array(

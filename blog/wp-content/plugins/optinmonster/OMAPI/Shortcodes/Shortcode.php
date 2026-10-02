@@ -216,9 +216,23 @@ class OMAPI_Shortcodes_Shortcode {
 			? $this->base->get_optin( absint( $this->identifier ) )
 			: $this->base->get_optin_by_slug( sanitize_text_field( $this->identifier ) );
 
-		// If no campaign found, do nothing.
 		if ( empty( $campaign ) ) {
-			throw new OMAPI_Shortcodes_Exception( 'Could not find campaign object for identifier' );
+			throw new OMAPI_Shortcodes_Exception( 'Campaign not eligible for shortcode rendering' );
+		}
+
+		// Only render campaigns that are:
+		// - published (paused campaigns are stored as drafts by OMAPI_Save, and
+		// get_page_by_path resolves drafts by slug), and
+		// - authored by the trusted OM-app/API sync, or by a user with the
+		// access capability. API-key sync runs with no logged-in user, so
+		// wp_insert_post stores post_author 0. A non-zero author lacking the
+		// capability means an XML-RPC-smuggled CPT post, not a real campaign.
+		$author = (int) $campaign->post_author;
+		if (
+			'publish' !== $campaign->post_status
+			|| ( $author > 0 && ! user_can( $author, $this->base->access_capability() ) )
+		) {
+			throw new OMAPI_Shortcodes_Exception( 'Campaign not eligible for shortcode rendering' );
 		}
 
 		$this->campaign = $campaign;
@@ -269,5 +283,4 @@ class OMAPI_Shortcodes_Shortcode {
 		// Return the HTML.
 		return apply_filters( 'optin_monster_shortcode_output', $html, $this->campaign, $this->atts );
 	}
-
 }

@@ -60,6 +60,13 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 	protected $capability = 'wpcode_edit_php_snippets';
 
 	/**
+	 * Hide the generator menu item.
+	 *
+	 * @var bool
+	 */
+	public $hide_menu = true;
+
+	/**
 	 * Call this just to set the page title translatable.
 	 */
 	public function __construct() {
@@ -81,6 +88,9 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 			$generator = sanitize_text_field( wp_unslash( $_GET['generator'] ) );
 			if ( array_key_exists( $generator, $this->generators ) ) {
 				$this->generator = $generator;
+				if ( isset( $this->generators[ $generator ]->code_type ) ) {
+					$this->code_type = $this->generators[ $generator ]->code_type;
+				}
 			}
 		}
 
@@ -130,7 +140,7 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 		$categories = wpcode()->generator()->get_categories();
 		?>
 		<div class="wpcode-items-metabox wpcode-metabox">
-			<?php $this->get_items_list_sidebar( $categories, __( 'All Generators', 'insert-headers-and-footers' ), __( 'Search Generators' ) ); ?>
+			<?php $this->get_items_list_sidebar( $categories, __( 'All Generators', 'insert-headers-and-footers' ), __( 'Search Generators', 'insert-headers-and-footers' ) ); ?>
 			<div class="wpcode-items-list">
 				<ul class="wpcode-items-list-category">
 					<?php
@@ -268,5 +278,6 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 		$editor->init_editor();
 
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
+		wp_enqueue_media();
 	}
 }

@@ -81,15 +81,6 @@ class Ai {
 	protected $getAccessTokenAction = 'aioseo_ai_get_access_token';
 
 	/**
-	 * The action name for fetching credits.
-	 *
-	 * @since 4.8.4
-	 *
-	 * @var string
-	 */
-	protected $creditFetchAction = 'aioseo_ai_update_credits';
-
-	/**
 	 * Class constructor.
 	 *
 	 * @since 4.8.4
@@ -98,10 +89,8 @@ class Ai {
 		$this->setOptions();
 
 		add_action( 'admin_init', [ $this, 'scheduleGetAccessToken' ] );
-		add_action( 'admin_init', [ $this, 'scheduleCreditFetchAction' ] );
 
 		add_action( $this->getAccessTokenAction, [ $this, 'getAccessToken' ] );
-		add_action( $this->creditFetchAction, [ $this, 'updateCredits' ] );
 
 		$this->assistant   = new Assistant();
 		$this->image       = new Image();
@@ -215,9 +204,6 @@ class Ai {
 		if ( is_wp_error( $response ) ) {
 			aioseo()->core->cache->update( 'ai_access_token_idle', true, HOUR_IN_SECONDS );
 
-			// Schedule another, one-time event in approx. 1 hour from now.
-			aioseo()->actionScheduler->scheduleSingle( $this->creditFetchAction, HOUR_IN_SECONDS + wp_rand( 0, 30 * MINUTE_IN_SECONDS ), [] );
-
 			return;
 		}
 
@@ -225,9 +211,6 @@ class Ai {
 		$data = json_decode( $body );
 		if ( empty( $data->accessToken ) ) {
 			aioseo()->core->cache->update( 'ai_access_token_idle', true, HOUR_IN_SECONDS );
-
-			// Schedule another, one-time event in approx. 1 hour from now.
-			aioseo()->actionScheduler->scheduleSingle( $this->creditFetchAction, HOUR_IN_SECONDS + wp_rand( 0, 30 * MINUTE_IN_SECONDS ), [] );
 
 			return;
 		}
@@ -238,27 +221,6 @@ class Ai {
 		aioseo()->core->cache->update( 'ai_access_token_idle', true, 12 * HOUR_IN_SECONDS );
 
 		$this->updateCredits( true );
-	}
-
-	/**
-	 * Schedules the credit fetch action.
-	 *
-	 * @since 4.8.4
-	 *
-	 * @return void
-	 */
-	public function scheduleCreditFetchAction() {
-		if ( $this->isDisabled() ) {
-			aioseo()->actionScheduler->unschedule( $this->creditFetchAction );
-
-			return;
-		}
-
-		if ( aioseo()->actionScheduler->isScheduled( $this->creditFetchAction ) ) {
-			return;
-		}
-
-		aioseo()->actionScheduler->scheduleRecurrent( $this->creditFetchAction, DAY_IN_SECONDS, DAY_IN_SECONDS, [] );
 	}
 
 	/**
@@ -285,9 +247,6 @@ class Ai {
 		if ( is_wp_error( $response ) ) {
 			aioseo()->core->cache->update( 'ai_credits_idle', true, HOUR_IN_SECONDS );
 
-			// Schedule another, one-time event in approx. 1 hour from now.
-			aioseo()->actionScheduler->scheduleSingle( $this->creditFetchAction, HOUR_IN_SECONDS + wp_rand( 0, 30 * MINUTE_IN_SECONDS ), [] );
-
 			return;
 		}
 
@@ -300,9 +259,6 @@ class Ai {
 			}
 
 			aioseo()->core->cache->update( 'ai_credits_idle', true, HOUR_IN_SECONDS );
-
-			// Schedule another, one-time event in approx. 1 hour from now.
-			aioseo()->actionScheduler->scheduleSingle( $this->creditFetchAction, HOUR_IN_SECONDS + wp_rand( 0, 30 * MINUTE_IN_SECONDS ), [] );
 
 			return;
 		}

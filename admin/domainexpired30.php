@@ -48,7 +48,7 @@ if ($tuma == true) {
     
 echo ("<p>Delivered..</p>");
 // SEND ME THE SMS 
-require_once('hawlastsms.php');
+require_once dirname(__DIR__) . '/libraries.php';
 
 // Specify your login credentials
 // Specify your login credentials

@@ -63,14 +63,12 @@ class WP_DLM {
 	public function __construct() {
 		global $wpdb;
 
-		register_deactivation_hook( DLM_PLUGIN_FILE, array( $this, 'deactivate_this_plugin' ) );
 		$cron_jobs = DLM_CRON_Jobs::get_instance();
 
 		// Setup Services
 		$this->services = new DLM_Services();
-
-		// Load plugin text domain.
-		$this->load_textdomain();
+		// Setup the download monitor upsells
+		DLM_Upsells::get_instance();
 
 		// Table for Download Infos.
 		$wpdb->download_log = "{$wpdb->prefix}download_log";
@@ -78,11 +76,11 @@ class WP_DLM {
 		$wpdb->dlm_reports = "{$wpdb->prefix}dlm_reports_log";
 		// New Table for individual Downloads.
 		$wpdb->dlm_downloads = "{$wpdb->prefix}dlm_downloads";
+		// New Table for API Keys.
+		$wpdb->dlm_api_keys = "{$wpdb->prefix}dlm_api_keys";
 
 		// Setup admin classes.
 		if ( is_admin() ) {
-
-			$extensions_handler = DLM_Extensions_Handler::get_instance();
 			// check if multisite and needs to create DB table
 
 			// Setup admin scripts
@@ -97,19 +95,12 @@ class WP_DLM {
 			$custom_labels = new DLM_Custom_Labels();
 			$custom_labels->setup();
 
-			// setup custom columns
-			$custom_columns = new DLM_Custom_Columns();
-			$custom_columns->setup();
-
 			// setup custom actions
 			$custom_actions = new DLM_Custom_Actions();
 			$custom_actions->setup();
 
 			// Admin Write Panels
 			new DLM_Admin_Writepanels();
-
-			// Admin Media Browser
-			new DLM_Admin_Media_Browser();
 
 			// Admin Media Insert
 			new DLM_Admin_Media_Insert();
@@ -132,6 +123,12 @@ class WP_DLM {
 				deactivate_plugins( 'dlm-download-duplicator/dlm-download-duplicator.php' );
 			}
 
+			//deactivate DLM Terms & Conditions and add notice.
+			if ( class_exists( 'DLM_Terms_And_Conditions' ) ) {
+				deactivate_plugins( 'dlm-terms-and-conditions/dlm-terms-and-conditions.php' );
+				add_action( 'admin_notices', array( $this, 'deactivation_admin_notice' ) );
+			}
+
 			// The beta testers class
 			/*if ( defined( 'DLM_BETA' ) && DLM_BETA && class_exists( 'DLM_Beta_Testers') ) {
 				new DLM_Beta_Testers();
@@ -141,14 +138,33 @@ class WP_DLM {
 
 			// Load the templates action class
 			$plugin_status = DLM_Plugin_Status::get_instance();
+
+			global $pagenow;
+			// Single Download edit screen debugger.
+			if ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) {
+				$debugger = DLM_Debug::get_instance();
+			}
+
+			// Load the API Key Generation class
+			$key_generation = DLM_Key_Generation::get_instance();
+
+			if ( ( defined( 'MULTISITE' ) && MULTISITE ) ) {
+				$multisite = DLM_Network_Settings::get_instance();
+			}
+
+			// Initialize the reports.
+			new DLM_Reports();
 		}
+
+		// Set cookie manager so we can add cleanup CRON jobs
+		DLM_Cookie_Manager::get_instance();
+
+		// Load the Approved Download Path option table
+		DLM_Downloads_Path::get_instance();
 
 		// Set the DB Upgrader class to see if we need to upgrade the table or not.
 		// This is mainly to move to version 4.6.x from 4.5.x and below.
 		$upgrader = DLM_DB_Upgrader::get_instance();
-
-		// Set Reports. We set them here in order to also create the REST Api calls.
-		$reports = DLM_Reports::get_instance();
 
 		// Setup AJAX handler if doing AJAX
 		if ( defined( 'DOING_AJAX' ) ) {
@@ -158,6 +174,11 @@ class WP_DLM {
 		// Setup new AJAX handler
 		$ajax_manager = new DLM_Ajax_Manager();
 		$ajax_manager->setup();
+
+		DLM_Rest_API::get_instance();
+
+		// Initialize the reports rest api.
+		new DLM_Reports_Rest_Api();
 
 		// Setup Modal
 		if ( '1' === get_option( 'dlm_no_access_modal', 0 ) ) {
@@ -214,12 +235,20 @@ class WP_DLM {
 		$gb_download_preview = new DLM_DownloadPreview_Preview();
 		$gb_download_preview->setup();
 
+		// Load the integrated Terms and Conditions functionality.
+		new DLM_Integrated_Terms_And_Conditions();
+		// Load the Members Lock functionality.
+		new DLM_Members_Lock();
+
 		// Backwards Compatibility.
 		$dlm_backwards_compatibility
 			= DLM_Backwards_Compatibility::get_instance();
 
 		// Setup integrations
 		$this->setup_integrations();
+
+		// Setup translations
+		$this->load_textdomain();
 
 		// Setup class that handles the frontend templates
 		DLM_Frontend_Templates::get_instance();
@@ -234,8 +263,6 @@ class WP_DLM {
 		// Generate attachment URL as Download link for protected files. Adding this here because we need it both in admin and in front.
 		add_filter( 'wp_get_attachment_url',
 			array( $this, 'generate_attachment_url' ), 15, 2 );
-
-		add_action( 'admin_menu', array( $this, 'init_upsells' ) );
 	}
 
 	/**
@@ -243,9 +270,10 @@ class WP_DLM {
 	 *
 	 * @since 4.7.72
 	 */
-	private function load_textdomain() {
-		$dlm_lang = dirname( DLM_FILE ) . '/languages/';
+	public function load_textdomain() {
 
+		$dlm_lang = dirname( DLM_FILE ) . '/languages';
+	
 		if ( get_user_locale() !== get_locale() ) {
 
 			unload_textdomain( 'download-monitor' );
@@ -260,10 +288,8 @@ class WP_DLM {
 
 			if ( file_exists( $lang_ext1 ) ) {
 				load_textdomain( 'download-monitor', $lang_ext1 );
-
 			} elseif ( file_exists( $lang_ext2 ) ) {
 				load_textdomain( 'download-monitor', $lang_ext2 );
-
 			} else {
 				load_plugin_textdomain( 'download-monitor', false, $dlm_lang );
 			}
@@ -290,6 +316,8 @@ class WP_DLM {
 
 		// setup product manager
 		DLM_Product_Manager::get()->setup();
+		// Set the no access session
+		add_action( 'wp', array( $this, 'set_no_access_session' ) );
 	}
 
 	/**
@@ -363,7 +391,7 @@ class WP_DLM {
 	public function frontend_scripts() {
 
 		if ( apply_filters( 'dlm_frontend_scripts', true ) ) {
-			wp_register_style( 'dlm-frontend', $this->get_plugin_url()
+			wp_enqueue_style( 'dlm-frontend', $this->get_plugin_url()
 			                                   . '/assets/css/frontend-tailwind.min.css',
 				array(), DLM_VERSION );
 		}
@@ -381,7 +409,8 @@ class WP_DLM {
 		}
 
 		// Leave this filter here in case XHR is problematic and needs to be disabled.
-		if ( self::do_xhr() ) {
+		$is_divi_fb = isset( $_GET['et_fb'] ) || ( function_exists( 'et_fb_is_builder_used_on_current_request' ) && et_fb_is_builder_used_on_current_request() );
+		if ( self::do_xhr() && ! $is_divi_fb ) {
 			wp_register_script(
 				'dlm-xhr',
 				plugins_url( '/assets/js/dlm-xhr' . ( ( ! SCRIPT_DEBUG )
@@ -396,7 +425,6 @@ class WP_DLM {
 			// Add dashicons on the front if popup modal for no access is used.
 			if ( '1' === get_option( 'dlm_no_access_modal', 0 ) ) {
 				wp_enqueue_style( 'dashicons' );
-				wp_enqueue_style( 'dlm-frontend' );
 			}
 			// @todo: delete the xhr_links attribute in the future as it will not be needed. It's only here for backwards
 			// compatibility as extensions might using it. Used prior to 4.7.72.
@@ -409,7 +437,7 @@ class WP_DLM {
 							'download-button',
 						),
 					),
-					'prevent_duplicates' => DLM_Utils::no_duplicate_download(),
+					'prevent_duplicates' => WP_DLM::dlm_window_logging()
 				)
 			);
 
@@ -440,13 +468,32 @@ class WP_DLM {
 			}
 
 			if ( get_option( 'permalink_structure' ) ) {
+
+				$home_url = get_home_url( null, '', $scheme );
+
+				// Fix for Polylang
+				// the URL should contain the locale site.com/lang/ 
+				// so we can detect a DLM download link.
+				if( function_exists( 'pll_home_url' ) ) {
+					$home_url = pll_home_url();
+				}
+
 				// Fix for translation plugins that modify the home_url.
-				$download_pointing_url = get_home_url( null, '', $scheme );
+				$download_pointing_url = rtrim( $home_url, '/' );
 				$download_pointing_url = $download_pointing_url . '/'
 				                         . $endpoint . '/';
 			} else {
-				$download_pointing_url = add_query_arg( $endpoint, '',
-					home_url( '', $scheme ) );
+
+				$home_url = home_url( null, '', $scheme );
+
+				// Fix for Polylang
+				// the URL should contain the locale site.com/lang/ 
+				// so we can detect a DLM download link.
+				if( function_exists( 'pll_home_url' ) ) {
+					$home_url = pll_home_url();
+				}
+
+				$download_pointing_url = add_query_arg( $endpoint, '', $home_url );
 			}
 
 			// Now we can remove the filter as the link is generated.
@@ -471,7 +518,7 @@ class WP_DLM {
 			wp_add_inline_script( 'dlm-xhr',
 				'const dlmXHR = ' . json_encode( $xhr_data )
 				. '; dlmXHRinstance = {}; const dlmXHRGlobalLinks = "'
-				. esc_url( $download_pointing_url )
+				. esc_url_raw( $download_pointing_url )
 				. '"; const dlmNonXHRGlobalLinks = '
 				. json_encode( $nonXHRGlobalLinks ) . '; dlmXHRgif = "'
 				. esc_url( $dlmXHRprogress['animation'] )
@@ -744,8 +791,9 @@ class WP_DLM {
 	 * @since 4.4.5
 	 */
 	public function archive_filter_download_link( $post_link, $post ) {
-		// We exclude the search because there is a specific option for this
-		if ( 'dlm_download' == $post->post_type && ! is_search() ) {
+		// We exclude the search because there is a specific option for this.
+		// Also, this should not be done in the admin.
+		if ( ! is_admin() && 'dlm_download' == $post->post_type && ! is_search() ) {
 			// fetch download object
 			try {
 				/** @var DLM_Download $download */
@@ -838,47 +886,6 @@ class WP_DLM {
 	}
 
 	/**
-	 * Handle plugin deactivation processes.
-	 *
-	 * @return void
-	 *
-	 * @since 4.8.0
-	 */
-	public function deactivate_this_plugin() {
-		self::handle_plugin_action();
-	}
-
-	/**
-	 * Handle plugin activation/deactivation hook
-	 *
-	 * @param string $request activation/deactivation.
-	 *
-	 * @return void
-	 * @since 4.8.0
-	 */
-	public static function handle_plugin_action( $request = 'deactivate' ) {
-
-		$user_license = get_option( 'dlm_master_license', false );
-		// If no license found, skip this.
-		if ( ! $user_license ) {
-			return;
-		}
-
-		$extensions_handler = DLM_Extensions_Handler::get_instance();
-		$user_license       = json_decode( $user_license, true );
-		$email              = $user_license['email'];
-		$license_key        = $user_license['license_key'];
-		$action_trigger     = '-dlm';
-		$args               = array(
-			'key'              => $license_key,
-			'email'            => $email,
-			'extension_action' => $request,
-			'action_trigger'   => $action_trigger,
-		);
-		$extensions_handler->handle_master_license( $args );
-	}
-
-	/**
 	 * Enable/disable X-Sendfile functionality
 	 *
 	 * @return mixed|null
@@ -896,6 +903,16 @@ class WP_DLM {
 		 * @since  4.9.6
 		 */
 		return apply_filters( 'dlm_x_sendfile', false );
+	}
+
+	/**
+	 * Enable/disable window logging functionality. Only permit one download log per 60 seconds.
+	 *
+	 * @return mixed|null
+	 * @since 4.9.4
+	 */
+	public static function dlm_window_logging() {
+		return apply_filters( 'dlm_enable_window_logging', true );
 	}
 
 	/**
@@ -937,11 +954,74 @@ class WP_DLM {
 	}
 
 	/**
-	 * Initialize the Upsells
+	 * Display admin notice when DLM Terms & Conditions is deactivated.
 	 *
-	 * @since 4.9.9
+	 * @since 5.0.0
 	 */
-	public function init_upsells() {
-		DLM_Upsells::get_instance();
+	public function deactivation_admin_notice() {
+		$notice = array(
+			'title'   => esc_html__( 'Terms & Conditions plugin deactivated', 'download-monitor' ),
+			'message' => esc_html__( 'Download Monitor - Terms & Conditions plugin was deactivated because it is now integrated within Download Monitor.', 'download-monitor' ),
+			'status'  => 'success',
+			'source'  => array(
+				'slug' => 'download-monitor',
+				'name' => 'Download Monitor',
+			),
+			'timed'   => 5000,
+		);
+
+		WPChill_Notifications::add_notification( 'dlm-tc-deactivated', $notice );
+	}
+
+	/**
+	 * Set no access session
+	 *
+	 * @return void
+	 * @since 5.0.14
+	 */
+	public function set_no_access_session() {
+		$no_access_page = get_option( 'dlm_no_access_page', 0 );
+		if ( apply_filters( 'dlm_set_no_access_session', $no_access_page ) && ! isset( $_SESSION ) ) {
+			if ( $this->is_download_related_request() ) {
+				$is_https = ( ! empty( $_SERVER['HTTPS'] ) && 'off' !== $_SERVER['HTTPS'] ) || ( isset( $_SERVER['SERVER_PORT'] ) && 443 === $_SERVER['SERVER_PORT'] );
+				$params   = array(
+					'secure'   => $is_https,
+					'httponly' => true,
+					'samesite' => 'Lax',
+				);
+				session_set_cookie_params( apply_filters( 'dlm_set_session_params', $params ) );
+				session_start();
+			}
+		}
+	}
+
+	/**
+	 * Check if current request is download-related
+	 *
+	 * @return bool
+	 * @since 5.1.2
+	 */
+	private function is_download_related_request() {
+		if ( is_singular( 'dlm_download' ) ) {
+			return true;
+		}
+
+		$no_access_page = get_option( 'dlm_no_access_page', 0 );
+		if ( $no_access_page && is_page( $no_access_page ) ) {
+			return true;
+		}
+
+		if ( isset( $_GET['download'] ) || isset( $_POST['download'] ) ) {
+			return true;
+		}
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			$action = isset( $_REQUEST['action'] ) ? sanitize_text_field( $_REQUEST['action'] ) : '';
+			if ( strpos( $action, 'dlm_' ) === 0 || strpos( $action, 'download' ) !== false ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

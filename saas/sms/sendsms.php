@@ -1,6 +1,6 @@
 <?php
 if ( !empty($_POST)) {
-//THIS FILES IS USED MY THE MPESA CONFIRMATION SCRIPT
+//THIS FILES IS USED BY THE MPESA CONFIRMATION SCRIPT
 
 require '../config.php';
 require '../database.php';
@@ -64,7 +64,7 @@ if(!$message) { $errors[] = "Please enter a message";}
 if(count($errors) == 0){  
  
 // SEND sms to the admin 
-require_once('hawlastsms.php');
+require_once dirname(__DIR__, 2) . '/libraries.php';
 
 // Specify your login credentials 
 $username = "hawlast";

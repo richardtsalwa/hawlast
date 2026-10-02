@@ -279,7 +279,8 @@ class Description {
 
 		$dynamicOptions = aioseo()->dynamicOptions->noConflict();
 		if ( ! $description && $dynamicOptions->searchAppearance->taxonomies->has( $term->taxonomy ) ) {
-			$description = $this->helpers->prepare( aioseo()->dynamicOptions->searchAppearance->taxonomies->{$term->taxonomy}->metaDescription, false, $default );
+			$metaDescription = aioseo()->dynamicOptions->searchAppearance->taxonomies->{$term->taxonomy}->metaDescription;
+			$description     = $this->helpers->prepare( aioseo()->tags->replaceTermTags( $metaDescription, $term ), false, $default );
 		}
 
 		$terms[ $term->term_id ] = $description ? $description : $this->helpers->prepare( term_description( $term->term_id ), false, $default );

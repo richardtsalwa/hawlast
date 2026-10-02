@@ -73,7 +73,7 @@ if ( mail($email, $subject, $message, $headers) )
 /* Redirect visitor to thank you page */
 
 // SEND ME THE SMS 
-require_once('../AfricasTalkingGateway.php');
+require_once dirname(__DIR__) . '/libraries.php';
 
 //Specify your credentials
 $username = "hawlast";

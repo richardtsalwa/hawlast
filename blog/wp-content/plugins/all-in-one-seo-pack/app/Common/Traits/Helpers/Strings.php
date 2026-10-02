@@ -290,6 +290,31 @@ trait Strings {
 	}
 
 	/**
+	 * Lowercases a registered post type/taxonomy label so it reads naturally inside a sentence.
+	 *
+	 * Labels are registered in title case ("Category", "Product categories"), which reads wrong
+	 * mid-sentence: "Your Category is 49 words long".
+	 *
+	 * NOTE: Applied in every locale. Languages that capitalize all nouns (German, for one) get a
+	 * lowercased noun here; the surrounding strings are translatable, so a translator can phrase
+	 * around it.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  string $label The registered label.
+	 * @return string        The label, lowercased.
+	 */
+	public function lowercaseLabel( $label ) {
+		if ( ! is_string( $label ) || '' === $label ) {
+			return '';
+		}
+
+		return function_exists( 'mb_strtolower' )
+			? mb_strtolower( $label, $this->getCharset() )
+			: strtolower( $label );
+	}
+
+	/**
 	 * Returns the string after all HTML entities have been decoded.
 	 *
 	 * @since   4.0.0

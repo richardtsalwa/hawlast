@@ -116,15 +116,66 @@ class DLM_Logging {
 	/**
 	 * Check if visitor has downloaded version
 	 *
-	 * @param DLM_Download_Version $version Version object.
+	 * @param mixed $version Version object or version ID.
 	 *
 	 * @return bool
 	 * @since 4.6.0
 	 */
 	public function has_uuid_downloaded_version( $version ) {
 		global $wpdb;
+		// Check if version ID is passed or object
+		if ( is_int( $version ) ) {
+			$version_id = $version;
+		} else {
+			$version_id = $version->get_id();
+		}
 
-		return ( absint( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->download_log} WHERE `version_id` = %d AND `uuid` = %s AND `download_status` IN ('completed','redirected')", $version->get_id(), DLM_Utils::get_visitor_uuid() ) ) ) > 0 );
+		return ( absint( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->download_log} WHERE `version_id` = %d AND `uuid` = %s AND `download_status` IN ('completed','redirected')", $version_id, DLM_Utils::get_visitor_uuid() ) ) ) > 0 );
+	}
+
+	/**
+	 * Generate a single-use token for an XHR download attempt, tied to the given download/version.
+	 *
+	 * @param int $download_id
+	 * @param int $version_id
+	 *
+	 * @return string
+	 */
+	public function generate_xhr_log_token( $download_id, $version_id ) {
+		$token = bin2hex( random_bytes( 32 ) );
+
+		set_transient(
+			'dlm_xhr_log_' . $token,
+			array(
+				'download_id' => absint( $download_id ),
+				'version_id'  => absint( $version_id ),
+			),
+			apply_filters( 'dlm_xhr_log_token_ttl', 30 * MINUTE_IN_SECONDS )
+		);
+
+		return $token;
+	}
+
+	/**
+	 * Validate and consume a single-use XHR log token.
+	 *
+	 * @param string $token
+	 * @param int    $download_id
+	 * @param int    $version_id
+	 *
+	 * @return bool
+	 */
+	private function consume_xhr_log_token( $token, $download_id, $version_id ) {
+		$key  = 'dlm_xhr_log_' . $token;
+		$data = get_transient( $key );
+		delete_transient( $key );
+
+		if ( ! is_array( $data ) || ! isset( $data['download_id'], $data['version_id'] ) ) {
+			return false;
+		}
+
+		return absint( $data['download_id'] ) === absint( $download_id )
+			&& absint( $data['version_id'] ) === absint( $version_id );
 	}
 
 	/**
@@ -142,19 +193,42 @@ class DLM_Logging {
 
 		check_ajax_referer( 'dlm_ajax_nonce', 'nonce' );
 
+		$download_id = absint( $_POST['download_id'] );
+		$version_id  = absint( $_POST['version_id'] );
+
+		if ( ! isset( $_POST['log_token'] )
+			|| ! $this->consume_xhr_log_token( sanitize_text_field( wp_unslash( $_POST['log_token'] ) ), $download_id, $version_id )
+		) {
+			wp_send_json_error( 'Invalid or expired log token' );
+		}
+
 		// Let's make sure the DLM_DOING_XHR is defined
 		if ( ! defined( 'DLM_DOING_XHR' ) ) {
 			define( 'DLM_DOING_XHR', true );
 		}
 
-		$download_id = absint( $_POST['download_id'] );
-		$version_id  = absint( $_POST['version_id'] );
-		$status      = sanitize_text_field( wp_unslash( $_POST['status'] ) );
+		$status           = sanitize_text_field( wp_unslash( $_POST['status'] ) );
+		$allowed_statuses = apply_filters( 'dlm_xhr_log_allowed_statuses', array( 'completed', 'redirected', 'failed' ) );
+
+		if ( ! in_array( $status, $allowed_statuses, true ) ) {
+			wp_send_json_error( 'Invalid status' );
+		}
+
 		$cookie      = 'true' === $_POST['cookie'];
 		$current_url = ( isset( $_POST['currentURL'] ) ) ? esc_url_raw( $_POST['currentURL'] ) : '-';
 		// Set our objects
-		$download = download_monitor()->service( 'download_repository' )->retrieve_single( $download_id );
-		$version  = download_monitor()->service( 'version_repository' )->retrieve_single( $version_id );
+		try {
+			$download = download_monitor()->service( 'download_repository' )->retrieve_single( $download_id );
+		} catch ( \Exception $e ) {
+			die();
+		}
+
+		try {
+			$version = download_monitor()->service( 'version_repository' )->retrieve_single( $version_id );
+		} catch ( \Exception $e ) {
+			die();
+		}
+
 		$download->set_version( $version );
 		// Truly log the corresponding status
 		$this->log( $download, $version, $status, $cookie, $current_url );
@@ -173,21 +247,10 @@ class DLM_Logging {
 	 * @param string $url
 	 */
 	public function log( $download, $version, $status = 'completed', $cookie = true, $url = '-' ) {
-		// Don't log if admin hit does not need to be logged
-		if ( self::ignore_admin_log() ) {
-			return;
-		}
 
-		if ( $this->is_count_unique_ips_only() && true === $this->has_uuid_downloaded_version( $version ) ) {
-			return;
-		}
-
-		if ( false !== strpos( $url, admin_url() ) ) {
-			return;
-		}
-
+		$cookie_manager = DLM_Cookie_Manager::get_instance();
 		// setup new log item object.
-		if ( ! DLM_Cookie_Manager::exists( $download ) ) {
+		if ( false === $cookie_manager->check_cookie_meta( 'wp_dlm_downloading', $download->get_id() ) ) {
 			$ip       = DLM_Utils::get_visitor_ip();
 			$log_item = new DLM_Log_Item();
 			$log_item->set_user_id( absint( get_current_user_id() ) );
@@ -201,10 +264,10 @@ class DLM_Logging {
 			$log_item->set_current_url( $url );
 
 			if ( $cookie ) {
-				DLM_Cookie_Manager::set_cookie( $download );
+				$cookie_manager->set_cookie( $download, array( 'meta' => array( array( 'wp_dlm_downloading' => $download->get_id() ) ) ) );
 			}
 			// persist log item.
-			download_monitor()->service( 'log_item_repository' )->persist( $log_item );
+			download_monitor()->service( 'log_item_repository' )->persist( $log_item ); 
 		}
 	}
 

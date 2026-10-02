@@ -253,6 +253,12 @@ trait Vue {
 				'archives'     => array_values( $this->getPublicPostTypes( false, true, true ) ),
 				'postStatuses' => array_values( $this->getPublicPostStatuses() )
 			],
+			// Object types TruSEO can never analyse. Localized so the include-list controls hide them
+			// instead of offering a checkbox that silently does nothing.
+			'truSeoIneligible'   => [
+				'postTypes'  => array_values( $this->getTruSeoIneligiblePostTypes() ),
+				'taxonomies' => array_values( $this->getTruSeoIneligibleTaxonomies() )
+			],
 			'notifications'      => array_merge( Models\Notification::getNotifications( true ), [
 				'force' => $this->showNotificationsDrawer()
 			] ),

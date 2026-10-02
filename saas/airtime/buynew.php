@@ -12,14 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] <> "POST")  die("You can only reach this page by 
 	//fclose($fp);
 	
 // THE AIRTIME BALANCE FROM AT
-//Ths is from composer generated from vendor folder 
-$autoloadPath = '/home/n2a33d5/vendor/autoload.php';
-
-if (file_exists($autoloadPath)) {
-    require_once $autoloadPath;
-} else {
-    die("The required file $autoloadPath does not exist.");
-}
+// Loaded through the central library loader (Composer vendor folder)
+require_once dirname(__DIR__, 2) . '/libraries.php';
 
 use AfricasTalking\SDK\AfricasTalking;
 

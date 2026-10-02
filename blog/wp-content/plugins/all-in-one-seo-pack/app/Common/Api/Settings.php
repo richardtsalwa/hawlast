@@ -31,7 +31,7 @@ class Settings {
 	 *
 	 * @var array
 	 */
-	const CONTENT_OPTIMIZATION_OPTIONS = [ 'truSeo', 'headlineAnalyzer', 'seoAnalysis', 'spellChecker', 'highlighter', 'highlighterStyle' ];
+	const CONTENT_OPTIMIZATION_OPTIONS = [ 'truSeo', 'truSeoObjects', 'headlineAnalyzer', 'seoAnalysis', 'spellChecker', 'highlighter', 'highlighterStyle' ];
 
 	/**
 	 * Retrieves the plugin options.

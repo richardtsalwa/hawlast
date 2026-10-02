@@ -126,6 +126,8 @@ abstract class WPCode_Auto_Insert_Type {
 			return;
 		}
 
+		add_action( 'admin_init', array( $this, 'load_upgrade_strings' ), 140 );
+
 		$this->add_start_hook();
 	}
 
@@ -194,8 +196,24 @@ abstract class WPCode_Auto_Insert_Type {
 	 * @return array
 	 */
 	public function get_locations() {
+		$this->load_locations();
+
 		return isset( $this->locations ) ? $this->locations : array();
 	}
+
+	/**
+	 * Load the locations for this type.
+	 *
+	 * @return void
+	 */
+	abstract public function load_locations();
+
+	/**
+	 * Load the label for this type.
+	 *
+	 * @return void
+	 */
+	abstract public function load_label();
 
 	/**
 	 * Query snippets by location.
@@ -247,10 +265,13 @@ abstract class WPCode_Auto_Insert_Type {
 
 		$this->snippets = array();
 		$args           = array(
-			'post_type'      => wpcode_get_post_type(),
-			'posts_per_page' => - 1,
-			'post_status'    => 'publish',
-			'cache_results'  => false, // We don't want to cache this query ever as it should only run when snippets are preloaded in case of an error it will provide false values if cached.
+			'post_type'        => wpcode_get_post_type(),
+			'posts_per_page'   => - 1,
+			'post_status'      => 'publish',
+			// We don't want to cache this query ever as it should only run when snippets are preloaded in case of an error it will provide false values if cached.
+			'cache_results'    => false,
+			// We don't want to allow any filters to be applied to this query.
+			'suppress_filters' => true,
 		);
 		$snippets_query = new WP_Query( $args );
 		$snippets       = $snippets_query->posts;
@@ -333,7 +354,8 @@ abstract class WPCode_Auto_Insert_Type {
 		}
 
 		foreach ( $terms as $term ) {
-			$this->locations_terms[ $term->slug ] = $term;
+			$term_slug                           = $term->slug ?? '';
+			$this->locations_terms[ $term_slug ] = $term;
 		}
 	}
 
@@ -348,7 +370,7 @@ abstract class WPCode_Auto_Insert_Type {
 	public function include_term_in_post( $clauses ) {
 		global $wpdb;
 
-		$clauses['fields']  .= ", {$wpdb->term_relationships}.term_taxonomy_id";
+		$clauses['fields'] .= ", {$wpdb->term_relationships}.term_taxonomy_id";
 		$clauses['groupby'] = '';
 
 		return $clauses;
@@ -360,6 +382,10 @@ abstract class WPCode_Auto_Insert_Type {
 	 * @return string
 	 */
 	public function get_label() {
+		if ( ! isset( $this->label ) ) {
+			$this->load_label();
+		}
+
 		return $this->label;
 	}
 
@@ -401,5 +427,14 @@ abstract class WPCode_Auto_Insert_Type {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Load the strings for the upgrade prompt, if any.
+	 *
+	 * @return void
+	 */
+	public function load_upgrade_strings() {
+
 	}
 }

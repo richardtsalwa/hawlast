@@ -586,6 +586,28 @@ trait WpContext {
 	}
 
 	/**
+	 * Returns the post types TruSEO can never analyse.
+	 *
+	 * NOTE: Exposed so the settings UI can hide them from the include-list instead of offering a
+	 * checkbox that does nothing — {@see getTruSeoEligiblePostTypes()} filters them out regardless of
+	 * what the user ticks.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @return array The post types that can never be analysed.
+	 */
+	public function getTruSeoIneligiblePostTypes() {
+		// Attachments have no editable body content; the others are handled by their own features or
+		// are not real content types.
+		$excludedPostTypes = [ 'attachment', 'aioseo-location', 'web-story' ];
+		if ( class_exists( 'bbPress' ) ) {
+			$excludedPostTypes = array_merge( $excludedPostTypes, [ 'forum', 'topic', 'reply' ] );
+		}
+
+		return $excludedPostTypes;
+	}
+
+	/**
 	 * Returns the post types that are eligible for TruSEO analysis.
 	 *
 	 * @since 4.7.3
@@ -593,14 +615,17 @@ trait WpContext {
 	 * @return array The post types that are eligible for TruSEO analysis.
 	 */
 	public function getTruSeoEligiblePostTypes() {
-		$allowedPostTypes  = aioseo()->helpers->getPublicPostTypes( true );
-		$excludedPostTypes = [ 'attachment', 'aioseo-location', 'web-story' ];
-		if ( class_exists( 'bbPress' ) ) {
-			$excludedPostTypes = array_merge( $excludedPostTypes, [ 'forum', 'topic', 'reply' ] );
-		}
+		$allowedPostTypes = aioseo()->helpers->getPublicPostTypes( true );
 
 		// Remove the excluded post types from the allowed ones.
-		$allowedPostTypes = array_diff( $allowedPostTypes, $excludedPostTypes );
+		$allowedPostTypes = array_diff( $allowedPostTypes, $this->getTruSeoIneligiblePostTypes() );
+
+		if ( ! aioseo()->options->advanced->truSeoObjects->postTypes->all ) {
+			$allowedPostTypes = array_intersect(
+				$allowedPostTypes,
+				(array) aioseo()->options->advanced->truSeoObjects->postTypes->included
+			);
+		}
 
 		// Now, check if the metabox is enabled and that the post type is public for each of these.
 		foreach ( $allowedPostTypes as $postType ) {
@@ -618,6 +643,188 @@ trait WpContext {
 
 		// Considering post types get registered during various stages of the WP load process, we should not cache this.
 		return $allowedPostTypes;
+	}
+
+	/**
+	 * Returns the taxonomies TruSEO can never analyse.
+	 *
+	 * NOTE: Exposed so the settings UI can hide them from the include-list instead of offering a
+	 * checkbox that does nothing — {@see getTruSeoEligibleTaxonomies()} filters them out regardless
+	 * of what the user ticks.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @return array The taxonomies that can never be analysed.
+	 */
+	public function getTruSeoIneligibleTaxonomies() {
+		return [
+			// A synthetic entry standing in for every `pa_*` attribute taxonomy; nothing of that
+			// name is registered, so it can never be eligible.
+			'product_attributes',
+			// Locations are ineligible as a post type too, so their categories follow.
+			'aioseo-location-category',
+			// Avada's Elastic Slider groups; a bucket for slides, not a content archive.
+			'themefusion_es_groups'
+		];
+	}
+
+	/**
+	 * Returns the taxonomies that are eligible for TruSEO analysis.
+	 *
+	 * NOTE: Scoped to WooCommerce collection taxonomies. A term carries no body content, so the
+	 * analysis only makes sense where the description doubles as a landing-page intro.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @return array The taxonomies that are eligible for TruSEO analysis.
+	 */
+	public function getTruSeoEligibleTaxonomies() {
+		// NOTE: Each read walks the full path — the options getter resets its group state after
+		// returning a leaf, so reusing an intermediate group object resolves the second read wrong.
+		$allowedTaxonomies = aioseo()->options->advanced->truSeoObjects->taxonomies->all
+			? aioseo()->helpers->getPublicTaxonomies( true )
+			: (array) aioseo()->options->advanced->truSeoObjects->taxonomies->included;
+
+		// A taxonomy the user selected before deactivating the plugin that registers it must not
+		// leak through as eligible.
+		$allowedTaxonomies = array_filter( $allowedTaxonomies, 'taxonomy_exists' );
+		$allowedTaxonomies = array_diff( $allowedTaxonomies, $this->getTruSeoIneligibleTaxonomies() );
+
+		$dynamicOptions = aioseo()->dynamicOptions->noConflict();
+		foreach ( $allowedTaxonomies as $index => $taxonomy ) {
+			// NOTE: `has()` must hydrate the group here — passing false leaves `advanced` unset,
+			// so the showMetaBox read below would always come back null.
+			if (
+				! $dynamicOptions->searchAppearance->taxonomies->has( $taxonomy ) ||
+				! $dynamicOptions->searchAppearance->taxonomies->{$taxonomy}->advanced->showMetaBox
+			) {
+				unset( $allowedTaxonomies[ $index ] );
+			}
+		}
+
+		return apply_filters( 'aioseo_truseo_eligible_taxonomies', array_values( $allowedTaxonomies ) );
+	}
+
+	/**
+	 * Returns whether the term's taxonomy supports on-page analysis.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  int  $termId Term ID.
+	 * @return bool         Whether the term's taxonomy supports on-page analysis.
+	 */
+	public function supportsTermPageAnalysis( $termId ) {
+		$term = $this->getTerm( $termId );
+		if ( ! is_a( $term, 'WP_Term' ) ) {
+			return false;
+		}
+
+		return in_array( $term->taxonomy, $this->getTruSeoEligibleTaxonomies(), true );
+	}
+
+	/**
+	 * Returns whether a term is eligible for being analyzed by TruSEO.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  int  $termId Term ID.
+	 * @return bool         Whether a term is eligible for being analyzed by TruSEO.
+	 */
+	public function isTermTruSeoEligible( $termId ) {
+		if ( ! aioseo()->options->advanced->truSeo ) {
+			return false;
+		}
+
+		return $this->supportsTermPageAnalysis( $termId );
+	}
+
+	/**
+	 * Returns whether a term has anything for TruSEO to analyse.
+	 *
+	 * A term's description is its only body content, so with none there is nothing to score. The
+	 * editor already refuses to show a score in that state; this keeps the list and the batch
+	 * scanner in step with it, rather than showing a badge stuck on "N/A" for a term that is
+	 * deliberately never scanned.
+	 *
+	 * NOTE: This gates the *score*, not the Optimization tab — the tab has to stay reachable so a
+	 * description can be added in the first place.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  int  $termId Term ID.
+	 * @return bool         Whether the term can be scored.
+	 */
+	public function isTermTruSeoAnalyzable( $termId ) {
+		if ( ! $this->isTermTruSeoEligible( $termId ) ) {
+			return false;
+		}
+
+		$term = $this->getTerm( $termId );
+
+		return is_a( $term, 'WP_Term' ) && '' !== trim( (string) $term->description );
+	}
+
+	/**
+	 * Returns the nouns TruSEO result copy uses for a taxonomy, e.g. "Your product category is 43 words long".
+	 *
+	 * NOTE: The taxonomy's own registered labels are used so the noun is right for every taxonomy and
+	 * already translated. Both the term editor and the term-list batch scanner read this, so the two
+	 * cannot describe the same term differently.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  string $taxonomy The taxonomy name.
+	 * @return array            The singular and plural nouns.
+	 */
+	public function getTaxonomyContentNouns( $taxonomy ) {
+		$taxonomyObject = get_taxonomy( $taxonomy );
+		if ( ! $taxonomyObject ) {
+			return [
+				'singular' => __( 'term', 'all-in-one-seo-pack' ),
+				'plural'   => __( 'terms', 'all-in-one-seo-pack' )
+			];
+		}
+
+		// Lowercased: these nouns land mid-sentence in result copy ("Your category is 49 words long"),
+		// where the registered title case reads wrong.
+		return [
+			'singular' => ! empty( $taxonomyObject->labels->singular_name )
+				? aioseo()->helpers->lowercaseLabel( $taxonomyObject->labels->singular_name )
+				: __( 'term', 'all-in-one-seo-pack' ),
+			'plural'   => ! empty( $taxonomyObject->labels->name )
+				? aioseo()->helpers->lowercaseLabel( $taxonomyObject->labels->name )
+				: __( 'terms', 'all-in-one-seo-pack' )
+		];
+	}
+
+	/**
+	 * Returns the nouns result copy and notices use for a post type, e.g. "Successfully analyzed 3 pages".
+	 *
+	 * NOTE: The counterpart of {@see getTaxonomyContentNouns}. Lowercased for the same reason —
+	 * these land mid-sentence, where the registered title case reads wrong.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  string $postType The post type name.
+	 * @return array            The singular and plural nouns.
+	 */
+	public function getPostTypeContentNouns( $postType ) {
+		$postTypeObject = $postType ? get_post_type_object( $postType ) : null;
+		if ( ! $postTypeObject ) {
+			return [
+				'singular' => __( 'post', 'all-in-one-seo-pack' ),
+				'plural'   => __( 'posts', 'all-in-one-seo-pack' )
+			];
+		}
+
+		return [
+			'singular' => ! empty( $postTypeObject->labels->singular_name )
+				? aioseo()->helpers->lowercaseLabel( $postTypeObject->labels->singular_name )
+				: __( 'post', 'all-in-one-seo-pack' ),
+			'plural'   => ! empty( $postTypeObject->labels->name )
+				? aioseo()->helpers->lowercaseLabel( $postTypeObject->labels->name )
+				: __( 'posts', 'all-in-one-seo-pack' )
+		];
 	}
 
 	/**

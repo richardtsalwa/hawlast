@@ -183,5 +183,4 @@ class OMAPI_Welcome {
 		</div>
 		<?php
 	}
-
 }

@@ -35,7 +35,7 @@ if(!$message) { $errors[] = "Please enter a message";}
  if (empty($errors)){
 
 // SEND sms to the admin 
-require_once('hawlastsms.php');
+require_once dirname(__DIR__, 2) . '/libraries.php';
 
 // Specify your login credentials
 $username = "hawlast";

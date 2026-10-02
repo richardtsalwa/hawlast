@@ -12,15 +12,17 @@ class DLM_Template_Handler {
 	 * @return array
 	 */
 	public function get_available_templates() {
-		return apply_filters( 'dlm_available_templates', array(
-			''             => __( 'Default - Title and count', 'download-monitor' ),
-			'button'       => __( 'Button - CSS styled button showing title and count', 'download-monitor' ),
-			'box'          => __( 'Box - Box showing thumbnail, title, count, filename and filesize.', 'download-monitor' ),
-			'filename'     => __( 'Filename - Filename and download count', 'download-monitor' ),
-			'title'        => __( 'Title - Shows download title only', 'download-monitor' ),
-			'version-list' => __( 'Version list - Lists all download versions in an unordered list', 'download-monitor' ),
-			'custom'       => __( 'Custom template', 'download-monitor' ),
-		) );
+		return apply_filters(
+			'dlm_available_templates',
+			array(
+				''             => __( 'Default - Title and count', 'download-monitor' ),
+				'button'       => __( 'Button - Shows download title', 'download-monitor' ),
+				'filename'     => __( 'Filename - Filename and download count', 'download-monitor' ),
+				'title'        => __( 'Title - Shows download title only', 'download-monitor' ),
+				'version-list' => __( 'Version list - Lists all download versions in an unordered list', 'download-monitor' ),
+				'custom'       => __( 'Custom template', 'download-monitor' ),
+			)
+		);
 	}
 
 	/**
@@ -37,6 +39,7 @@ class DLM_Template_Handler {
 	 */
 	public function get_template_part( $slug, $name = '', $custom_dir = '', $args = array() ) {
 		$template = '';
+		$name     = sanitize_file_name( $name );
 
 		// The plugin path
 		$plugin_path = download_monitor()->get_plugin_path();
@@ -82,24 +85,35 @@ class DLM_Template_Handler {
 			// Extract args if there are any
 			if ( is_array( $args ) && count( $args ) > 0 ) {
 				extract( $args );
-
-				// Compatibility between extensions and templates.
-				if ( ! isset( $download ) && isset( $dlm_download ) ) {
-					$download = $dlm_download;
-				}
-
-				if ( ! isset( $dlm_download ) && isset( $download ) ) {
-					$dlm_download = $download;
-				}
 			}
+
+			// Compatibility between extensions and templates.
+			if ( ! isset( $download ) && isset( $dlm_download ) ) {
+				$download = $dlm_download;
+			}
+
+			if ( ! isset( $dlm_download ) && isset( $download ) ) {
+				$dlm_download = $download;
+			}
+
 			// Check if $dlm_download is set, if not set it to false. This happens to shortcodes where the Download is not set.
 			if ( ! isset( $dlm_download ) ) {
 				$dlm_download = false;
 			}
 
+			if ( ! isset( $download ) ) {
+				$download = false;
+			}
+
+			if ( ! isset( $dlm_download ) ) {
+				$dlm_download = false;
+			}
+
+			$attributes = $this->get_template_attributes( $download, $template );
+
 			do_action( 'dlm_before_template_part', $template, $slug, $name, $custom_dir, $args );
 			$attributes = $this->get_template_attributes( $dlm_download, $template, $slug, $name );
-			include( $template );
+			include $template;
 
 			do_action( 'dlm_after_template_part', $template, $slug, $name, $custom_dir, $args );
 			//load_template( $template, false );
@@ -129,7 +143,7 @@ class DLM_Template_Handler {
 		$default_attributes = array(
 			'link_attributes' => array(
 				'data-e-Disable-Page-Transition' => 'true',
-				'class'                          => array( 'download-link' ),
+				'class'                          => array( 'dlm-download-link' ),
 				'title'                          => $title,
 				'href'                           => $download->get_the_download_link(),
 				'rel'                            => 'nofollow',

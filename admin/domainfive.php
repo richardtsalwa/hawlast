@@ -68,7 +68,7 @@ echo ("<p>Message delivery failed...$email</p>");
 }
 
 // SEND ME THE SMS 
-require_once('hawlastsms.php');
+require_once dirname(__DIR__) . '/libraries.php';
 
 // Specify your login credentials
 $username = "hawlast";

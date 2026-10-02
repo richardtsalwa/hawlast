@@ -101,11 +101,11 @@ echo $curlerror;
 <meta name=Keywords content="domain Kenya, kenya domain names, cheap domains, Domain registration Kenya" />
 <meta name=robots content=noindex,follow />
 <title>Domain names Kenya, Cheap Domain registration in Kenya</title>
-<link rel=stylesheet type=text/css href=../style.css />
 <link rel="stylesheet" href="../font-awesome.min.css" type="text/css">
-<link rel="stylesheet" type="text/css" href="../responsive.css"><link rel="shortcut icon" href=../images/favicon.ico type=image/x-icon />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+<link rel="shortcut icon" href=../images/favicon.ico type=image/x-icon />
 <title>Domain names Kenya, Cheap Domain registration in Kenya</title>
-<?php require("includes/header.txt"); ?>
+<?php require __DIR__ . "/includes/header.php"; ?>
 </div>
 <div class=center_content>
 <?php
@@ -239,6 +239,6 @@ require("includes/checkout.php");
 ?>
 <br /><br /><p>We are now web hosting the Kenya cTLD domains aka .ke with options to register a domain like .co.ke,or.ke and ac.ke.</p></div>
 <div class=clear></div></div>
-<div class=right_content><?php require("includes/other_left.txt");?></div>
-<?php require("includes/footer.txt");?>
+<div class=right_content><?php require __DIR__ . "/includes/other_left.php";?></div>
+<?php require __DIR__ . "/includes/footer.php";?>
 </body></html>

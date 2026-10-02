@@ -1,6 +1,105 @@
 # Changelog
 All notable changes to the OptinMonster plugin will be documented in this file.
 
+### 2.17.1 - 2026-08-14
+* Fixed campaign embed code printing on the page as visible text.
+
+### 2.17.0 - 2026-08-13
+* Added WordPress 7.0 compatibility.
+* Raised the minimum supported versions to PHP 7.4 and WordPress 6.0.
+* Fixed a fatal error on PHP 8.0+ during campaign sync when the API response omitted the page-limit header.
+* Fixed a PHP 8.1+ deprecation notice in the MailPoet integration when a form submission omitted the campaign slug.
+* Fixed a PHP 8.2+ "dynamic property" deprecation notice triggered by the Elementor widget.
+* Fixed a PHP warning shown in the Elementor editor when the account has no inline campaigns.
+* Fixed a JavaScript error when adding the OptinMonster widget in the Elementor editor on a site with no inline campaigns.
+* Fixed broken image paths for the Elementor widget icon and the loading spinner.
+* Security hardening
+
+### 2.16.24 - 2026-05-22
+* Improved the campaign filtering to allow filtering by status and folder, along with ne sorting options.
+* Fixed a scenario where cloned campaigns were not displaying on WordPress sites.
+* Fixed a PHP 8.4 compatibility issue in the Rules exception handler.
+* Added WordPress 6.9 compatibility.
+* Added WooCommerce 10.5 compatibility.
+* Maintenance updates.
+
+### 2.16.23 - 2026-03-12
+* Unreleased.
+
+### 2.16.22 - 2025-11-19
+* Promotional updates to the dashboard.
+
+### 2.16.21 - 2025-10-03
+* Maintenance updates.
+* Preparation for ShareASale to AWIN migration.
+
+### 2.16.20 - 2025-07-24
+* Maintenance updates.
+
+### 2.16.19 - 2025-03-31
+* Improved support for the WPML plugin
+
+### 2.16.18 - 2025-03-26
+* Fixed a scenario where the wrong screenshot may load
+
+### 2.16.17 - 2025-03-26
+* Improvements to campaign screenshots
+* Blocksy theme compatibility enhancements
+
+### 2.16.16 - 2025-02-24
+* Added WooCommerce 9.6 compatibility.
+* Performance improvements while in various editor contexts, by preventing unnecessary API calls.
+* Updated URL used for OptinMonster API calls.
+* Updates to the OptinMonster Gutenberg block to improve compatibility with iframes in the Block Editor.
+
+### 2.16.15 - 2025-02-03
+* Added WordPress 6.7 compatibility.
+
+### 2.16.13 - 2024-12-04
+* Removed UI elements that were no longer needed.
+
+### 2.16.12 - 2024-12-02
+* Promotional updates to the dashboard.
+
+### 2.16.11 - 2024-11-27
+* Documentation updates.
+
+### 2.16.10 - 2024-11-27
+* Improve access to future events.
+
+### 2.16.9 - 2024-11-12
+* Internal improvements to for future sales events.
+* Fixed a bug that may occur when generating URLs for use in our menu items.
+
+### 2.16.8 - 2024-11-04
+* Avoid showing sidebar menu for role that does not have access when using User Role Editor plugin.
+* Various npm package updates used for generating our JavaScript code.
+
+### 2.16.7 - 2024-10-24
+* Improvements to campaign output settings management.
+* UI improvements.
+
+### 2.16.6 - 2024-10-15
+* Removed compatibility checks for WordFence as they are no longer needed.
+* Updates to onboarding flow.
+* Improved text when template search returns no results.
+* Various npm package updates used for generating our JavaScript code.
+
+### 2.16.5 - 2024-09-16
+* Support for improved campaign publishing from within the campaign builder.
+* Improved frontend output when no campaigns are assigned to the site.
+* Various npm package updates used for generating our JavaScript code.
+
+### 2.16.4 - 2024-07-05
+* Fixed an issue where "Never load on..." output settings were hidden.
+
+### 2.16.3 - 2024-07-01
+* Improved template filtering.
+* Added custom field support to our MailPoet integration.
+* Improved the campaign creation modal.
+* Security and performance improvements.
+* Various npm package updates used for generating our JavaScript code.
+
 ### 2.16.2 - 2024-05-16
 * Improved browser coverage.
 

@@ -106,7 +106,27 @@ class OMAPI_Type {
 				),
 				'public'          => false,
 				'rewrite'         => false,
-				'capability_type' => 'post',
+				// The SaaS-sync writer runs as an admin. A 'post' capability_type
+				// accidentally exposes this CPT to anyone with edit_posts (e.g. a
+				// Contributor over XML-RPC's wp.newPost, which ignores show_ui).
+				// Map every cap to manage_options so only admins can write.
+				'capability_type' => 'om_campaign',
+				'map_meta_cap'    => false,
+				'capabilities'    => array(
+					'edit_post'              => $this->base->access_capability(),
+					'edit_posts'             => $this->base->access_capability(),
+					'edit_others_posts'      => $this->base->access_capability(),
+					'edit_published_posts'   => $this->base->access_capability(),
+					'edit_private_posts'     => $this->base->access_capability(),
+					'publish_posts'          => $this->base->access_capability(),
+					'read_post'              => $this->base->access_capability(),
+					'read_private_posts'     => $this->base->access_capability(),
+					'delete_post'            => $this->base->access_capability(),
+					'delete_posts'           => $this->base->access_capability(),
+					'delete_others_posts'    => $this->base->access_capability(),
+					'delete_published_posts' => $this->base->access_capability(),
+					'delete_private_posts'   => $this->base->access_capability(),
+				),
 				'has_archive'     => false,
 				'hierarchical'    => false,
 				'supports'        => array( 'title' ),

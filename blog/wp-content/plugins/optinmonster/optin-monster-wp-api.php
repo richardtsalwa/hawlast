@@ -5,15 +5,15 @@
  * Description: OptinMonster is the best WordPress popup builder plugin that helps you grow your email newsletter list and sales with email popups, exit intent popups, floating bars and more!
  * Author:      OptinMonster Popup Builder Team
  * Author URI:  https://optinmonster.com
- * Version:     2.16.2
+ * Version:     2.17.1
  * Text Domain: optin-monster-api
  * Domain Path: languages
  *
  * WC requires at least: 3.2
- * WC tested up to:      8.6
- * Requires at least:    4.7
- * Requires PHP:         5.3
- * Tested up to:         6.5
+ * WC tested up to:      10.5.3
+ * Requires at least:    6.0
+ * Requires PHP:         7.4
+ * Tested up to:         7.0
  *
  * @package OMAPI
  *
@@ -54,6 +54,24 @@ define( 'OMAPI_FILE', __FILE__ );
 class OMAPI {
 
 	/**
+	 * The minimum PHP version this plugin supports.
+	 *
+	 * @since 2.17.0
+	 *
+	 * @var string
+	 */
+	const MINIMUM_PHP_VERSION = '7.4';
+
+	/**
+	 * The minimum WordPress version this plugin supports.
+	 *
+	 * @since 2.17.0
+	 *
+	 * @var string
+	 */
+	const MINIMUM_WP_VERSION = '6.0';
+
+	/**
 	 * Holds the class object.
 	 *
 	 * @since 1.0.0
@@ -69,7 +87,7 @@ class OMAPI {
 	 *
 	 * @var string
 	 */
-	public $version = '2.16.2';
+	public $version = '2.17.1';
 
 	/**
 	 * The name of the plugin.
@@ -139,7 +157,6 @@ class OMAPI {
 		'notifications' => 'OMAPI_Notifications',
 		'classicEditor' => 'OMAPI_ClassicEditor',
 		// @since 2.10.0
-		'wordfence'     => 'OMAPI_Wordfence',
 		'urls'          => 'OMAPI_Urls',
 	);
 
@@ -168,8 +185,9 @@ class OMAPI {
 		// Hide the unrelated admin notices.
 		add_action( 'admin_print_scripts', array( $this, 'hide_unrelated_admin_notices' ) );
 
-		// PHP version check.
-		add_action( 'admin_init', array( $this, 'check_php_version' ) );
+		// PHP version check on `all_admin_notices`: `admin_notices` skips the network and user
+		// dashboards, and `admin_init` runs before admin-header.php, which put output above the doctype.
+		add_action( 'all_admin_notices', array( $this, 'check_php_version' ) );
 
 		// Filter the WooCommerce category/tag REST API responses.
 		add_filter( 'woocommerce_rest_prepare_product_cat', 'OMAPI_WooCommerce::add_category_base_to_api_response' );
@@ -188,7 +206,6 @@ class OMAPI {
 
 		load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
 		load_plugin_textdomain( $domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-
 	}
 
 	/**
@@ -200,7 +217,6 @@ class OMAPI {
 
 		// To do: add widgets.
 		register_widget( 'OMAPI_Widget' );
-
 	}
 
 	/**
@@ -302,6 +318,13 @@ class OMAPI {
 			update_option( 'omapi_review', $review );
 		}
 
+		// Create a connection token if one doesn't exist, and we're not already connected.
+		$is_connected = ! empty( $option['api']['apikey'] ) && isset( $option['userId'] ) && 0 < absint( $option['userId'] );
+		if ( ! $is_connected && empty( $option['connectionToken'] ) ) {
+			$option['connectionToken'] = wp_hash( get_current_user_id() . site_url() . time() );
+			update_option( 'optin_monster_api', $option );
+		}
+
 		// Check/set the installation date.
 		if ( empty( $option['installed'] ) ) {
 
@@ -340,7 +363,6 @@ class OMAPI {
 
 		// Fire a hook to say that the global classes are loaded.
 		do_action( 'optin_monster_api_global_loaded' );
-
 	}
 
 	/**
@@ -375,11 +397,9 @@ class OMAPI {
 		$this->notifications = new OMAPI_Notifications();
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$this->classicEditor = new OMAPI_ClassicEditor();
-		$this->wordfence     = new OMAPI_Wordfence();
 
 		// Fire a hook to say that the admin classes are loaded.
 		do_action( 'optin_monster_api_admin_loaded' );
-
 	}
 
 	/**
@@ -401,7 +421,7 @@ class OMAPI {
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The optin slug used to retrieve a optin.
-	 * @return array|bool  Array of optin data or false if none found.
+	 * @return WP_Post|null  Array of optin data or false if none found.
 	 */
 	public function get_optin_by_slug( $slug ) {
 		$optin = get_page_by_path( sanitize_text_field( $slug ), OBJECT, OMAPI_Type::SLUG );
@@ -499,17 +519,16 @@ class OMAPI {
 	 *
 	 * @since 2.6.8
 	 *
-	 * @param WP_Post $post Optin post object.
+	 * @param WP_Post|null $post Optin post object.
 	 */
 	public function add_campaign_properties( $post ) {
 		$post = $this->validate_is_campaign_type( $post );
 		if ( ! empty( $post->ID ) ) {
 			$post->campaign_type = get_post_meta( $post->ID, '_omapi_type', true );
-			$post->enabled       = ! ! get_post_meta( $post->ID, '_omapi_enabled', true );
+			$post->enabled       = (bool) get_post_meta( $post->ID, '_omapi_enabled', true );
 		}
 
 		return $post;
-
 	}
 
 	/**
@@ -635,7 +654,6 @@ class OMAPI {
 				'apikey' => $apikey,
 			)
 		);
-
 	}
 
 	/**
@@ -713,7 +731,7 @@ class OMAPI {
 	 */
 	public function get_api_key_errors() {
 		$option = $this->get_option();
-		return isset( $option['is_expired'] ) && $option['is_expired'] || isset( $option['is_disabled'] ) && $option['is_disabled'] || isset( $option['is_invalid'] ) && $option['is_invalid'];
+		return ( isset( $option['is_expired'] ) && $option['is_expired'] ) || ( isset( $option['is_disabled'] ) && $option['is_disabled'] ) || ( isset( $option['is_invalid'] ) && $option['is_invalid'] );
 	}
 
 	/**
@@ -725,6 +743,7 @@ class OMAPI {
 	 * @param  mixed  $data Arbitrary data to be made available to the view file.
 	 *
 	 * @return void
+	 *
 	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	 */
 	public function output_view( $file, $data = array() ) {
@@ -862,6 +881,11 @@ class OMAPI {
 	 * @return boolean Whether OM user is allowed MonsterLinks.
 	 */
 	public function has_rule_type( $rule_type ) {
+		// If we don't have credentials, we can't fetch, so bail.
+		if ( ! OMAPI_ApiKey::has_credentials() ) {
+			return false;
+		}
+
 		$data = OMAPI_Api::fetch_me_cached();
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -911,11 +935,10 @@ class OMAPI {
 		}
 
 		// Check if the file exists. If so, load the file.
-		$filename = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . str_replace( '_', DIRECTORY_SEPARATOR, $classname ) . '.php';
+		$filename = __DIR__ . DIRECTORY_SEPARATOR . str_replace( '_', DIRECTORY_SEPARATOR, $classname ) . '.php';
 		if ( file_exists( $filename ) ) {
 			require $filename;
 		}
-
 	}
 
 	/**
@@ -1027,12 +1050,13 @@ class OMAPI {
 	 */
 	public function check_php_version() {
 
-		// Display for PHP below 5.6.
-		if ( version_compare( PHP_VERSION, '5.5', '>=' ) ) {
+		// Only notify sites below the minimum supported PHP version.
+		if ( version_compare( PHP_VERSION, self::MINIMUM_PHP_VERSION, '>=' ) ) {
 			return;
 		}
 
-		// Display for admins only.
+		// Display to users who can act on this: any administrator on single site, network
+		// super admins on multisite. See is_super_admin(), which branches on the two.
 		if ( ! is_super_admin() ) {
 			return;
 		}
@@ -1042,39 +1066,48 @@ class OMAPI {
 			return;
 		}
 
-		// Do not double up on WPForms notice.
-		if ( function_exists( 'wpforms_check_php_version' ) ) {
-			return;
-		}
+		$this->render_php_version_notice();
+	}
 
-		// Display the notice, finally.
-		echo '<div id="message" class="notice notice-error">' .
-		'<p>' .
-		sprintf(
-			wp_kses(
-				/* translators: %1$s - OptinMonster API plugin name; %2$s - optinmonster.com URL to a related doc. */
-				__( 'Your site is running an outdated version of PHP that is no longer supported and may cause issues with the %1$s plugin. <a href="%2$s" target="_blank" rel="noopener noreferrer">Read more</a> for additional information.', 'optin-monster-api' ),
-				array(
-					'a' => array(
-						'href'   => array(),
-						'target' => array(),
-						'rel'    => array(),
+	/**
+	 * Echoes the outdated-PHP admin notice.
+	 *
+	 * Output only — the caller owns every eligibility check.
+	 *
+	 * @since 2.17.0
+	 *
+	 * @return void
+	 */
+	public function render_php_version_notice() {
+
+		?>
+		<div id="om-php-version-notice" class="notice notice-error">
+			<p>
+				<?php
+				printf(
+					wp_kses(
+						/* translators: %1$s - current PHP version; %2$s - OptinMonster plugin name (wrapped in <strong>); %3$s - minimum required PHP version; %4$s - optinmonster.com URL to a related doc. */
+						__( 'Your site is running PHP %1$s. The %2$s plugin requires PHP %3$s or higher, and may not work correctly until PHP is updated. <a href="%4$s" target="_blank" rel="noopener noreferrer">Read more</a> for additional information.<br><br><em><strong>Please Note:</strong> WordPress will not reactivate or update OptinMonster on this site until PHP is updated.</em>', 'optin-monster-api' ),
+						array(
+							'a'      => array(
+								'href'   => array(),
+								'target' => array(),
+								'rel'    => array(),
+							),
+							'br'     => array(),
+							'em'     => array(),
+							'strong' => array(),
+						)
 					),
-				)
-			),
-			'<strong>OptinMonster API</strong>',
-			'https://optinmonster.com/docs/supported-php-version/'
-		) .
-		'<br><br><em>' .
-		wp_kses(
-			__( '<strong>Please Note:</strong> Support for PHP 5.5 will be discontinued in 2020. After this, if no further action is taken, OptinMonster functionality will be disabled.', 'optin-monster-api' ),
-			array(
-				'strong' => array(),
-				'em'     => array(),
-			)
-		) .
-		'</em></p>' .
-		'</div>';
+					esc_html( PHP_VERSION ),
+					'<strong>' . esc_html( $this->plugin_name ) . '</strong>',
+					esc_html( self::MINIMUM_PHP_VERSION ),
+					esc_url( 'https://optinmonster.com/docs/supported-php-version/' )
+				);
+				?>
+			</p>
+		</div>
+		<?php
 	}
 
 	/**
@@ -1211,13 +1244,17 @@ class OMAPI {
 	 */
 	public function __get( $property ) {
 		if ( ! empty( self::$class_map[ $property ] ) ) {
-			$this->$property = new self::$class_map[ $property ]();
+			$class           = self::$class_map[ $property ];
+			$this->$property = new $class();
 		}
 
 		return $this->$property;
 	}
-
 }
+
+// Mixing functions in with the class for activation and uninstall hooks, as well
+// as the template tag, since they need to be outside of the class scope.
+// phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed
 
 register_activation_hook( __FILE__, 'optin_monster_api_activation_hook' );
 /**
@@ -1232,13 +1269,14 @@ register_activation_hook( __FILE__, 'optin_monster_api_activation_hook' );
 function optin_monster_api_activation_hook( $network_wide ) {
 
 	global $wp_version;
-	if ( version_compare( $wp_version, '4.7.0', '<' ) && ! defined( 'OPTINMONSTER_FORCE_ACTIVATION' ) ) {
+	if ( version_compare( $wp_version, OMAPI::MINIMUM_WP_VERSION, '<' ) && ! defined( 'OPTINMONSTER_FORCE_ACTIVATION' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		wp_die(
 			wp_kses_post(
 				sprintf(
-					/* translators: %s) admin url */
-					__( 'Sorry, but your version of WordPress does not meet OptinMonster\'s required version of <strong>4.7.0</strong> to run properly. The plugin has been deactivated. <a href="%s">Click here to return to the Dashboard</a>.', 'optin-monster-api' ),
+					/* translators: %1$s - minimum required WordPress version; %2$s - admin url. */
+					__( 'Sorry, but your version of WordPress does not meet OptinMonster\'s required version of <strong>%1$s</strong> to run properly. The plugin has been deactivated. <a href="%2$s">Click here to return to the Dashboard</a>.', 'optin-monster-api' ),
+					esc_html( OMAPI::MINIMUM_WP_VERSION ),
 					esc_url( admin_url() )
 				)
 			)
@@ -1303,7 +1341,6 @@ function optin_monster_api_uninstall_hook() {
 	} else {
 		delete_option( 'optin_monster_api' );
 	}
-
 }
 
 // Load the plugin.
@@ -1340,7 +1377,6 @@ if ( ! function_exists( 'optin_monster' ) ) {
 		} else {
 			echo do_shortcode( $shortcode );
 		}
-
 	}
 }
 
@@ -1358,6 +1394,5 @@ if ( ! function_exists( 'optin_monster_tag' ) ) {
 
 		// Return the v2 template tag.
 		return optin_monster( $id, 'slug', array(), $return );
-
 	}
 }

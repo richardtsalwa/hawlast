@@ -12,19 +12,19 @@ $svgpath = plugin_dir_path( OMAPI_FILE ) . '/assets/images/icons/';
 		<ul>
 			<li>
 				<a href="#omapi-sticky-bar" title="Sticky Bar" class="active">
-					<?php include $svgpath . 'sticky-bar.svg'; ?>
+					<?php require $svgpath . 'sticky-bar.svg'; ?>
 					<?php esc_html_e( 'Sticky Bar', 'optin-monster-api' ); ?>
 				</a>
 			</li>
 			<li>
 				<a href="#omapi-popup" title="Popup">
-					<?php include $svgpath . 'popup.svg'; ?>
+					<?php require $svgpath . 'popup.svg'; ?>
 					<?php esc_html_e( 'Popup', 'optin-monster-api' ); ?>
 				</a>
 			</li>
 			<li>
 				<a href="#omapi-gamified" title="Gamified">
-					<?php include $svgpath . 'gamified.svg'; ?>
+					<?php require $svgpath . 'gamified.svg'; ?>
 					<?php esc_html_e( 'Gamified Spin to Win', 'optin-monster-api' ); ?>
 				</a>
 			</li>

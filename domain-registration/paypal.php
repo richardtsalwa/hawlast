@@ -27,7 +27,7 @@ setcookie("affiliate", "", time() - 3600);
 }
 
 // SEND ME THE SMS 
-require_once('../AfricasTalkingGateway.php');
+require_once dirname(__DIR__) . '/libraries.php';
 
 // Specify your login credentials
 $username = "hawlast";

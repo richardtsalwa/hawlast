@@ -1546,7 +1546,10 @@ class Database {
 		$queryString     = $this->query();
 		$prepare         = $this->db->prepare( $queryString, 1, 1 );
 		$queryHash       = md5( $queryString );
-		$cacheTableName = $this->getCacheTableName();
+		$cacheTableName  = $this->getCacheTableName();
+
+		// reset() nulls out the statement below, so we have to grab it before that happens.
+		$statement = $this->statement;
 
 		// Pull the result from the in-memory cache if everything checks out.
 		if (
@@ -1579,7 +1582,7 @@ class Database {
 		}
 
 		// Only cache SELECT queries for performance.
-		if ( in_array( $this->statement, [ 'SELECT', 'SELECT DISTINCT' ], true ) ) {
+		if ( in_array( $statement, [ 'SELECT', 'SELECT DISTINCT' ], true ) ) {
 			$this->cache[ $cacheTableName ][ $queryHash ][ $return ] = $this->result;
 		}
 
@@ -1687,6 +1690,10 @@ class Database {
 
 	/**
 	 * Returns the last error reported by MySQL.
+	 *
+	 * NOTE: This only holds until the next successful query, which clears it. It is therefore only
+	 * meaningful immediately after the query it is meant to describe. To detect a failed model write,
+	 * read Model::$lastError instead — Model::save() re-fetches the row and would clear this.
 	 *
 	 * @since 4.0.0
 	 *

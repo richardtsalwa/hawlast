@@ -28,35 +28,36 @@ class OMAPI_Debug {
 	 * @return bool
 	 */
 	public static function can_output_debug() {
-		$rules_debug = ! empty( $_GET['omwpdebug'] ) ? wp_unslash( $_GET['omwpdebug'] ) : '';
+		$rules_debug = ! empty( $_GET['omwpdebug'] ) ? sanitize_text_field( wp_unslash( $_GET['omwpdebug'] ) ) : '';
 
+		// Persistent enablement (via REST) still requires this query var on the frontend.
 		if ( $rules_debug ) {
 			$omapi         = OMAPI::get_instance();
 			$disable       = 'off' === $rules_debug;
-			$decoded       = base64_decode( base64_decode( $rules_debug ) );
-			$debug_enabled = $omapi->get_option( 'api', 'omwpdebug' );
-			$creds         = $omapi->get_api_credentials();
-			if (
-				! empty( $creds['apikey'] )
-				&& ( $decoded === $creds['apikey'] || $disable )
-			) {
+			$debug_enabled = (bool) $omapi->get_option( 'api', 'omwpdebug' );
 
-				$option = $omapi->get_option();
-
-				if ( $disable ) {
-					unset( $option['api']['omwpdebug'] );
-					$debug_enabled = false;
-				} else {
-					$option['api']['omwpdebug'] = true;
-					$debug_enabled              = true;
+			// Read-only: this block never writes to wp_options.
+			if ( $disable ) {
+				$debug_enabled = false;
+			} elseif ( ! $debug_enabled ) {
+				// A valid apikey token enables debug for this request only; nothing is stored.
+				$creds = $omapi->get_api_credentials();
+				if ( ! empty( $creds['apikey'] ) ) {
+					$inner   = base64_decode( $rules_debug, true );
+					$decoded = ( false !== $inner ) ? base64_decode( $inner, true ) : false;
+					if (
+						is_string( $decoded )
+						&& '' !== $decoded
+						&& hash_equals( (string) $creds['apikey'], $decoded )
+					) {
+						$debug_enabled = true;
+					}
 				}
-				update_option( 'optin_monster_api', $option );
 			}
 
-			$rules_debug = $debug_enabled || is_user_logged_in() && $omapi->can_access( 'rules_debug' );
+			$rules_debug = $debug_enabled || ( is_user_logged_in() && $omapi->can_access( 'rules_debug' ) );
 		}
 
-		// If query var is set and user can manage OM, output debug data.
 		return apply_filters( 'optin_monster_api_should_output_rules_debug', ! empty( $rules_debug ) );
 	}
 
@@ -72,11 +73,20 @@ class OMAPI_Debug {
 	 * @return void
 	 */
 	public static function output_general() {
+		// Get all registered post types.
+		$all_post_types = get_post_types( array(), 'objects' );
+
+		// Initialize an array to store the results.
 		$results = array();
 
-		$post_types = array_keys( get_post_types( array( 'public' => true ), 'names' ) );
-		foreach ( $post_types as $post_type ) {
-			$results[ is_singular( $post_type ) ? 'TRUE' : 'FALSE' ][] = "is_singular('{$post_type}')";
+		// Iterate through each post type.
+		foreach ( $all_post_types as $post_type_object ) {
+			// Check if the post type is viewable.
+			if ( is_post_type_viewable( $post_type_object ) ) {
+				$post_type = $post_type_object->name;
+				// Evaluate if the current post is singular and of this post type.
+				$results[ is_singular( $post_type ) ? 'TRUE' : 'FALSE' ][] = "is_singular('{$post_type}')";
+			}
 		}
 
 		$conditionals = array(
@@ -127,21 +137,21 @@ class OMAPI_Debug {
 				break;
 			}
 
-			// Special case for is_sticky to prevent PHP notices
+			// Special case for is_sticky to prevent PHP notices.
 			$id = null;
 			if ( ( 'is_sticky' === $conditional ) && ! get_post( $id ) ) {
 				$results['FALSE'][] = $conditional;
 				break;
 			}
 
-			// Special case for multisite $conditionals to prevent them from
-			// being annoying on single site installations
+			// Special case for multisite $conditionals to prevent them from.
+			// being annoying on single site installations.
 			if ( ! is_multisite() && in_array( $conditional, array( 'is_main_network', 'is_main_site' ), true ) ) {
 				$results['N/A'][] = $conditional;
 				break;
 			}
 
-			// Default case.
+			// The default case.
 			$results[ call_user_func( $conditional ) ? 'TRUE' : 'FALSE' ][] = $conditional;
 		}
 
@@ -157,8 +167,8 @@ class OMAPI_Debug {
 				Show Verbose Debugging Info
 			</button>
 		</div>
-		<xmp class="_om-debugging _om-optin">$conditionals: <?php print_r( $results ); ?></xmp>
+		<?php // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export ?>
+		<pre class="_om-debugging _om-optin">$conditionals: <?php echo esc_html( var_export( $results, true ) ); ?></pre>
 		<?php
 	}
-
 }

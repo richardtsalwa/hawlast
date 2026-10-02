@@ -97,6 +97,18 @@ class Model implements \JsonSerializable {
 	public $id = null;
 
 	/**
+	 * The error reported by MySQL for the last write issued by save(), or an empty string if it succeeded.
+	 *
+	 * NOTE: This is recorded because $wpdb->last_error is cleared by the next successful query, and save()
+	 * always re-fetches the row afterwards. Callers must check this instead of Database::lastError().
+	 *
+	 * @since 5.0.1
+	 *
+	 * @var string
+	 */
+	public $lastError = '';
+
+	/**
 	 * An array of columns from the DB that we can use.
 	 *
 	 * @since 4.0.0
@@ -346,10 +358,13 @@ class Model implements \JsonSerializable {
 	/**
 	 * Saves data to the requested resource.
 	 *
-	 * @since 4.0.0
+	 * @since   4.0.0
+	 * @version 5.0.1 Records the write error in $lastError.
 	 */
 	public function save() {
 		$fields = $this->transform( $this->filter( (array) get_object_vars( $this ) ) );
+
+		$writeError = '';
 
 		$id = null;
 		if ( count( $fields ) > 0 ) {
@@ -372,7 +387,10 @@ class Model implements \JsonSerializable {
 						->set( $fields )
 						->where( [ $pk => $pkv ] )
 						->run();
-					$id = $this->$pk;
+
+					// Must be read before the re-fetch below, which clears $wpdb->last_error.
+					$writeError = aioseo()->core->db->lastError();
+					$id         = $this->$pk;
 				} else {
 					// Row does not exist.
 					$fields[ $pk ]     = $pkv;
@@ -384,6 +402,8 @@ class Model implements \JsonSerializable {
 						->set( $fields )
 						->run()
 						->insertId();
+
+					$writeError = aioseo()->core->db->lastError();
 
 					if ( $id ) {
 						$this->$pk = $id;
@@ -399,6 +419,8 @@ class Model implements \JsonSerializable {
 					->run()
 					->insertId();
 
+				$writeError = aioseo()->core->db->lastError();
+
 				if ( $id ) {
 					$this->$pk = $id;
 				}
@@ -407,6 +429,9 @@ class Model implements \JsonSerializable {
 
 		// Refresh the resource.
 		$this->reset( $id );
+
+		// Set after the refresh, which reconstructs the model.
+		$this->lastError = $writeError;
 	}
 
 	/**

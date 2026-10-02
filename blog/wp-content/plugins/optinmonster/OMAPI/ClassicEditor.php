@@ -256,5 +256,4 @@ class OMAPI_ClassicEditor {
 		$disabled = ! empty( $_POST['om_disable_all_campaigns'] );
 		update_post_meta( $post_id, 'om_disable_all_campaigns', $disabled );
 	}
-
 }

@@ -11,10 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] <> "GET")  die("You can only reach this page by p
 <title>Domain names Kenya, Cheap Domain registration in Kenya</title>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
 <meta name=Description content="Register a domain name instantly for free with our hosting plans. A domain name gives your business credibility and increase sales." />
-<meta name=Keywords content="domain Kenya, kenya domain names, cheap domains, Domain registration Kenya" /><link rel=stylesheet type=text/css href=../style.css />
-<link rel="stylesheet" type="text/css" href="../responsive.css?ind=123">
-<link rel="stylesheet" href="../font-awesome.min.css" 
-type="text/css">
+<meta name=Keywords content="domain Kenya, kenya domain names, cheap domains, Domain registration Kenya" />
+<link rel="stylesheet" href="../font-awesome.min.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="../style.css" />
 <link rel="shortcut icon" href=../images/favicon.ico type=image/x-icon />
 <style type="text/css">
 .no-thanks-link{
@@ -64,7 +63,7 @@ a.no-thanks-link {
 }
 </style>
 <?php
-require("includes/header.txt");
+require __DIR__ . "/includes/header.php";
 ?>
 </div>
 <div class=center_content>
@@ -198,7 +197,7 @@ if ($ddomain !== "example.com") {
 <tr>
 <td class="leftCol" colspan="5">
 <br /><br />
-<div class="no-thanks-parent"><a class="no-thanks-link" href="reserve.php?h=domain&domain=<?php echo $_GET['domain']; ?>&src=<?php echo $src; ?>&amount=<?php echo domainprices($ext); ?>">No thanks.Proceed and pay Ksh  <?php echo domainprices($ext); ?> for the domain.</a>  <br /> Search <a href="/domain-registration/">for another domain name</a>.</div>
+<div class="no-thanks-parent"><a class="no-thanks-link" href="reserve.php?h=domain&domain=<?php echo $_GET['domain']; ?>&src=<?php echo $src; ?>&amount=<?php echo domainprices($ext); ?>">No thanks.Proceed and pay Ksh  <?php echo domainprices($ext); ?> for the domain.</a>  <br /> Search <a href="<?php echo hawlast_url('domain-registration/'); ?>">for another domain name</a>.</div>
 
 </td>
 </tr>
@@ -206,7 +205,7 @@ if ($ddomain !== "example.com") {
 } else {
 ?>
 <tr>
-<td class="leftCol" colspan="5"><div>Search <a href="/domain-registration/">for another domain name</a>.</div>
+<td class="leftCol" colspan="5"><div>Search <a href="<?php echo hawlast_url('domain-registration/'); ?>">for another domain name</a>.</div>
 </td>
 </tr>
 
@@ -234,11 +233,11 @@ if ($ddomain !== "example.com") {
 </div>
 <div class=right_content>
 <?php
-require("includes/other_left.txt");
+require __DIR__ . "/includes/other_left.php";
 ?>
 </div>
 <?php
-require("includes/footer.txt");
+require __DIR__ . "/includes/footer.php";
 ?>
 
 </body></html>

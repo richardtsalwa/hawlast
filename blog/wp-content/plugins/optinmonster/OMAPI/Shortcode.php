@@ -175,5 +175,4 @@ class OMAPI_Shortcode {
 
 		return $e;
 	}
-
 }

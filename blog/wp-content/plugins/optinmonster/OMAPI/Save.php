@@ -110,7 +110,6 @@ class OMAPI_Save {
 		} else {
 			$this->add_optins( $optins, $enabled );
 		}
-
 	}
 
 	/**
@@ -237,11 +236,6 @@ class OMAPI_Save {
 			update_post_meta( $post_id, '_omapi_automatic', 1 );
 		}
 
-		$enabled = apply_filters( 'optin_monster_auto_enable_campaign', $enabled );
-		if ( $enabled ) {
-			update_post_meta( $post_id, '_omapi_enabled', true );
-		}
-
 		$this->update_optin_meta( $post_id, $optin );
 	}
 
@@ -304,6 +298,15 @@ class OMAPI_Save {
 	public function update_optin_meta( $post_id, $optin ) {
 		update_post_meta( $post_id, '_omapi_type', $optin->type );
 		update_post_meta( $post_id, '_omapi_ids', $optin->ids );
+
+		// Sync _omapi_enabled with campaign status from API (only when status is provided).
+		if ( ! empty( $optin->status ) ) {
+			if ( 'active' === $optin->status ) {
+				update_post_meta( $post_id, '_omapi_enabled', true );
+			} else {
+				delete_post_meta( $post_id, '_omapi_enabled' );
+			}
+		}
 
 		$shortcodes = ! empty( $optin->shortcodes ) ? $optin->shortcodes : null;
 
@@ -389,7 +392,7 @@ class OMAPI_Save {
 	 *
 	 * @param array $data The data passed in via POST request.
 	 *
-	 * @return void
+	 * @return mixed
 	 */
 	public function woocommerce_connect( $data ) {
 		_deprecated_function( __FUNCTION__, '2.8.0', 'OMAPI_WooCommerce_Save->connect()' );
@@ -407,7 +410,7 @@ class OMAPI_Save {
 	 *
 	 * @param array $data The data passed in via POST request.
 	 *
-	 * @return void
+	 * @return mixed
 	 */
 	public function woocommerce_disconnect( $data ) {
 		_deprecated_function( __FUNCTION__, '2.8.0', 'OMAPI_WooCommerce_Save->disconnect()' );
@@ -425,9 +428,35 @@ class OMAPI_Save {
 	 * @return string
 	 */
 	public static function get_shortcodes_string( $shortcodes ) {
-		return is_array( $shortcodes )
-			? '|||' . implode( '|||', array_map( 'htmlentities', $shortcodes ) )
-			: '|||' . htmlentities( $shortcodes, ENT_COMPAT, 'UTF-8' );
+		if ( is_array( $shortcodes ) ) {
+			$encoded = array_map(
+				static function ( $shortcode ) {
+					return htmlentities( $shortcode ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8' );
+				},
+				$shortcodes
+			);
+
+			return '|||' . implode( '|||', $encoded );
+		}
+
+		return '|||' . htmlentities( $shortcodes ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8' );
 	}
 
+	/**
+	 * Reverse the encoding applied by get_shortcodes_string().
+	 *
+	 * Every reader of `_omapi_shortcode_output` must go through here. Both sides
+	 * previously stated their flags independently, and they drifted: PHP 8.1
+	 * changed the htmlentities() default so the encoder began emitting `&#039;`
+	 * while the readers still decoded with ENT_COMPAT, which leaves it alone.
+	 *
+	 * @since 2.17.0
+	 *
+	 * @param  string $shortcode An encoded shortcode string.
+	 *
+	 * @return string
+	 */
+	public static function decode_shortcode( $shortcode ) {
+		return html_entity_decode( $shortcode ?? '', ENT_QUOTES, 'UTF-8' );
+	}
 }

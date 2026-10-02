@@ -102,10 +102,9 @@ class PostSeoService {
 		$this->applyRobotsFields( $fields, $data );
 		$this->applySocialFields( $fields, $data );
 
-		Models\Post::savePost( $postId, $data );
+		$saveError = Models\Post::savePost( $postId, $data );
 
-		$lastError = aioseo()->core->db->lastError();
-		if ( ! empty( $lastError ) ) {
+		if ( ! empty( $saveError ) ) {
 			return new \WP_Error(
 				'save_failed',
 				__( 'Failed to save post SEO data.', 'all-in-one-seo-pack' ),

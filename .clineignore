@@ -1,0 +1,25 @@
+# ==============================================================
+# HAWLAST — .clineignore
+# Cline must NEVER open, read, search, or submit these paths.
+# Same syntax as .gitignore. These files often hold live secrets.
+# ==============================================================
+
+# --- Database credentials (BLOCKED — never submitted) ----------
+config.php
+**/config.php
+
+# --- Other secret-bearing files ---------------------------------
+.env
+**/.env
+**/.env.*
+blog/wp-config.php
+blog/wp-content/wflogs
+
+# --- Logs (can leak credentials / PII) --------------------------
+*.log
+**/*.log
+
+# --- Local tooling / version control (not part of the app) ------
+.git
+node_modules
+**/node_modules

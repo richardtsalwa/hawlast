@@ -26,8 +26,8 @@ class DLM_Beta_Testers {
 			),
 		);
 
-		$this->link    = '<a target="_BLANK" href="https://downloads.wordpress.org/plugin/download-monitor.zip">' . esc_html( 'here', 'download-monitor' ) . '</a>';
-		$this->contact = '<a target="_BLANK" href="https://www.download-monitor.com/contact/">' . esc_html( 'contact us form', 'download-monitor' ) . '</a>';
+		$this->link    = '<a target="_BLANK" href="https://downloads.wordpress.org/plugin/download-monitor.zip">' . esc_html__( 'here', 'download-monitor' ) . '</a>';
+		$this->contact = '<a target="_BLANK" href="https://www.download-monitor.com/contact/">' . esc_html__( 'contact us form', 'download-monitor' ) . '</a>';
 
 		add_action( 'init', array( $this, 'init' ) );
 
@@ -61,23 +61,19 @@ class DLM_Beta_Testers {
 		if ( get_option( 'download-monitor-hide-beta-notice', false ) ) {
 			return;
 		}
-		?>
-		<div data-dismissible="download-monitor-beta-notice" id="download-monitor-beta-notice" class="notice notice-success is-dismissible" style="margin-top:30px;">
-			<h1><?php echo $this->messages['headling']; ?></h1>
-			<p><?php echo sprintf( wp_kses_post( $this->messages['notice'] ), wp_kses_post( $this->link ), wp_kses_post( $this->contact ) ); ?></p>
-			<?php
-			if ( ! empty( $this->messages['changelog'] ) ) {
-				echo '<h3>' . $this->messages['changelog_title'] . '</h3>';
-				echo '<ul>';
-				foreach ( $this->messages['changelog'] as $item ) {
-					echo '<li><span class="dashicons dashicons-yes"></span> ' . $item . '</li>';
-				}
-				echo '</ul>';
+		$notice = array(
+			'title'   => $this->messages['headling'],
+			'message' => $this->messages['notice'],
+			'status'  => 'success',
+			'source'  => array(
+				'slug' => 'download-monitor',
+				'name' => 'Download Monitor',
+			),
+			'dismiss' => true,
+			'callback' => 'dismissBetaTesterNotice',
+		);
 
-			}
-			?>
-		</div>
-		<?php
+		WPChill_Notifications::add_notification( 'download-monitor-beta-notice', $notice );
 	}
 
 	/**
@@ -105,9 +101,12 @@ class DLM_Beta_Testers {
 	public function ajax() {
 
 		check_ajax_referer( 'download-monitor-beta-notice', 'security' );
+		// Check permissions
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'You do not have permission to do this.', 'download-monitor' ) );
+		}
 		update_option( 'download-monitor-hide-beta-notice', true );
 		wp_die( 'ok' );
-
 	}
 
 	/**
@@ -129,25 +128,16 @@ class DLM_Beta_Testers {
 		$ajax_nonce = wp_create_nonce( 'download-monitor-beta-notice' );
 
 		?>
-
 		<script type="text/javascript">
-			jQuery( document ).ready( function( $ ){
 
-				$(document).on('click','#download-monitor-beta-notice .notice-dismiss', function( ){
-					var data = {
-						action: 'download-monitor_beta_test_notice_dismiss',
-						security: '<?php echo $ajax_nonce; ?>',
-					};
+		function dismissBetaTesterNotice( element ) {
+			var data = {
+				action: 'download-monitor_beta_test_notice_dismiss',
+				security: '<?php echo esc_js( $ajax_nonce ); ?>',
+			};
 
-					$.post( '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', data, function( response ) {
-						$( '#download-monitor-beta-notice' ).slideUp( 'fast', function() {
-							$( this ).remove();
-						} );
-					});
-
-				} );
-
-			});
+			jQuery.post('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', data );
+		}
 		</script>
 
 		<?php

@@ -76,19 +76,19 @@
 		display: -ms-flexbox;
 		display: flex;
 		-ms-flex-wrap: wrap;
-		    flex-wrap: wrap;
+			flex-wrap: wrap;
 	}
 
 	.om-cc-wrap .step {
 		-webkit-box-flex: 1;
-		    -ms-flex-positive: 1;
-		        flex-grow: 1;
+			-ms-flex-positive: 1;
+				flex-grow: 1;
 		-ms-flex-negative: 1;
-		    flex-shrink: 1;
+			flex-shrink: 1;
 		margin-bottom: 1.4em;
 		padding: 0 1em 0 0;
 		-ms-flex-preferred-size: 50%;
-		    flex-basis: 50%;
+			flex-basis: 50%;
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
 	}
@@ -168,7 +168,7 @@
 	<p><?php echo wp_kses( __( 'Email is hands-down the most effective way to nurture leads and turn them into customers, with a return on investment (ROI) of <strong>$44 back for every $1 spent</strong> according to the Direct Marketing Association.', 'optin-monster-api' ), array( 'strong' => array() ) ); ?></p>
 	<p><?php esc_html_e( 'Here are 3 big reasons why every smart business in the world has an email list:', 'optin-monster-api' ); ?></p>
 	<a href="<?php echo esc_url( $data['signup_url'] ); ?>" target="_blank" rel="noopener noreferrer">
-		<img width="350" class="logo" src="<?php echo esc_url( $data['images_url'] .'constant-contact-OM.png' ); ?>" alt="<?php esc_attr_e( 'OptinMonster with Constant Contact - Try us free', 'optin-monster-api' ); ?>"/>
+		<img width="350" class="logo" src="<?php echo esc_url( $data['images_url'] . 'constant-contact-OM.png' ); ?>" alt="<?php esc_attr_e( 'OptinMonster with Constant Contact - Try us free', 'optin-monster-api' ); ?>"/>
 	</a>
 	<ol class="reasons">
 		<li><?php echo wp_kses( __( '<strong>Email is still #1</strong> - At least 91% of consumers check their email on a daily basis. You get direct access to your subscribers, without having to play by social media&#39;s rules and algorithms.', 'optin-monster-api' ), array( 'strong' => array() ) ); ?></li>

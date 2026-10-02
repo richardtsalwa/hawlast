@@ -968,6 +968,38 @@ class Tags {
 	}
 
 	/**
+	 * Replaces the term tags in the string provided with the given term's own values.
+	 *
+	 * NOTE: These tags resolve from the queried object, which only exists on the term's own
+	 * archive. Callers that already hold the term have to substitute them up front.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  string   $string The string to look for tags in.
+	 * @param  \WP_Term $term   The term.
+	 * @return string           The string with the term tags replaced.
+	 */
+	public function replaceTermTags( $string, $term ) {
+		$string = (string) $string;
+		if ( ! $string || ! is_a( $term, 'WP_Term' ) ) {
+			return $string;
+		}
+
+		$values = [
+			'taxonomy_title'       => $term->name,
+			'taxonomy_description' => term_description( $term->term_id )
+		];
+
+		foreach ( $values as $tagId => $value ) {
+			// Mirrors the pattern in replaceTags() so #taxonomy_title doesn't eat a longer tag.
+			$pattern = '/' . $this->denotationChar . $tagId . '(?![a-zA-Z0-9_])/i';
+			$string  = aioseo()->helpers->pregReplace( $pattern, $value, $string );
+		}
+
+		return $string;
+	}
+
+	/**
 	 * Get the value of the tag to replace.
 	 *
 	 * @since 4.0.0

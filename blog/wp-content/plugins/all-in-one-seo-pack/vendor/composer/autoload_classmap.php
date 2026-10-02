@@ -111,6 +111,7 @@ return array(
     'AIOSEO\\Plugin\\Common\\Main\\Main' => $baseDir . '/app/Common/Main/Main.php',
     'AIOSEO\\Plugin\\Common\\Main\\Media' => $baseDir . '/app/Common/Main/Media.php',
     'AIOSEO\\Plugin\\Common\\Main\\Migrations\\Definitions\\DropLegacyCacheIndexes' => $baseDir . '/app/Common/Main/Migrations/Definitions/DropLegacyCacheIndexes.php',
+    'AIOSEO\\Plugin\\Common\\Main\\Migrations\\Definitions\\UnscheduleAiCreditFetch' => $baseDir . '/app/Common/Main/Migrations/Definitions/UnscheduleAiCreditFetch.php',
     'AIOSEO\\Plugin\\Common\\Main\\Migrations\\Migration' => $baseDir . '/app/Common/Main/Migrations/Migration.php',
     'AIOSEO\\Plugin\\Common\\Main\\Migrations\\MigrationLog' => $baseDir . '/app/Common/Main/Migrations/MigrationLog.php',
     'AIOSEO\\Plugin\\Common\\Main\\Migrations\\MigrationRunner' => $baseDir . '/app/Common/Main/Migrations/MigrationRunner.php',

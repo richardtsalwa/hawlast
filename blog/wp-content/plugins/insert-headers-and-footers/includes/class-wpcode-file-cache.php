@@ -56,6 +56,17 @@ class WPCode_File_Cache {
 	public function get( $name, $ttl = 0 ) {
 		$file = $this->get_directory_path( $this->get_cache_filename_by_key( $name ) );
 
+		/**
+		 * Filter the $ttl for a file if you want to change it.
+		 *
+		 * @param int    $ttl The time to live for the cache.
+		 * @param string $name The name of the file.
+		 *
+		 * @return int
+		 * @since 2.2.2
+		 */
+		$ttl = apply_filters( 'wpcode_file_cache_ttl', $ttl, $name );
+
 		// If the file doesn't exist there's not much to do.
 		if ( ! file_exists( $file ) ) {
 			// Let's see if we have it in the database.
@@ -119,8 +130,7 @@ class WPCode_File_Cache {
 	 * @return void
 	 */
 	private function write_file( $name, $data ) {
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		$written = file_put_contents( $this->get_directory_path( $name ), $data );
+		$written = file_put_contents( $this->get_directory_path( $name ), $data ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 		if ( false === $written ) {
 			// If we can't save the file to the file cache let's try to save it to the database.
 			// This is not ideal but it prevents having endless requests.

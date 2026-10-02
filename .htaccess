@@ -17,7 +17,6 @@ Redirect /sms http://www.hawlast.com/saas
 Redirect /start http://www.hawlast.com/domain-registration
 
 Redirect /software.html https://www.hawlast.com/software.php
-Redirect /portfolio.html https://www.hawlast.com/portfolio.php
 Redirect /online-marketing.html https://www.hawlast.com/online-marketing.php
 Redirect /faqs.html https://www.hawlast.com/faqs.php
 Redirect /contactus.html https://www.hawlast.com/contactus.php

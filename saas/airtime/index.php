@@ -159,8 +159,8 @@ echo '<b>Your balance is KES ' . $row['bal'] . '</b><br/>';
 Database::disconnect();
 
 /// THE AIRTIME BALANCE FROM AT
-// Be sure to include the file you've just downloaded
-require_once('AfricasTalkingGateway.php');
+// Be sure to include the library loader
+require_once dirname(__DIR__, 2) . '/libraries.php';
 
 // Specify your login credentials
 $username = "hawlast";

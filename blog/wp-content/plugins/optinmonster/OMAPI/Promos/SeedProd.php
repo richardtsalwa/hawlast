@@ -106,5 +106,4 @@ class OMAPI_Promos_SeedProd extends OMAPI_Promos_Base {
 
 		return $classes;
 	}
-
 }

@@ -64,5 +64,4 @@ class OMAPI_Promos {
 			$this->constant_contact = new OMAPI_ConstantContact();
 		}
 	}
-
 }

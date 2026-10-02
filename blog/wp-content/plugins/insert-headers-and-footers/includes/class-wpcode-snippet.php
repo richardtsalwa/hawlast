@@ -177,6 +177,13 @@ class WPCode_Snippet {
 	 * @var array
 	 */
 	private $generator_data;
+
+	/**
+	 * Compress code output.
+	 *
+	 * @var bool
+	 */
+	public $compress_output;
 	/**
 	 * The type of device to load this snippet on.
 	 *
@@ -190,6 +197,13 @@ class WPCode_Snippet {
 	 * @var array
 	 */
 	public $schedule;
+
+	/**
+	 * Compiled code.
+	 *
+	 * @var string
+	 */
+	public $compiled_code;
 
 	/**
 	 * Location extra parameters.
@@ -456,6 +470,27 @@ class WPCode_Snippet {
 			$post_args['ID'] = $this->id;
 			$this->load_from_id( $this->id );
 		}
+
+		// A user who cannot activate snippets may not edit an active snippet, since that would change
+		// what runs on the site without activation rights. They can still edit inactive snippets and
+		// create new ones. No-user contexts (cron, WP-CLI, importers) are trusted and skip this check.
+		// This mirrors how the plugin behaved before the edit/activate capability split.
+		if (
+			is_user_logged_in()
+			&& ! empty( $this->id )
+			&& 'publish' === get_post_status( $this->id )
+			&& ! current_user_can( 'wpcode_activate_snippets', $this )
+		) {
+			wpcode()->error->add_error(
+				array(
+					'message' => __( 'You are not allowed to edit an active snippet. Please ask a user who can activate snippets to make the change.', 'insert-headers-and-footers' ),
+					'type'    => 'permissions',
+				)
+			);
+
+			return false;
+		}
+
 		if ( isset( $this->title ) ) {
 			$post_args['post_title'] = $this->title;
 		}
@@ -579,8 +614,17 @@ class WPCode_Snippet {
 		if ( isset( $this->shortcode_attributes ) ) {
 			update_post_meta( $this->id, '_wpcode_shortcode_attributes', $this->shortcode_attributes );
 		}
-		if ( isset( $this->load_as_file ) && in_array( $this->get_code_type(), array( 'css', 'js' ), true ) ) {
+		if ( isset( $this->load_as_file ) && in_array( $this->get_code_type(), array( 'css', 'js', 'scss' ), true ) ) {
 			update_post_meta( $this->id, '_wpcode_load_as_file', $this->load_as_file );
+		}
+		if ( isset( $this->compress_output ) ) {
+			update_post_meta( $this->id, '_wpcode_compress_output', true );
+		} else {
+			delete_post_meta( $this->id, '_wpcode_compress_output' );
+		}
+
+		if ( isset( $this->compiled_code ) ) {
+			update_post_meta( $this->id, '_wpcode_compiled_code', $this->compiled_code );
 		}
 
 		/**
@@ -619,10 +663,11 @@ class WPCode_Snippet {
 			// If the code is not getting executed just skip.
 			return;
 		}
-		if ( false === $this->active || isset( $this->post_data ) && 'publish' === $this->post_data->post_status ) {
+		if ( false === $this->active ) {
 			// If we're not trying to activate or the snippet is already active, bail.
 			return;
 		}
+
 		// Make sure no errors are added by something else.
 		wpcode()->error->clear_errors();
 		// Try running the code.
@@ -928,6 +973,7 @@ class WPCode_Snippet {
 			'priority'             => $this->get_priority(),
 			'location_extra'       => $this->get_location_extra(),
 			'shortcode_attributes' => $this->get_shortcode_attributes(),
+			'compiled_code'        => $this->get_compiled_code(),
 			'modified'             => $modified,
 		);
 	}
@@ -1075,6 +1121,31 @@ class WPCode_Snippet {
 	}
 
 	/**
+	 * Load compiled Code.
+	 *
+	 * @return string
+	 */
+	public function get_compiled_code() {
+		if ( ! isset( $this->compiled_code ) ) {
+			$this->compiled_code = get_post_meta( $this->get_id(), '_wpcode_compiled_code', true );
+		}
+		return $this->compiled_code;
+	}
+
+	/**
+	 * Maybe the output be compressed?
+	 *
+	 * @return bool
+	 */
+	public function maybe_compress_output() {
+		if ( ! isset( $this->compress_output ) ) {
+			$this->compress_output = boolval( get_post_meta( $this->get_id(), '_wpcode_compress_output', true ) );
+		}
+
+		return $this->compress_output;
+	}
+
+	/**
 	 * Load the shortcode attributes and return.
 	 *
 	 * @return array
@@ -1156,7 +1227,7 @@ class WPCode_Snippet {
 	 */
 	public function get_load_as_file() {
 		if ( ! isset( $this->load_as_file ) ) {
-			$this->load_as_file = in_array( $this->get_code_type(), array( 'js', 'css' ), true );
+			$this->load_as_file = in_array( $this->get_code_type(), array( 'js', 'css', 'scss' ), true );
 			if ( $this->load_as_file ) {
 				$this->load_as_file = boolval( get_post_meta( $this->get_id(), '_wpcode_load_as_file', true ) );
 			}

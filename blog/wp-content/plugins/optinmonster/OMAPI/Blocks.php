@@ -164,7 +164,7 @@ class OMAPI_Blocks {
 		$is_widgets_page = 'widgets.php' === $pagenow;
 
 		// Prevent enqueueing sidebar settings on widgets screen...
-		if ( ! $is_widgets_page ) {
+		if ( ! $is_widgets_page && ! is_customize_preview() ) {
 			wp_enqueue_script(
 				$this->base->plugin_slug . '-gutenberg-sidebar-settings',
 				$this->base->url . 'assets/dist/js/om-settings.min.js',
@@ -269,6 +269,7 @@ class OMAPI_Blocks {
 				'monsterlink'           => esc_url_raw( OPTINMONSTER_SHAREABLE_LINK ) . '/c/',
 				'wpVersion'             => $GLOBALS['wp_version'],
 				'customFieldsSupported' => post_type_supports( get_post_type( $post ), 'custom-fields' ),
+				'pluginUrl'             => esc_url_raw( plugin_dir_url( __DIR__ ) ),
 			);
 		}
 
@@ -355,8 +356,9 @@ class OMAPI_Blocks {
 	 * @return string
 	 */
 	public function get_output( $atts ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$context  = ! empty( $_REQUEST['context'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['context'] ) ) : '';
 		$is_rest  = defined( 'REST_REQUEST' ) && REST_REQUEST;
-		$context  = ! empty( $_REQUEST['context'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['context'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$is_gutes = $is_rest && 'edit' === $context;
 
 		// Our Guten-block handles the embed output manually.
@@ -364,11 +366,15 @@ class OMAPI_Blocks {
 			return;
 		}
 
+		// Unslash and sanitize the shortcode attributes.
+		$atts = array_map( 'sanitize_text_field', wp_unslash( $atts ) );
+
 		// Gutenberg block shortcodes default to following the rules.
 		// See assets/js/campaign-selector.js, attributes.followrules.
 		if ( ! isset( $atts['followrules'] ) ) {
 			$atts['followrules'] = true;
 		}
+		$atts['followrules'] = wp_validate_boolean( $atts['followrules'] );
 
 		$output = $this->base->shortcode->shortcode( $atts );
 
@@ -384,5 +390,4 @@ class OMAPI_Blocks {
 		// Just return the shortcode output to the frontend.
 		return $output;
 	}
-
 }

@@ -11,10 +11,8 @@ require '../config.php';
 <meta name="description" content="Register a domain name. A domain name gives your business credibility and increase sales." />
 <meta name="keywords" content="domain Kenya, kenya domain names, cheap domains, Domain registration Kenya" />
 <title>Domain names Kenya, Cheap Domain registration in Kenya</title>
-<link rel=stylesheet type=text/css href=../style.css />
-<link rel="stylesheet" href="../font-awesome.min.css" 
-type="text/css">
-<link rel="stylesheet" type="text/css" href="../responsive.css">
+<link rel="stylesheet" href="../font-awesome.min.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="../style.css" />
 <link rel="shortcut icon" href=../images/favicon.ico type=image/x-icon />
 <style>
   .alert {
@@ -44,9 +42,8 @@ type="text/css">
 <div id="menu">
 <ul>
 <li><a href="../">Home</a></li>
-<li class="selected"><a href="../domain-registration/">Domain Registration</a></li>
+<li class="selected"><a href="<?php echo hawlast_url('domain-registration/'); ?>">Domain Registration</a></li>
 <li><a href="../software.html">Software</a></li>
-<li><a href="../portfolio.html">Portfolio</a></li> 
 <li><a href="../blog/">Blog</a></li>
 <li><a href="../online-marketing.html" title="Online Marketing in Kenya">Online Marketing</a></li>
 <li><a href="../affiliates.php">Affiliates</a></li>
@@ -169,6 +166,6 @@ Pay via MPESA /Cheque /Direct deposit<br />
 <br /><br />
 </div>
 <div class="clear"></div></div>
-<?php require("includes/footer.txt"); ?>
+<?php require __DIR__ . "/includes/footer.php"; ?>
 <script async type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 </body></html>

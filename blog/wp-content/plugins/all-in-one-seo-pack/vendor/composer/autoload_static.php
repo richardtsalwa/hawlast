@@ -4,34 +4,34 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1dc5609ceff85151a470c5b8ef014319
+class ComposerStaticInitcbb883331a0e0a657ab67cb8eacd985b
 {
     public static $prefixLengthsPsr4 = array (
-        'L' => 
+        'L' =>
         array (
             'League\\HTMLToMarkdown\\' => 22,
         ),
-        'A' => 
+        'A' =>
         array (
             'AIOSEO\\Plugin\\' => 14,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'League\\HTMLToMarkdown\\' => 
+        'League\\HTMLToMarkdown\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/html-to-markdown/src',
         ),
-        'AIOSEO\\Plugin\\' => 
+        'AIOSEO\\Plugin\\' =>
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
     );
 
     public static $prefixesPsr0 = array (
-        'P' => 
+        'P' =>
         array (
-            'PHPInsight' => 
+            'PHPInsight' =>
             array (
                 0 => __DIR__ . '/..' . '/jwhennessey/phpinsight/lib',
             ),
@@ -144,6 +144,7 @@ class ComposerStaticInit1dc5609ceff85151a470c5b8ef014319
         'AIOSEO\\Plugin\\Common\\Main\\Main' => __DIR__ . '/../..' . '/app/Common/Main/Main.php',
         'AIOSEO\\Plugin\\Common\\Main\\Media' => __DIR__ . '/../..' . '/app/Common/Main/Media.php',
         'AIOSEO\\Plugin\\Common\\Main\\Migrations\\Definitions\\DropLegacyCacheIndexes' => __DIR__ . '/../..' . '/app/Common/Main/Migrations/Definitions/DropLegacyCacheIndexes.php',
+        'AIOSEO\\Plugin\\Common\\Main\\Migrations\\Definitions\\UnscheduleAiCreditFetch' => __DIR__ . '/../..' . '/app/Common/Main/Migrations/Definitions/UnscheduleAiCreditFetch.php',
         'AIOSEO\\Plugin\\Common\\Main\\Migrations\\Migration' => __DIR__ . '/../..' . '/app/Common/Main/Migrations/Migration.php',
         'AIOSEO\\Plugin\\Common\\Main\\Migrations\\MigrationLog' => __DIR__ . '/../..' . '/app/Common/Main/Migrations/MigrationLog.php',
         'AIOSEO\\Plugin\\Common\\Main\\Migrations\\MigrationRunner' => __DIR__ . '/../..' . '/app/Common/Main/Migrations/MigrationRunner.php',
@@ -411,10 +412,10 @@ class ComposerStaticInit1dc5609ceff85151a470c5b8ef014319
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1dc5609ceff85151a470c5b8ef014319::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1dc5609ceff85151a470c5b8ef014319::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit1dc5609ceff85151a470c5b8ef014319::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit1dc5609ceff85151a470c5b8ef014319::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcbb883331a0e0a657ab67cb8eacd985b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcbb883331a0e0a657ab67cb8eacd985b::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitcbb883331a0e0a657ab67cb8eacd985b::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitcbb883331a0e0a657ab67cb8eacd985b::$classMap;
 
         }, null, ClassLoader::class);
     }

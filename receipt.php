@@ -3,10 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require 'PHPMailer/PHPMailerAutoload.php';
+require_once __DIR__ . '/libraries.php';
 
-require_once 'dompdf/src/Autoloader.php';
-Dompdf\Autoloader::register();
 use Dompdf\Dompdf;
 
 // Initialize dompdf

@@ -101,7 +101,7 @@ class OMAPI_Inserter {
 		}
 
 		$closing_p  = '</p>';
-		$paragraphs = explode( $closing_p, $this->content );
+		$paragraphs = explode( $closing_p, (string) $this->content );
 		$count      = count( $paragraphs );
 
 		// If the number of paragraphs in the content is less than
@@ -146,7 +146,7 @@ class OMAPI_Inserter {
 			}
 
 			// This is a valid paragraph.
-			$valid_paragraphs++;
+			++$valid_paragraphs;
 
 			// If it has enough valid paragraphs, it can continue
 			if ( $valid_paragraphs === $paragraph_number ) {
@@ -220,7 +220,7 @@ class OMAPI_Inserter {
 
 		foreach ( $words_array as $word ) {
 			if ( ! empty( $after_word ) && false !== strpos( $word, $after_word ) ) {
-				$number_occurrences++;
+				++$number_occurrences;
 			}
 		}
 

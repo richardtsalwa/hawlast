@@ -1,0 +1,68 @@
+<div class=about>
+
+<H3 STYLE="color:green" align:centre;>OVER <?PHP  echo birthday('2010-05-10'); ?> YEARS OF WEB HOSTING</H3>
+<br />
+<br />
+
+<?php
+require __DIR__ . "/includes/domain_search.php";
+?>
+<br />
+<br />
+
+<?php
+
+if(isMobileDevice()){
+ ?>
+<a href="whatsapp://send?phone=+254720401869&text=%2FI%20need%20more%20information%20on%20web%20hosting"><img src="/images/WhatsApp.png" alt="Chat with us on WhatsApp"></a>
+<?php }
+else {
+ 
+?>
+<a href="https://api.whatsapp.com/send?phone=+254720401869&text=%2FI%20need%20more%20information%20on" target="_blank"><img src="/images/WhatsApp.png" alt="Chat with us on WhatsApp"></a>
+<?php
+}
+?>
+<br />
+
+<div class="fb-like" data-href="https://www.facebook.com/hawlast/" data-layout="standard" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
+<br />
+<br />
+<a href="https://twitter.com/hawlast?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-lang="en" data-show-count="true">Follow @hawlast</a>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<br />
+
+<br />
+<script async src="https://platform.linkedin.com/in.js" type="text/javascript"></script>
+<script type="IN/Share" data-url="https://www.hawlast.com" data-counter="right"></script>
+<br />
+
+</div>
+
+<div class=about>
+<h3>Web hosting</h3>
+<br />
+<h3>Kenya cTLD Domains aka .ke domains</h3>
+
+<b>Kenya Domains .co.ke</b> Ksh. <?php echo $coke; ?> p.a <a href="./" title="Domain registration"><b>BUY</b></a><br />
+<br />
+<b>Domain registration only</b> Ksh. <?php echo $com; ?> (.com,.net,.biz,.org,.info) <a href="./" title="Domain registration"><b>BUY</b></a><br />
+<br />
+<b>Email hosting</b> Ksh. <?php echo $email; ?> Free domain* <a href="./" title="hosting packages"><b>BUY</b></a> <br />
+<br />
+<b>Starter plan hosting</b> Ksh. <?php echo $starter; ?> Free domain* <a href="./" title="hosting packages"><b>BUY</b></a> <br />
+<br />
+<b>Premier plan hosting</b> Ksh. <?php echo $premier; ?> Free domain* <a href="./" title="hosting packages"><b>BUY</b></a> <br />
+<br />
+<b>*</b>.com,.net,.biz,.org,.info<br />
+<br /><br />
+
+<br /><br />
+<h3>Domain Registration</h3><p>Register the following domains for FREE FOREVER &#58; &#45; &#46;com, &#46;net, &#46;org, &#46;info and &#46;biz.</p><p>This offer is available only if the domain name is purchased along with our web hosting and is applicable <b>forever</b> as long as your hosting account is in good standing.</p><br />
+</div>
+<br />
+<!-- PayPal Logo --><table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center"><a href="#" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png" border="0" alt="Now accepting PayPal"></a><div style="text-align:center"><a href="https://www.paypal.com/webapps/mpp/pay-online"><font size="2" face="Arial" color="#0079CD"><b>How PayPal Works</b></font></a></div></td></tr></table><!-- PayPal Logo -->
+<br />
+<br /><br />
+</div><div class=clear></div>
+

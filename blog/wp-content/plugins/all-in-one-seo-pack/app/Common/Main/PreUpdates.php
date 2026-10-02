@@ -319,7 +319,8 @@ class PreUpdates {
 	 *
 	 * Now uses dbDelta to update DB schema instead of manual table creation.
 	 *
-	 * @since 4.1.5
+	 * @since   4.1.5
+	 * @version 5.0.1 Detects the legacy schema via `name`; no longer clears the cache table.
 	 *
 	 * @return void
 	 */
@@ -328,36 +329,38 @@ class PreUpdates {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		}
 
-		// Truncate existing rows BEFORE dbDelta to prevent "Duplicate entry" errors
-		// when adding the UNIQUE KEY on the new 'name' column. Without this, dbDelta adds
-		// the column with default '' for all existing rows, causing duplicate key violations.
-		// Only needed when upgrading from an old schema that has the 'key' column.
 		$db        = aioseo()->core->db->db;
 		$tableName = $db->prefix . 'aioseo_cache';
-		$keyColumnExists = $db->get_var(
+		$columns   = $db->get_col(
 			$db->prepare(
-				"SELECT COLUMN_NAME
+				'SELECT COLUMN_NAME
 				FROM INFORMATION_SCHEMA.COLUMNS
 				WHERE TABLE_SCHEMA = DATABASE()
-				AND TABLE_NAME = %s
-				AND COLUMN_NAME = 'key'",
+				AND TABLE_NAME = %s',
 				$tableName
 			)
 		);
 
-		if ( ! empty( $keyColumnExists ) ) {
+		// The pre-4.9.7 schema is identified by the absence of `name`, never by the presence
+		// of the legacy `key` column: nothing drops `key` (dbDelta cannot, and
+		// updateCacheTable() only makes it nullable), so a `key` probe stays true forever and
+		// re-runs this one-time migration on every subsequent update.
+		// An empty column list means the table doesn't exist yet and dbDelta will create it.
+		$needsSchemaMigration = ! empty( $columns ) && ! in_array( 'name', $columns, true );
+
+		// Truncate existing rows BEFORE dbDelta to prevent "Duplicate entry" errors
+		// when adding the UNIQUE KEY on the new 'name' column. Without this, dbDelta adds
+		// the column with default '' for all existing rows, causing duplicate key violations.
+		// This also serves as the cache wipe for the migration, so no row-by-row delete is
+		// needed afterwards — an unbounded `DELETE ... WHERE name LIKE '%'` took next-key
+		// locks across the whole table and deadlocked against concurrent cache upserts.
+		if ( $needsSchemaMigration ) {
 			aioseo()->core->db->execute( "TRUNCATE TABLE {$tableName}" );
 		}
 
 		// Use dbDelta to create the cache table based on schema definition.
 		$schema = aioseo()->dbSchema->getCacheTableSchema();
 		dbDelta( $schema );
-
-		// Only clear cache if we migrated from the old schema, to avoid wiping
-		// important cache entries like 'activation_redirect' on fresh installs.
-		if ( ! empty( $keyColumnExists ) ) {
-			aioseo()->core->cache->clearPrefix( '' );
-		}
 	}
 
 	/**

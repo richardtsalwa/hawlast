@@ -11,7 +11,7 @@ const { __ } = wp.i18n;
  *
  * @since 2.6.10
  *
- * @returns {Object} The settings for the campaign selector block.
+ * @returns {object} The settings for the campaign selector block.
  */
 export const getBlockSettings = () => {
 	const wpVersion = parseFloat(OMAPI.wpVersion);

@@ -1,0 +1,165 @@
+HAWLAST
+
+http://skillbuilder.aws/
+
+https://aws.training/
+
+https://aws.amazon.com/certification
+
+
+Each link now correctly prepends `<?php echo BASE_URL; ?>` to ensure proper URL resolution regardless of the application's deployment path.
+
+System Integration :::
+
+When registering  domain ask number of year
+
+:::: Products Like Google EMail / Office 365 / Dropb xo storage / AWS 
+
+Ask the dns 1 and dns 2 if they only need a domain name / ask for parking
+
+Add ons ...
+SEO
+
+//-am flag pushes all tracked modified files in one go
+//helps ignore the untracked files and no need to start with add file.php
+
+
+git commit -a "chore: add Open link to media bubbles in inbox and realtime thread
+Document/audio/video messages in the WhatsApp inbox now render a clickable Open button linking to the media URL, in both the
+server-rendered (index.php) and client-poll (new_realtime.js) paths.Storage-side JSON-string media unpacking was already in place."
+git push
+
+git commit -am ": Fully threading conversation - turns"
+git push
+
+git commit -am "fix: Inbound images not to render"
+git push
+
+git commit -m "test:The error log JSON for interactive message"
+git push
+
+WhatsApp Business API INTERGRATION
+
+github create a branch
+
+git checkout -b hpanel
+
+git add FROM-MANUAL-AUTONOMOUS-step1-backup.sql FROM-MANUAL-AUTONOMOUS.sql
+
+git add pos/cross_stock.php pos/includes/header.php
+git commit -a "docs: clinerules to ensure secure code"
+
+git push 
+
+
+F~Ha8JYDC1Uit)?K
+
+legacygolderp@posglv.com	/home/posglv/public_html
+
+
+git commit -am "fix: ""
+
+git push -u origin main
+
+
+feat: — A new feature for the user 
+fix: — A bug fix (e.g., fix: resolve SQL database query error)
+refactor: — Code changes that neither fix a bug nor add a feature 
+docs: — Documentation changes only (e.g., docs: update API integration
+style: — Formatting, missing semi-colons, white-space fixes 
+test: — Adding missing tests or correcting existing tests
+chore: — Updating build tasks, cPanel configs, package dependencies, or repo files
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9KL6HJDLH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-P9KL6HJDLH');
+</script>
+
+
+<meta name="google-site-verification" content="YZPXJE-6W2iSvgrFkQPcGRTh3md86Qv7PnNa0DTcA2g" />
+
+<script  type="application/ld+json" id="website-json-ld">
+{
+    "@context":"http://schema.org",
+    "@type":"WebSite",
+    "name":"HAWLAST",
+    "alternateName":"HAWLAST VENTURES",
+    "url":"https://www.hawlast.com"
+}
+</script>
+<script  type="application/ld+json" id="social-json-ld">
+{
+    "@context":"http://schema.org",
+    "@type":"Organization",
+    "name":"Hawlast Ventures",
+    "url":"https://www.hawlast.com",
+    "logo": "https://www.hawlast.com/images/domain-registration.gif",
+    "sameAs":[
+        "https://www.facebook.com/hawlast",
+        "https://twitter.com/hawlast"
+    ]
+}
+</script>
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@hawlast">
+<meta name="twitter:title" content="Get started with your website or blog idea now.">
+<meta name="twitter:description" content="Website or Blog? Get started. 90% of clients working with us keep growing their sales and profits.">
+<meta name="twitter:creator" content="@RichardTsalwa">
+<!-- Twitter Summary card images must be at least 120x120px -->
+<meta name="twitter:image" content="https://www.hawlast.com/images/hawlast-get-online.jpg">
+
+<!-- Open Graph data -->
+<meta property="og:title" content="Get started with your website or blog idea now." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.hawlast.com/" />
+<meta property="og:image" content="https://www.hawlast.com/images/hawlast-get-online.jpg" />
+<meta property="og:description" content="Get started with your website or blog idea today." /> 
+<meta property="og:site_name" content="Hawlast" />
+<meta property="fb:admins" content="1166791883" />
+<meta property="fb:app_id" content="202015096126" />
+
+/////////////////////////////////
+Project: Rebuild hawlast.com homepage from hosting company to Technical Founder-as-a-Service firm. Keep existing logo/colors but use dark mode premium style (black/white + gold accent #D4AF37). Font: Inter or Sora.1. TOP BAR (Small, above main menu)
+Left: Remote-First | By Appointment: The Promenade, Westlands, Nairobi
+Right: Domain & Hosting Desk → /domain-hosting/ | Support | Client Login2. MAIN NAV MENU (Sticky)
+Left: Logo "HAWLAST VENTURES" + tagline small "Technical Founder as a Service"
+Right Menu: How It Works | Solutions | GoldERP | Pricing | Book 15-Min Triage [Primary Button Gold]
+Mobile: Hamburger. Top bar link /domain-hosting/ should be in mobile menu footer as "Looking for just domain & hosting?"3. HERO SECTION
+Headline: Stop Guessing Your Tech Stack. Hire a Technical Founder.
+Sub: We help Kenyan founders set up domains, email that delivers, MPesa & payments, WhatsApp bots, GoldERP, and AI tools — so you stop losing focus and start saving OPEX.
+CTA 1: Book Free 15-Min Tech Triage -> Calendly link
+CTA 2: See How It Works -> anchor to #howitworks
+Below CTA add trust line: 20 companies max at a time | Not an agency. Your fractional CTO.
+Right side: Diagram showing messy stack (6 logos disconnected) vs clean Hawlast Stack (connected flow)4. PROBLEM SECTION (3 columns)
+Title: The real reason your runway is short?
+Box 1: Icon email: Emails land in spam. SPF/DKIM is broken.
+Box 2: Icon money: Paying 6 SaaS tools that don't talk to each other.
+Box 3: Icon AI: Testing 10 AI tools, implementing none.5. HOW IT WORKS (#howitworks) - 3 steps
+Title: Audit → Setup → Run
+Step 1: 1. Founder Tech Audit (KES 49k) - We map your current stack, find cost leaks, security gaps, SEO score. Deliverable: 12-page report + Stack Map.
+Step 2: 2. Technical Founder Setup (From KES 180k) - We build your clean stack: Domain in YOUR name, Google Workspace, Website, MPesa Daraja, Paystack, WhatsApp API, GoldERP, AI automation.
+Step 3: 3. Fractional CTO Retainer - We stay as your Head of Technology. Weekly standup, vendor management, security, support.6. SOLUTIONS SECTION
+Title: Pick Your Founder Stack
+Cards (4):Retail & E-commerce StackService Business StackSchools & Churches Stack (highlight your experience)Startup & SME Stack
+Each card lists: Domain, Email, MPesa/Payments, WhatsApp Bot, GoldERP, AI.7. PRICING SECTION (#pricing)
+Title: Transparent Pricing. No Bargaining Needed.
+Tier Lite: Audit Lite - KES 19k - Checklist + 30-min Loom video. For self-serve. [Button: Get Lite]
+Tier Main (Highlighted): Founder Tech Audit - KES 49,000 - Includes Be Found Online Diagnostic (SEO + Email Deliverability + Security) + Cost Leak Report + Stack Map + 90-min Debrief. Note: 100% credit if you move to Setup within 7 days [Button: Book Audit - Most Popular]
+Tier Premium: Investor-Ready Audit - KES 85k - Everything in Founder Audit + ODPC Data Privacy docs + Cybersecurity policy + Investor Tech Due Diligence doc [Button: Get Investor Ready]Below tiers: Add banner: Starter? Need just domain & hosting? Go to Domain & Hosting Desk → /domain-hosting/ - From KES 2,500/year. Handled by our Starter Desk team.8. GOLDERP SECTION
+Title: GoldERP: The Operating System for Kenyan SMEs
+Text: Not just another ERP. It connects your sales, MPesa, stock, WhatsApp orders, and reports in one place. Built by Hawlast for Kenyan reality.
+CTA: See GoldERP Demo → /golderp9. PROOF / FOOTER CTA
+Title: We work with 20 companies at a time. 1 slot open this month.
+CTA: Book Triage Call
+Footer Links: Include Domain & Hosting Desk (/domain-hosting/) in footer under "Quick Start"Design Instructions:No hosting price tables on homepage.All Book buttons go to /book or Calendly.Make /domain-hosting/ link open in same tab, but style it as secondary (grey, not gold).Add sticky WhatsApp button bottom right.Build as clean Tailwind HTML, responsive, fast.

@@ -10,11 +10,11 @@ require 'config.php';
 <title>Pay securely  &ndash; hawlast.com</title>
 
 <link rel=icon href=images/favicon.ico type=image/x-icon /><meta name=robots content=index,follow />
-<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"><link rel=stylesheet type=text/css href=style.css />
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"><link rel="stylesheet" type="text/css" href="style.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
-type="text/css"><link rel="stylesheet" type="text/css" href="responsive.css" />
+type="text/css"><link rel="stylesheet" type="text/css" href="style.css" />
 <?php
-require("includes/header.txt");
+require __DIR__ . "/includes/header.php";
 ?>
 </div>
 <div class=center_content>
@@ -142,12 +142,12 @@ require("includes/header.txt");
 </div>
 <div class=right_content>
 <?php
-require("includes/pay.txt");
+require __DIR__ . "/includes/pay.php";
 ?>
 </div>
 <div style="clear:both"></div>
 
 <?php
-require("includes/footer.txt");
+require __DIR__ . "/includes/footer.php";
 ?>
 </body></html>

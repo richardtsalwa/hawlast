@@ -1,0 +1,80 @@
+# HAWLAST — Cline Project Rules
+
+---
+
+## 🛑 1. MANDATORY SECURITY & PRIVACY GUARDRAILS
+
+### Secrets & Credentials Protection
+1. **Never Output Secrets:** NEVER show, echo, print, dump, or commit the contents of `config.php` (root, `/pos/`, `deliveries/`, `lish/`, `saas/`, `teachers/`, etc.) or files in `.clineignore`. This applies to chat output, diffs, PRs, logs, or code blocks.
+2. **Redact Credentials:** Redact real credentials, hostnames, passwords, usernames, or connection strings as `********`. When discussing connections, state only: *"Credentials are defined in `config.php`."*
+3. **No Credential Duplication:** Never declare `$db_host`, `$db_user`, `$db_pass`, or new `new PDO()` instances outside your primary `config.php`. Always import the existing connection.
+4. **Surgical Config Editing:** If editing `config.php`, modify ONLY the requested lines and show diffs with redacted values. Never move secrets to a non-git-ignored location.
+
+### PII & Data Privacy Restrictions
+1. **Forbidden Columns:** You are strictly banned from selecting, querying, or outputting data from columns containing PII, including:
+   - Names: `name`, `first_name`, `last_name`, `username`
+   - Contact Info: `phone`, `phone_number`, `mobile`, `tel`, `email`, `email_address`
+   - Messages/Content: `message`, `messages`, `body`, `text`, `chat_history`
+   - Auth Data: `password`, `hash`, `salt`
+2. **Explicit Column Selection:** NEVER use `SELECT *` on tables containing user or client data. Explicitly name non-sensitive columns (e.g., `id`, `created_at`, `status`, `role`).
+3. **Verification via Aggregation:** To check row existence or counts, use `COUNT()` or limit queries strictly to the primary key (`id`).
+4. **Pre-Transmission Audit:** Ensure terminal outputs contain zero real or fake names, numbers, or message bodies. If PII is required, request anonymous mock data from the user.
+
+---
+
+## 🗄️ 2. DATABASE & PDO ARCHITECTURE
+
+### Global Connection Protocol
+- **Configuration Import:** Every script requiring database access MUST start with `require_once __DIR__ . '/config.php';` (or adjust relative path such as `require_once __DIR__ . '/pos/config.php';` based on module depth).
+- **Global `$pdo` Usage:** Always rely on the global `$pdo` instance created by `config.php`. Do not re-initialize PDO connections or manually close them with `$pdo = null` during standard web requests (let PHP clean up automatically).
+
+### Safe Database Execution & Schema Safeguards
+- **Allowed Direct Operations:** SELECT, INSERT, and UPDATE queries may be executed via PHP scripts, CLI, or cURL using the global `$pdo` without requesting database credentials.
+- **SCHEMA ALTERATION SAFEGUARD:** You MUST explicitly request confirmation before executing ANY structural changes (`ALTER TABLE`, `DROP TABLE`, `CREATE TABLE`, `TRUNCATE`, dropping columns, or modifying indexes). You must display the proposed SQL statement and await explicit user approval before execution.
+- **FORBIDDEN ROW DELETION:** Never issue `DELETE FROM` against user, client, account, or transaction data unless the user explicitly requests it by name. Never run `TRUNCATE` or `DROP TABLE` on populated tables. Announce every `DELETE`/`TRUNCATE` statement in full before execution and await approval.
+
+### 🛡️ User Deletion Safety (No Orphaning)
+- **NEVER Hard-Delete a User With Dependent Data:** If a user/client record has related rows in ANY other table or form (orders, payments, invoices, subscriptions, messages, uploads, logs, profiles, addresses, assignments, etc.), that user MUST NOT be deleted — under any circumstance. Deleting them would orphan, break, or silently destroy data.
+- **Mandatory Dependency Audit Before Any Delete:** Before proposing or executing a user deletion, run a `COUNT(*)`-style check (primary-key-scoped only, no PII) across EVERY related table/foreign key that references the user. If any count is greater than zero, the deletion is BLOCKED.
+- **Preferred Alternative — Soft Delete:** Use deactivation instead of deletion (`UPDATE ... SET status = 'inactive'` / `is_active = 0` / `deleted_at = NOW()`), preserving referential integrity and audit history. Keep the row so historical reports and foreign keys stay valid.
+- **Hard Delete Only When Truly Empty:** A hard `DELETE` is permitted only when the user has zero dependent rows across all referencing tables AND the user explicitly confirms this in writing. Report the verified dependency counts (numbers only) as proof before executing.
+- **Never Cascade Silently:** If a foreign key is defined with `ON DELETE CASCADE`, do NOT rely on it to justify deleting a user. Cascading deletion of child data still counts as deleting a user's data and must be surfaced to the user for approval first.
+- **No Bypass:** Do not delete via alternate paths (re-inserting a new ID, `TRUNCATE`, disabling/re-enabling constraints, raw CLI, or editing rows out of a table) to get around this rule.
+
+### 📄 Schema Documentation Sync
+- **ALWAYS UPDATE `databases_structure.sql`:** The canonical schema dump lives at `d:\xampp\htdocs\hawlast\databases_structure.sql` (root directory). ANY time a table's scheme is altered — `CREATE TABLE`, `ALTER TABLE` (add/drop/rename column, change type, add/drop index or constraint), engine/charset change, or table create/drop — you MUST update `databases_structure.sql` in the SAME task before reporting completion.
+- **How:** Mirror the exact `CREATE TABLE` definition as it exists after the change, keeping `InnoDB` / `utf8mb4` / `utf8mb4_unicode_ci` and all current indexes and foreign keys intact. Never leave the dump stale or out of sync with the live database.
+- **Verification:** Before finishing, state which tables were affected and confirm the dump matches the live schema. If the dump could not be updated (e.g., file locked, dump not found), explicitly say the sync was skipped and why — never silently omit it.
+
+### MySQL Standards
+- **Engine & Charset:** Always use `InnoDB` engine with `utf8mb4` character set and `utf8mb4_unicode_ci` collation.
+- **Indexing & Constraints:** Apply proper indexes and foreign keys to optimize performance and enforce integrity. Set `UNIQUE` constraints on `email` or `phone` only when mandated by business logic.
+
+---
+
+## 🔒 3. PHP SECURITY & BEST PRACTICES
+
+- **PDO Configuration:** Ensure options include `PDO::ERRMODE_EXCEPTION`, `PDO::FETCH_ASSOC`, `PDO::EMULATE_PREPARES => false`, and timezone set to `Africa/Nairobi`.
+- **Prepared Statements:** Always use prepared statements for queries involving dynamic parameters.
+- **Transactions:** Use `beginTransaction()`, `commit()`, and `rollBack()` for multi-step atomic operations.
+- **XSS Prevention:** Always escape output using `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')`.
+- **Timing-Safe Comparison:** Use `hash_equals((string)$a, (string)$b)` when comparing tokens or hashes.
+- **Session Security:** Call `session_regenerate_id(true)` immediately following login or privilege elevation.
+- **Validation:** Distinguish between `isset()` (existence) and `empty()` (falsy checks) based on exact business logic. Use `try/catch` around IO/network operations rather than pure logic.
+
+---
+
+## 🛠️ 4. WORKFLOW & DEVELOPMENT CONVENTIONS
+
+### LLM Mindset & Execution
+1. **Think & Surface Tradeoffs:** State assumptions explicitly. If uncertain or presented with multiple choices, ask the user before writing code.
+2. **Simplicity First:** Write minimum code for requested features only. No speculative abstractions, unnecessary flexibility, or over-engineering.
+3. **Surgical Changes:** Modify only lines directly tied to the request. Do not refactor adjacent code or clean up pre-existing dead code unless explicitly requested. Remove unused variables/imports introduced by your own changes.
+4. **Token Conservation:** Keep responses short and code concise. Do not output unchanged files—show only diffs or modified blocks.
+
+### Codebase Organization
+- **Environment:** PHP 8.2.12 | MySQL 8.2.12 (mysqlnd) | Apache/2.4.58 (Win64 XAMPP local / cPanel production).
+- **Routing:** Entry points stay in the root (e.g., `index.php`, `hawlastke.php`). Feature modules reside in `admin/`, `blog/`, `saas/`, `teachers/`, `deliveries/`, `lish/`, etc.
+- **Frontend Assets:** Use raw/vanilla JavaScript AJAX and keep styles in existing bundles (`style.css`, `responsive.css`, `js/`).
+- **Error Handling:** Log errors to `php_errors.log`. Ensure `display_errors` is OFF in production.
+- **Linting:** Validate modified PHP files via PHP CLI (e.g., `"d:\xampp\php\php.exe" -l <file>`). If unavailable, explicitly state that linting was skipped.

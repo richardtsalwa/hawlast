@@ -19,13 +19,29 @@ if ( ! class_exists( 'DLM_Post_Type_Manager' ) ) {
 				array( $this, 'register_dlm_download_post_meta_rest' ) );
 			add_action( 'init', array( $this, 'register' ), 10 );
 
-			add_filter( 'views_edit-dlm_download',
-				array( $this, 'add_extensions_tab' ), 10, 1 );
-
 			add_action( 'current_screen', array( $this, 'disable_geditor' ) );
 			// Action to do when a post is deleted.
 			add_action( 'before_delete_post', array( $this, 'delete_post' ), 15,
 				2 );
+			// Route to custom list table for the Downloads CPT.
+			add_filter( 'wp_list_table_class_name', array( $this, 'custom_list_table' ), 15, 2 );
+		}
+
+		/**
+		 * Custom Admin List Table for the Downloads CPT. Used to improve performance.
+		 *
+		 * @param  string  $class_name  The class name of the list table.
+		 * @array $args  The arguments passed to the filter.
+		 *
+		 * @return string
+		 * @since 5.0.0
+		 */
+		public function custom_list_table( $class_name, $args ) {
+			if ( 'dlm_download' === $args['screen']->post_type && 'edit' === $args['screen']->base ) {
+				$class_name = 'DLM_Admin_List_Table';
+			}
+
+			return $class_name;
 		}
 
 		/**
@@ -82,7 +98,7 @@ if ( ! class_exists( 'DLM_Post_Type_Manager' ) ) {
 						'delete_post'         => 'manage_downloads',
 						'read_post'           => 'manage_downloads',
 					),
-					'publicly_queryable'  => false,
+					'publicly_queryable'  => true,
 					'exclude_from_search' => ( 1
 					                           !== absint( get_option( 'dlm_wp_search_enabled',
 							0 ) ) ),
@@ -101,7 +117,7 @@ if ( ! class_exists( 'DLM_Post_Type_Manager' ) ) {
 					'show_in_nav_menus'   => false,
 					'menu_position'       => 35,
 					'show_in_rest'        => true,
-					'menu_icon'           => 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA1IiBoZWlnaHQ9IjEwNSIgdmlld0JveD0iMCAwIDEwNSAxMDUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik01Mi41IDAuMDAwNTk5Njc0QzM4LjU3NTYgMC4wMDA1OTk2NzQgMjUuMjIxOSA1LjUzMjAzIDE1LjM3NzYgMTUuMzc4MUM1LjUzMTQ2IDI1LjIyMjkgMCAzOC41NzY2IDAgNTIuNTAwM0MwIDY2LjQyNCA1LjUzMTQ2IDc5Ljc3ODMgMTUuMzc3NiA4OS42MjI1QzI1LjIyMjUgOTkuNDY4NiAzOC41NzYyIDEwNSA1Mi41IDEwNUM2Ni40MjM4IDEwNSA3OS43NzgxIDk5LjQ2ODYgODkuNjIyNCA4OS42MjI1Qzk5LjQ2ODUgNzkuNzc3NyAxMDUgNjYuNDI0IDEwNSA1Mi41MDAzQzEwNSA0My4yODQ1IDEwMi41NzQgMzQuMjMwOCA5Ny45NjY0IDI2LjI1MDJDOTMuMzU4NyAxOC4yNjk1IDg2LjczMDQgMTEuNjQxNiA3OC43NDk3IDcuMDMzNTRDNzAuNzY5IDIuNDI1ODEgNjEuNzE1MiAwIDUyLjQ5OTQgMEw1Mi41IDAuMDAwNTk5Njc0Wk00MC40Nzc3IDM4LjI3MThMNDcuMjQ5OSA0NS4wOTY5VjI2LjI0OTZINTcuNzUwMVY0NS4wOTY5TDY0LjUyMjMgMzguMzI0Nkw3MS45MjUyIDQ1LjcyNzVMNTIuNSA2NS4xNTI2TDMzLjAyMiA0NS42NzQ3TDQwLjQ3NzcgMzguMjcxOFpNNzguNzQ5MSA3OC43NTExSDI2LjI0ODVWNjguMjUxSDc4Ljc0OTFWNzguNzUxMVoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=',
+					'menu_icon'           => 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iNjQuMDAwMDAwcHQiIGhlaWdodD0iNjQuMDAwMDAwcHQiIHZpZXdCb3g9IjAgMCA2NC4wMDAwMDAgNjQuMDAwMDAwIgogcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCI+Cgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCw2NC4wMDAwMDApIHNjYWxlKDAuMTAwMDAwLC0wLjEwMDAwMCkiCmZpbGw9IiNmZmZmZmYiIHN0cm9rZT0ibm9uZSI+CjxwYXRoIGQ9Ik0yMjYgNjIzIGMtMTAxIC0zMSAtMTgzIC0xMTEgLTIxMSAtMjA3IC03MiAtMjQwIDE0MiAtNDY2IDM4MCAtNDA0CjczIDIwIDEzMyA1NiAxNjggMTAyIDk0IDEyMiAxMDAgMjYzIDE2IDM4OSAtNzMgMTExIC0yMjAgMTYxIC0zNTMgMTIweiBtMTQ0Ci0xNTggYzAgLTExIC0xMiAtMTUgLTUwIC0xNSAtMzggMCAtNTAgNCAtNTAgMTUgMCAxMSAxMiAxNSA1MCAxNSAzOCAwIDUwIC00CjUwIC0xNXogbTAgLTUwIGMwIC0xMSAtMTIgLTE1IC01MCAtMTUgLTM4IDAgLTUwIDQgLTUwIDE1IDAgMTEgMTIgMTUgNTAgMTUKMzggMCA1MCAtNCA1MCAtMTV6IG0yIC04MiBjMyAtMzcgNCAtMzggNTEgLTQzIGw0OCAtNSAtNzYgLTc1IC03NSAtNzQgLTc1IDc0Ci03NiA3NSA0OCA1IGM0NyA1IDQ4IDYgNTEgNDMgbDMgMzcgNDkgMCA0OSAwIDMgLTM3eiIvPgo8L2c+Cjwvc3ZnPgo=',
 				) )
 			);
 
@@ -184,91 +200,6 @@ if ( ! class_exists( 'DLM_Post_Type_Manager' ) ) {
 						$post_arr['author'] );
 				},
 			) );
-
-		}
-
-		/**
-		 * Add tab navigation.
-		 *
-		 * @param  array  $views  Array of views.
-		 *
-		 * @return array|mixed
-		 */
-		public function add_extensions_tab( $views ) {
-			$this->display_extension_tab();
-			$posts = count(
-				get_posts(
-					array(
-						'post_type'   => 'dlm_download',
-						'post_status' => array(
-							'publish',
-							'future',
-							'trash',
-							'draft',
-							'inherit',
-							'pending',
-						),
-					)
-				)
-			);
-
-			if ( 0 === $posts ) {
-				global $wp_list_table;
-				$wp_list_table = new DLM_Empty_Table();
-
-				return array();
-			}
-
-			return $views;
-		}
-
-		/**
-		 * Display the extension tab.
-		 */
-		public function display_extension_tab() {
-			?>
-			<h2 class="nav-tab-wrapper">
-				<?php
-				$tabs = array(
-					'downloads'       => array(
-						'name'     => __( 'Downloads', 'download-monitor' ),
-						'url'      => admin_url( 'edit.php?post_type=dlm_download' ),
-						'priority' => '1',
-					),
-					'suggest_feature' => array(
-						'name'     => esc_html__( 'Suggest a feature',
-							'download-monitor' ),
-						'icon'     => 'dashicons-external',
-						'url'      => 'https://forms.gle/3igARBBzrbp6M8Fc7',
-						'target'   => '_blank',
-						'priority' => '60',
-					),
-				);
-
-				if ( current_user_can( 'install_plugins' ) ) {
-					$tabs['extensions'] = array(
-						'name'     => esc_html__( 'Extensions',
-							'download-monitor' ),
-						'url'      => admin_url( 'edit.php?post_type=dlm_download&page=dlm-extensions' ),
-						'priority' => '5',
-					);
-				}
-
-				/**
-				 * Hook for DLM CPT table view tabs
-				 *
-				 * @hooked DLM_Admin_Extensions dlm_cpt_tabs()
-				 */
-				$tabs = apply_filters( 'dlm_add_edit_tabs', $tabs );
-
-				uasort( $tabs,
-					array( 'DLM_Admin_Helper', 'sort_data_by_priority' ) );
-
-				DLM_Admin_Helper::dlm_tab_navigation( $tabs, 'downloads' );
-				?>
-			</h2>
-			<br/>
-			<?php
 		}
 
 		/**
@@ -345,7 +276,7 @@ if ( ! class_exists( 'DLM_Post_Type_Manager' ) ) {
 				// The retrieved download is an array of downloads. We only need the first and only one, as it's a query
 				// based on ID.
 				if ( ! empty( $download ) ) {
-					$download = $download[0];
+					$download  = reset($download);
 				}
 
 				$versions = $download->get_versions();

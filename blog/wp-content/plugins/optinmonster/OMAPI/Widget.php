@@ -80,7 +80,6 @@ class OMAPI_Widget extends WP_Widget {
 			$widget_ops,
 			$control_ops
 		);
-
 	}
 
 	/**
@@ -140,7 +139,6 @@ class OMAPI_Widget extends WP_Widget {
 		echo $args['after_widget'];
 
 		do_action( 'optin_monster_api_widget_after_output', $args, $instance );
-
 	}
 
 	/**
@@ -159,12 +157,11 @@ class OMAPI_Widget extends WP_Widget {
 		$instance = $old_instance;
 
 		// Sanitize user inputs.
-		$instance['title']            = trim( $new_instance['title'] );
+		$instance['title']            = trim( $new_instance['title'] ?? '' );
 		$instance['followrules']      = ! empty( $new_instance['followrules'] );
-		$instance['optin_monster_id'] = absint( $new_instance['optin_monster_id'] );
+		$instance['optin_monster_id'] = absint( $new_instance['optin_monster_id'] ?? 0 );
 
 		return apply_filters( 'optin_monster_api_widget_update_instance', $instance, $new_instance );
-
 	}
 
 	/**
@@ -194,7 +191,8 @@ class OMAPI_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'optin_monster_id' ) ); ?>"><?php esc_html_e( 'Campaign', 'optin-monster-api' ); ?></label>
 			<select id="<?php echo esc_attr( $this->get_field_id( 'optin_monster_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'optin_monster_id' ) ); ?>" style="width: 100%;">
-				<?php if ( ! empty( $optins ) ) {
+				<?php
+				if ( ! empty( $optins ) ) {
 					foreach ( $optins as $optin ) {
 						$type    = get_post_meta( $optin->ID, '_omapi_type', true );
 						$enabled = (bool) get_post_meta( $optin->ID, '_omapi_enabled', true );
@@ -222,7 +220,5 @@ class OMAPI_Widget extends WP_Widget {
 		<?php
 
 		do_action( 'optin_monster_api_widget_after_form', $instance );
-
 	}
-
 }

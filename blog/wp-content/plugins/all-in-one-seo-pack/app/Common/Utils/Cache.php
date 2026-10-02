@@ -58,13 +58,27 @@ class Cache {
 	protected $prefix = '';
 
 	/**
-	 * Whether to use transients as fallback.
+	 * Whether to use transients as fallback, keyed by resolved table name.
 	 *
-	 * @since 4.9.4.2
+	 * Shared across all Cache instances (core, network, redirects) since they
+	 * target the same table; keying by the resolved name keeps it correct when
+	 * a subclass operates against another blog's table on multisite.
 	 *
-	 * @var bool|null
+	 * @since   4.9.4.2
+	 * @version 5.0.1 Made static and keyed by table so the availability check runs once per request.
+	 *
+	 * @var array<string,bool>
 	 */
-	private $useTransientFallback = null;
+	private static $useTransientFallback = [];
+
+	/**
+	 * Resolved table names that have already run checkIfTableExists() this request.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @var array<string,bool>
+	 */
+	private static $tableChecked = [];
 
 	/**
 	 * Class constructor.
@@ -82,10 +96,18 @@ class Cache {
 	 *
 	 * @since   4.7.7.1
 	 * @version 4.9.4.2 Absorb prune logic from CachePrune class.
+	 * @version 5.0.1 Run once per resolved table per request; instances share the same table and hooks.
 	 *
 	 * @return void
 	 */
 	public function checkIfTableExists() {
+		global $wpdb;
+		$resolvedTable = $wpdb->prefix . $this->table;
+		if ( isset( self::$tableChecked[ $resolvedTable ] ) ) {
+			return;
+		}
+		self::$tableChecked[ $resolvedTable ] = true;
+
 		if ( ! aioseo()->core->db->tableExists( $this->table ) ) {
 			aioseo()->preUpdates->createCacheTable();
 		}
@@ -510,18 +532,19 @@ class Cache {
 	 * @return bool True if table exists and is accessible.
 	 */
 	private function isCacheTableAvailable() {
-		if ( null !== $this->useTransientFallback ) {
-			return ! $this->useTransientFallback;
-		}
-
 		// Check the DB directly (avoids circular dependency with Database::tableExists).
 		global $wpdb;
 		$tableName = $wpdb->prefix . $this->table;
+
+		if ( isset( self::$useTransientFallback[ $tableName ] ) ) {
+			return ! self::$useTransientFallback[ $tableName ];
+		}
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$tableExists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $tableName ) );
 
 		if ( ! $tableExists ) {
-			$this->useTransientFallback = true;
+			self::$useTransientFallback[ $tableName ] = true;
 
 			return false;
 		}
@@ -543,12 +566,12 @@ class Cache {
 		);
 
 		if ( ! $nameColumnExists ) {
-			$this->useTransientFallback = true;
+			self::$useTransientFallback[ $tableName ] = true;
 
 			return false;
 		}
 
-		$this->useTransientFallback = false;
+		self::$useTransientFallback[ $tableName ] = false;
 
 		return true;
 	}

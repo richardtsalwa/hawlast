@@ -112,10 +112,11 @@ class SeoPreview {
 	 *
 	 * @since   4.2.8
 	 * @version 5.0.0.1 Keyword columns fall back to the legacy keyphrases column.
+	 * @version 5.0.1 Visibility widened to protected; term analysis data added.
 	 *
 	 * @return array The data.
 	 */
-	private function getVueData() {
+	protected function getVueData() {
 		$data = [
 			'editGoogleSnippetUrl'   => '',
 			'editFacebookSnippetUrl' => '',
@@ -125,6 +126,9 @@ class SeoPreview {
 			'truseo'                 => '',
 			'focus_keyword'          => '',
 			'additional_keywords'    => '',
+			// A term's description is a single short block, so its editor hides the Readability tab.
+			// The inspector hides its Readability row for the same reason.
+			'hasReadability'         => true,
 			'headlineScore'          => null,
 			'urls'                   => [
 				'home'        => home_url(),
@@ -159,6 +163,7 @@ class SeoPreview {
 				$wpObject              = $queriedObject;
 				$labels                = get_taxonomy_labels( get_taxonomy( $queriedObject->taxonomy ) );
 				$data['editObjectUrl'] = get_edit_term_link( $queriedObject, $queriedObject->taxonomy );
+				$data                  = array_merge( $data, $this->getTermAnalysisData( $queriedObject ) );
 			} else {
 				$wpObject = aioseo()->helpers->getPost();
 
@@ -173,12 +178,15 @@ class SeoPreview {
 						current_user_can( 'edit_post', $wpObject->ID ) &&
 						! post_password_required( $wpObject )
 					) {
-						$aioseoPost                  = Models\Post::getPost( $wpObject->ID );
-						$keywordColumns              = Models\Post::getKeywordColumnsWithLegacyFallback( $aioseoPost );
-						$data['truseo']              = Models\Post::getTruseoDefaults( $aioseoPost->truseo );
-						$data['focus_keyword']       = $keywordColumns['focus_keyword'];
-						$data['additional_keywords'] = $keywordColumns['additional_keywords'];
-						$data['headlineScore']       = aioseo()->standalone->headlineAnalyzer->getScoreForPost( $wpObject->ID, $aioseoPost );
+						// Reuse the request-cached meta data instead of a second Post::getPost() query.
+						$aioseoPost = aioseo()->meta->metaData->getMetaData( $wpObject );
+						if ( is_a( $aioseoPost, 'AIOSEO\Plugin\Common\Models\Post' ) ) {
+							$keywordColumns              = Models\Post::getKeywordColumnsWithLegacyFallback( $aioseoPost );
+							$data['truseo']              = Models\Post::getTruseoDefaults( $aioseoPost->truseo );
+							$data['focus_keyword']       = $keywordColumns['focus_keyword'];
+							$data['additional_keywords'] = $keywordColumns['additional_keywords'];
+							$data['headlineScore']       = aioseo()->standalone->headlineAnalyzer->getScoreForPost( $wpObject->ID, $aioseoPost );
+						}
 					}
 				}
 			}
@@ -225,6 +233,20 @@ class SeoPreview {
 		$data['aioseoPageAnalysis']        = aioseo()->access->hasCapability( 'aioseo_page_analysis' );
 
 		return $data;
+	}
+
+	/**
+	 * Returns the TruSEO analysis data for a term.
+	 *
+	 * NOTE: Term analysis is Pro-only — {@see \AIOSEO\Plugin\Pro\Standalone\SeoPreview} fills this in.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  \WP_Term $term The term.
+	 * @return array          The analysis data, empty when the term isn't analysed.
+	 */
+	protected function getTermAnalysisData( $term ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		return [];
 	}
 
 	/**

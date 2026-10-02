@@ -79,6 +79,27 @@ $txt = "No Object Found";
 
 $status = checkDomain($domainext,$server,$txt);
 
+$isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+
+if ($isAjax) {
+    if (strcasecmp($status, "Available") == 0) {
+        $continueUrl = "hosting.php?src=" . urlencode($src) . "&domain=" . urlencode($domainext) . "&ext=" . urlencode($ext);
+        echo json_encode([
+            'status' => 'success',
+            'available' => true,
+            'message' => '<strong>' . htmlspecialchars($domainext) . '</strong> is available. <a href="' . htmlspecialchars($continueUrl) . '">Continue with hosting</a>'
+        ]);
+        exit;
+    }
+
+    echo json_encode([
+        'status' => 'success',
+        'available' => false,
+        'message' => '<strong>' . htmlspecialchars($domainext) . '</strong> is already taken. Please try another name.'
+    ]);
+    exit;
+}
+
 if(strcasecmp($status,"Available")==0){
 
 //IF DOMAIN IS AVAILABLE

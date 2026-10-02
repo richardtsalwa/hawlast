@@ -12,9 +12,9 @@ ob_start();
 <meta name=Keywords content="SSL certificates, Secure webistes, hosting,support,nairobi kenya,domain name,SEO,online marketing" /><meta name=robots ontent=noindex,follow />
 <title>404 Error &ndash; hawlast.com</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
-type="text/css"><link rel=stylesheet type=text/css href=style.css /><link rel="stylesheet" type="text/css" href="responsive.css" /><link rel="shortcut icon" href=images/favicon.ico type=image/x-icon /><script src="validate.js" type="text/javascript"></script>
+type="text/css"><link rel="stylesheet" type="text/css" href="style.css" /><link rel="stylesheet" type="text/css" href="style.css" /><link rel="shortcut icon" href=images/favicon.ico type=image/x-icon /><script src="validate.js" type="text/javascript"></script>
 <?php
-require("includes/header.txt");
+require __DIR__ . "/includes/header.php";
 ?>
 </div>
 <div class=center_content><div class=left_content>
@@ -24,10 +24,10 @@ require("includes/header.txt");
 
 <div class=right_content>
 <?php
-require("includes/other_left.txt");
+require __DIR__ . "/includes/other_left.php";
 ?>
 </div>
 <?php
-require("includes/footer.txt");
+require __DIR__ . "/includes/footer.php";
 ?>
 </body></html>

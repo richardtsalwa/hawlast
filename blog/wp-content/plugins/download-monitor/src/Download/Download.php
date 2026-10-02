@@ -429,42 +429,45 @@ class DLM_Download {
 	 */
 	public function get_the_download_link( $timestamp = true ) {
 		$scheme   = parse_url( get_option( 'home' ), PHP_URL_SCHEME );
-		$endpoint = ( $endpoint = get_option( 'dlm_download_endpoint' ) ) ? $endpoint : 'download';
+		$endpoint = get_option( 'dlm_download_endpoint', 'download' );
+		$endpoint = apply_filters( 'wpml_translate_single_string', $endpoint, 'download-monitor', 'Download endpoint' );
 		$ep_value = get_option( 'dlm_download_endpoint_value' );
 
 		switch ( $ep_value ) {
-			case 'slug' :
+			case 'slug':
 				$value = $this->post->post_name;
 				break;
-			default :
+			default:
 				$value = $this->id;
 				break;
 		}
-		// If WPML is active we should return the original home_url to avoid 404 pages.
-		//@todo: If Downloads will be made translatable in the future then this should be removed.
-		// First we need to make sure they are not translated.
-		$wpml_options      = get_option( 'icl_sitepress_settings', false );
-		$is_dlm_translated = false;
-		if ( $wpml_options && isset( $wpml_options['custom_posts_sync_option'] ) && in_array( 'dlm_download', $wpml_options['custom_posts_sync_option'] ) ) {
-			$is_dlm_translated = true;
-		}
-
-		if ( $is_dlm_translated ) {
-			add_filter( 'wpml_get_home_url', array( 'DLM_Utils', 'wpml_download_link' ), 15, 2 );
-		}
 
 		if ( get_option( 'permalink_structure' ) ) {
-			// Fix for translation plugins that modify the home_url
-			$link = get_home_url( null, '', $scheme );
-			$link = $link . '/' . $endpoint . '/' . $value . '/';
-		} else {
-			$link = add_query_arg( $endpoint, $value, home_url( '', $scheme ) );
-		}
+			$home_url = get_home_url( null, '', $scheme );
 
-		// Now we can remove the filter as the link is generated.
-		//@todo: If Downloads will be made translatable in the future then this should be removed.
-		if ( $is_dlm_translated ) {
-			remove_filter( 'wpml_get_home_url', array( 'DLM_Utils', 'wpml_download_link' ), 15, 2 );
+			// Fix for Polylang - includes language prefix and any subdirectory (e.g. site.com/en/subdir/)
+			if ( function_exists( 'pll_home_url' ) ) {
+				$home_url = pll_home_url();
+			}
+
+			// Fix for WPML and other translation plugins in admin
+			$link = $this->maybe_add_language_prefix( $home_url );
+
+			$parsed_url = wp_parse_url( $link );
+			if ( ! empty( $parsed_url['query'] ) ) {
+				$link = add_query_arg( $endpoint, $value, $link );
+			} else {
+				$link = untrailingslashit( $link ) . '/' . $endpoint . '/' . $value . '/';
+			}
+		} else {
+			$home_url = home_url( '', $scheme );
+
+			// Fix for Polylang - includes language prefix and any subdirectory (e.g. site.com/en/subdir/)
+			if ( function_exists( 'pll_home_url' ) ) {
+				$home_url = pll_home_url();
+			}
+
+			$link = add_query_arg( $endpoint, $value, $home_url );
 		}
 
 		// Add the timestamp to the Download's link to prevent unwanted behaviour with caching plugins/hosts.
@@ -475,7 +478,6 @@ class DLM_Download {
 
 		// only add version argument when current version isn't the latest version.
 		if ( null !== $this->get_version() && false === $this->get_version()->is_latest() ) {
-
 			if ( $this->get_version()->has_version_number() ) {
 				$link = add_query_arg( 'version', $this->get_version()->get_version_slug(), $link );
 			} else {
@@ -484,6 +486,45 @@ class DLM_Download {
 		}
 
 		return apply_filters( 'dlm_download_get_the_download_link', esc_url_raw( $link ), $this, $this->get_version() );
+	}
+
+	/**
+	 * Add language prefix to the URL in admin, for WPML or Polylang.
+	 *
+	 * @param string $url The original URL.
+	 * @access private
+	 * @return string Modified URL with language prefix if needed.
+	 */
+	private function maybe_add_language_prefix( $url ) {
+		if ( ! is_admin() ) {
+			return $url;
+		}
+
+		$current_lang = null;
+		$default_lang = null;
+
+		// Check for Polylang
+		if ( function_exists( 'pll_current_language' ) && function_exists( 'pll_default_language' ) ) {
+			$current_lang = pll_current_language();
+			$default_lang = pll_default_language();
+		}
+
+		// Check for WPML
+		if ( function_exists( 'icl_object_id' ) ) {
+			$current_lang = apply_filters( 'wpml_current_language', null );
+			if ( function_exists( 'wpml_get_default_language' ) ) {
+				$default_lang = wpml_get_default_language();
+			}
+		}
+
+		if ( $current_lang && $default_lang && $current_lang !== $default_lang ) {
+			$lang_segment = '/' . $current_lang . '/';
+			if ( strpos( $url, $lang_segment ) === false ) {
+				return untrailingslashit( $url ) . $lang_segment;
+			}
+		}
+
+		return $url;
 	}
 
 	/**

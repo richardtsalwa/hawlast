@@ -108,7 +108,7 @@ class OMAPI_EasyDigitalDownloads_Rules extends OMAPI_Rules_Base {
 	 * @return boolean True if current page is EDD Download, false otherwise or if it was not able to determine.
 	 */
 	public function is_edd_download() {
-		 // Get the current page/post id.
+		// Get the current page/post id.
 		$post_id = get_the_ID();
 
 		if ( ! $post_id || ! function_exists( 'edd_get_download' ) ) {

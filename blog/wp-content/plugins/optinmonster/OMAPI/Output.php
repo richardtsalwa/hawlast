@@ -162,13 +162,13 @@ class OMAPI_Output {
 
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		self::$live_preview       = ! empty( $_GET['om-live-preview'] )
-			? wp_unslash( $_GET['om-live-preview'] )
+			? sanitize_text_field( wp_unslash( $_GET['om-live-preview'] ) )
 			: false;
 		self::$live_rules_preview = ! empty( $_GET['om-live-rules-preview'] )
-			? wp_unslash( $_GET['om-live-rules-preview'] )
+			? sanitize_text_field( wp_unslash( $_GET['om-live-rules-preview'] ) )
 			: false;
 		self::$site_verification  = ! empty( $_GET['om-verify-site'] )
-			? wp_unslash( $_GET['om-verify-site'] )
+			? sanitize_text_field( wp_unslash( $_GET['om-verify-site'] ) )
 			: false;
 		// phpcs:enable
 	}
@@ -179,6 +179,13 @@ class OMAPI_Output {
 	 * @since 1.0.0
 	 */
 	public function maybe_load_optinmonster() {
+		/**
+		 * Check if there are any campaigns for the site
+		 */
+		$optins = $this->base->get_optins();
+		if ( empty( $optins ) ) {
+			return;
+		}
 
 		// Checking if AMP is enabled.
 		if ( OMAPI_Utils::is_amp_enabled() ) {
@@ -222,12 +229,7 @@ class OMAPI_Output {
 			$in_footer
 		);
 
-		if ( version_compare( get_bloginfo( 'version' ), '4.1.0', '>=' ) ) {
-			add_filter( 'script_loader_tag', array( $this, 'filter_api_script' ), 10, 2 );
-		} else {
-			add_filter( 'clean_url', array( $this, 'filter_api_url' ) );
-		}
-
+		add_filter( 'script_loader_tag', array( $this, 'filter_api_script' ), 10, 2 );
 	}
 
 	/**
@@ -258,11 +260,14 @@ class OMAPI_Output {
 	 * Filters the API script tag to add a custom ID.
 	 *
 	 * @since 1.0.0
+	 * @deprecated 2.17.0 Use `OMAPI_Output::filter_api_script()` instead.
 	 *
 	 * @param string $url  The URL to filter.
 	 * @return string $url Amended URL with our ID attribute appended.
 	 */
 	public function filter_api_url( $url ) {
+		_deprecated_function( __METHOD__, '{{next}}', 'OMAPI_Output::filter_api_script()' );
+
 		// If the handle is not ours, do nothing.
 		if ( false === strpos( $url, str_replace( 'https://', '', OMAPI_Urls::om_api() ) ) ) {
 			return $url;
@@ -270,7 +275,6 @@ class OMAPI_Output {
 
 		// Adjust the URL to add our custom script ID.
 		return "$url' async='async' id='omapi-script";
-
 	}
 
 	/**
@@ -290,7 +294,6 @@ class OMAPI_Output {
 		$priority = apply_filters( 'optin_monster_post_priority', 999 ); // Deprecated.
 		$priority = apply_filters( 'optin_monster_api_post_priority', 999 );
 		add_filter( 'the_content', array( $this, 'load_optinmonster_inline_content' ), $priority );
-
 	}
 
 	/**
@@ -310,7 +313,7 @@ class OMAPI_Output {
 		}
 
 		// If the global $post is not set or the post status is not published, return early.
-		if ( empty( $post ) || isset( $post->ID ) && 'publish' !== get_post_status( $post->ID ) ) {
+		if ( empty( $post ) || ( isset( $post->ID ) && 'publish' !== get_post_status( $post->ID ) ) ) {
 			return $content;
 		}
 
@@ -368,7 +371,6 @@ class OMAPI_Output {
 
 		// Return the content.
 		return $content;
-
 	}
 
 	/**
@@ -377,6 +379,14 @@ class OMAPI_Output {
 	 * @since 1.0.0
 	 */
 	public function load_optinmonster() {
+		/**
+		 * Check if there are any campaigns for the site
+		 */
+		$optins = $this->base->get_optins();
+		if ( empty( $optins ) ) {
+			return;
+		}
+
 		$post_id = self::current_id();
 
 		$prevented = is_singular() && $post_id && get_post_meta( $post_id, 'om_disable_all_campaigns', true );
@@ -385,7 +395,7 @@ class OMAPI_Output {
 			add_action( 'wp_footer', array( $this, 'prevent_all_campaigns' ), 11 );
 		}
 
-		$optins    = $prevented ? array() : $this->base->get_optins();
+		$optins    = $prevented ? array() : $optins;
 		$campaigns = array();
 
 		if ( empty( $optins ) ) {
@@ -459,8 +469,8 @@ class OMAPI_Output {
 
 			$embed = self::om_script_tag(
 				array(
-					'id'         	=> 'omapi-script-preview-' . $campaign_id,
-					'campaignId' 	=> $campaign_id,
+					'id'            => 'omapi-script-preview-' . $campaign_id,
+					'campaignId'    => $campaign_id,
 					'accountUserId' => $this->base->get_option( 'accountUserId' ),
 				)
 			);
@@ -581,10 +591,22 @@ class OMAPI_Output {
 					continue;
 				}
 
+				$decoded = OMAPI_Save::decode_shortcode( $shortcode );
+
+				// Neutralize a stored `</script>` so it can't close the raw-text
+				// <script> template early and execute trailing markup. Backslashed
+				// `<\/script` isn't parsed as an end tag; scoped to `</script`
+				// so other content (e.g. a legit `</em>`) survives.
+				$helper = preg_replace( '#<(?=/script)#i', '<\\\\', $decoded );
+
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo '<script type="text/template" class="omapi-shortcode-helper">' . html_entity_decode( $shortcode, ENT_COMPAT, 'UTF-8' ) . '</script>';
+				echo '<script type="text/template" class="omapi-shortcode-helper">' . $helper . '</script>';
+				// ENT_COMPAT here is the wire format the external api.js consumer
+				// expects, so it deliberately does not match the ENT_QUOTES decode
+				// above. ENT_SUBSTITUTE keeps invalid UTF-8 from collapsing the whole
+				// block to an empty string.
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo '<script type="text/template" class="omapi-shortcode-parsed omapi-encoded">' . htmlentities( do_shortcode( html_entity_decode( $shortcode, ENT_COMPAT, 'UTF-8' ) ), ENT_COMPAT, 'UTF-8' ) . '</script>';
+				echo '<script type="text/template" class="omapi-shortcode-parsed omapi-encoded">' . htmlentities( do_shortcode( $decoded ), ENT_COMPAT | ENT_SUBSTITUTE, 'UTF-8' ) . '</script>';
 			}
 		}
 
@@ -593,12 +615,12 @@ class OMAPI_Output {
 		<script type="text/javascript">
 		<?php
 		foreach ( $this->slugs as $slug => $data ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo 'var ' . sanitize_title_with_dashes( $slug ) . '_shortcode = true;';
 		}
 		?>
 		</script>
 		<?php
-
 	}
 
 	/**
@@ -714,6 +736,14 @@ class OMAPI_Output {
 	public function display_rules_data() {
 		global $wp_query;
 
+		/**
+		 * Check if there are any campaigns for the site
+		 */
+		$optins = $this->base->get_optins();
+		if ( empty( $optins ) ) {
+			return;
+		}
+
 		// If already localized, do nothing.
 		if ( $this->data_output ) {
 			return;
@@ -739,7 +769,7 @@ class OMAPI_Output {
 		}
 
 		// Get the current object's terms, if applicable. Defaults to public taxonomies only.
-		if ( ! empty( $post->ID ) && is_singular() || ( $wp_query->is_category() || $wp_query->is_tag() || $wp_query->is_tax() ) ) {
+		if ( ( ! empty( $post->ID ) && is_singular() ) || $wp_query->is_category() || $wp_query->is_tag() || $wp_query->is_tax() ) {
 
 			// Should we only check public taxonomies?
 			$only_public = apply_filters( 'optinmonster_only_check_public_taxonomies', true, $post );
@@ -787,12 +817,19 @@ class OMAPI_Output {
 	 *
 	 * @since  1.5.0
 	 *
-	 * @param  object $optin The option post object.
+	 * @param  object $optin The optin post object.
 	 *
 	 * @return string         The optin campaign html.
 	 */
 	public function prepare_campaign( $optin ) {
-		$optin          = $this->base->validate_is_campaign_type( $optin );
+		$optin = $this->base->validate_is_campaign_type( $optin );
+
+		// The API sends the campaign embed entity-encoded and OMAPI_Save stores it
+		// that way, so this decode is what turns it back into real markup.
+		// Without it the embed prints on the page as visible text and the
+		// campaign never loads. Callers must only pass campaigns synced from the
+		// API; write access to this post type is restricted in OMAPI_Type and
+		// that restriction is what makes the decode here safe.
 		$campaign_embed = ! empty( $optin->post_content )
 			? trim( html_entity_decode( stripslashes( $optin->post_content ), ENT_QUOTES, 'UTF-8' ), '\'' )
 			: '';
@@ -875,32 +912,14 @@ class OMAPI_Output {
 	 */
 	public static function om_script_tag( $args = array() ) {
 
-		$src = esc_url_raw( OMAPI_Urls::om_api() );
-
-		$script_id = ! empty( $args['id'] )
-			? sprintf( 's.id="%s";', esc_attr( $args['id'] ) )
-			: '';
-
-		$campaign_or_account_id = ! empty( $args['accountId'] )
-			? sprintf( 's.dataset.account="%s";', esc_attr( $args['accountId'] ) )
-			: '';
-
-		if ( empty( $campaign_or_account_id ) && ! empty( $args['campaignId'] ) ) {
-			$campaign_or_account_id = sprintf( 's.dataset.campaign="%s";', esc_attr( $args['campaignId'] ) );
-		}
-
-		$user_id = ! empty( $args['accountUserId'] )
-			? sprintf( 's.dataset.user="%s";', esc_attr( $args['accountUserId'] ) )
-			: '';
-
-		$api_cname = OMAPI::get_instance()->get_option( 'apiCname' );
-		$api_cname = ! empty( $api_cname )
-			? sprintf( 's.dataset.api="%s";', esc_attr( $api_cname ) )
-			: '';
-
-		$env = defined( 'OPTINMONSTER_ENV' )
-			? sprintf( 's.dataset.env="%s";', esc_attr( OPTINMONSTER_ENV ) )
-			: '';
+		// Set up the script variables.
+		$src         = OMAPI_Urls::om_api();
+		$script_id   = empty( $args['id'] ) ? '' : $args['id'];
+		$account_id  = empty( $args['accountId'] ) ? '' : $args['accountId'];
+		$campaign_id = empty( $account_id ) && ! empty( $args['campaignId'] ) ? $args['campaignId'] : '';
+		$user_id     = empty( $args['accountUserId'] ) ? '' : $args['accountUserId'];
+		$api_cname   = OMAPI::get_instance()->get_option( 'apiCname' );
+		$env         = defined( 'OPTINMONSTER_ENV' ) ? OPTINMONSTER_ENV : '';
 
 		$tag  = '<script>';
 		$tag .= '(function(d){';
@@ -908,23 +927,25 @@ class OMAPI_Output {
 		$tag .= 's.type="text/javascript";';
 		$tag .= 's.src="%1$s";';
 		$tag .= 's.async=true;';
-		$tag .= '%2$s';
-		$tag .= '%3$s';
-		$tag .= '%4$s';
-		$tag .= '%5$s';
-		$tag .= '%6$s';
+		$tag .= empty( $script_id ) ? '' : 's.id="%2$s";';
+		$tag .= empty( $account_id ) ? '' : 's.dataset.account="%3$s";';
+		$tag .= empty( $campaign_id ) ? '' : 's.dataset.campaign="%4$s";';
+		$tag .= empty( $user_id ) ? '' : 's.dataset.user="%5$s";';
+		$tag .= empty( $api_cname ) ? '' : 's.dataset.api="%6$s";';
+		$tag .= empty( $env ) ? '' : 's.dataset.env="%7$s";';
 		$tag .= 'd.getElementsByTagName("head")[0].appendChild(s);';
 		$tag .= '})(document);';
 		$tag .= '</script>';
 
 		$tag = sprintf(
 			$tag,
-			$src,
-			$script_id,
-			$campaign_or_account_id,
-			$user_id,
-			$api_cname,
-			$env
+			esc_url_raw( $src ),
+			esc_attr( $script_id ),
+			esc_attr( $account_id ),
+			esc_attr( $campaign_id ),
+			esc_attr( $user_id ),
+			esc_attr( $api_cname ),
+			esc_attr( $env )
 		);
 
 		return apply_filters( 'optin_monster_embed_script_tag', $tag, $args );

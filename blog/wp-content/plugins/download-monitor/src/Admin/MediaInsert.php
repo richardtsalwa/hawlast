@@ -51,6 +51,8 @@ class DLM_Admin_Media_Insert {
 		wp_enqueue_style( 'wp-admin' );
 		wp_enqueue_style( 'colors' );
 		wp_enqueue_script( 'plupload-all' );
+		// Do not print emojies.
+		remove_action( 'admin_print_styles', 'print_emoji_styles' );
 
 		echo '<!DOCTYPE html><html lang="en"><head><title>' . esc_html__( 'Insert Download', 'download-monitor' ) . '</title><meta charset="utf-8" />';
 
@@ -79,6 +81,10 @@ class DLM_Admin_Media_Insert {
 		 */
 		// phpcs:ignore
 		if ( ! empty( $_POST['download_url'] ) && ! empty( $_POST['download_title'] ) && isset( $_POST['quick-add-nonce'] ) && wp_verify_nonce( $_POST['quick-add-nonce'], 'quick-add' ) ) {
+
+			if ( ! current_user_can( 'manage_downloads' ) ) {
+				wp_die( esc_html__( 'You do not have sufficient permissions to perform this action.', 'download-monitor' ) );
+			}
 
 			$url     = esc_url_raw( wp_unslash( $_POST['download_url'] ) );
 			$title   = sanitize_text_field( wp_unslash( $_POST['download_title'] ) );
@@ -123,7 +129,7 @@ class DLM_Admin_Media_Insert {
 					// File Manager
 					$file_manager = new DLM_File_Manager();
 					
-					list( $file_path )  = $file_manager->get_secure_path( $url, true );
+					list( $file_path )  = $file_manager->get_secure_path( $url );
 
 					// Meta
 					update_post_meta( $file_id, '_version', $version );
@@ -175,7 +181,7 @@ class DLM_Admin_Media_Insert {
                 <legend><?php echo esc_html__( 'Search download', 'download-monitor' ); ?>:</legend>
                 <label>
                     <input type="text" name="dlm_search" value='<?php echo esc_html( str_replace( "'", "", stripslashes( ( $search_query ) ) ) ); ?>'/>
-                    <input type="submit" name="dlm_search_submit" value="Search" class="button button-primary" />
+                    <input type="submit" name="dlm_search_submit" value="Search" class="button button-primary dlm-media-insert-button" />
                 </label>
             </fieldset>
 
@@ -222,7 +228,7 @@ class DLM_Admin_Media_Insert {
 			</p>
 
 			<p>
-				<input type="button" class="button insert_download button-primary button-large" value="<?php echo esc_html__( 'Insert Shortcode', 'download-monitor' ); ?>"/>
+				<input type="button" class="button insert_download button-primary button-large dlm-media-insert-button" value="<?php echo esc_html__( 'Insert Shortcode', 'download-monitor' ); ?>"/>
 			</p>
 
 		</form>
@@ -265,7 +271,7 @@ class DLM_Admin_Media_Insert {
 
 				<p>
 					<?php wp_nonce_field( 'quick-add', 'quick-add-nonce' ) ?>
-					<input type="submit" class="button button-primary button-large" value="<?php echo esc_attr__( 'Save Download', 'download-monitor' ); ?>"/>
+					<input type="submit" class="button button-primary button-large dlm-media-insert-button" value="<?php echo esc_attr__( 'Save Download', 'download-monitor' ); ?>"/>
 				</p>
 			</div>
 

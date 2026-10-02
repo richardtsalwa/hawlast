@@ -203,3 +203,22 @@ h3 {
 
 	
 } /* /max-width:767px */
+/* ==============================================================
+   HERO SECTION — responsive overrides
+   Mobile order: H1 -> subhead -> CTAs -> visual -> trust line
+   ============================================================== */
+@media (max-width:900px){
+  .hero{ padding:30px 22px 38px; }
+}
+
+@media (max-width:767px){
+  .hero{ padding:28px 18px 34px; }
+  .hero-grid{ flex-direction:column; gap:26px; }
+  .hero-visual{ width:100%; }
+  .hero h1{ text-align:left; width:auto; font-size:26px; }
+  .hero-card.shift, .hero-card.shift-2{ margin-left:0; }
+  .hero-cta{ flex-direction:column; }
+  .hero-cta a.btn{ width:100%; }
+  .hero-trust{ display:none; }
+  .hero-trust-mobile{ display:flex; }
+}

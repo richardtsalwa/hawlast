@@ -2,8 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Be sure to include the file you've just downloaded
-require_once('AfricasTalkingGateway.php');
+// Be sure to include the library loader
+require_once dirname(__DIR__) . '/libraries.php';
 
 // Specify your login credentials
 $username = "hawlast";

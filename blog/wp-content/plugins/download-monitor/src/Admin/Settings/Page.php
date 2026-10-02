@@ -66,77 +66,78 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 				switch ( $action ) {
 					case 'dlm_regenerate_protection':
 						if ( $this->regenerate_protection() ) {
-							wp_redirect( add_query_arg( array( 'dlm_action_done' => $action ), admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings&tab=status&section=misc' ) ) );
+							$this->display_admin_action_message( $action );
+							wp_safe_redirect( admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings&tab=status&section=misc' ) );
 							exit;
 						}
 						break;
 					case 'dlm_regenerate_robots':
 						if ( $this->regenerate_robots() ) {
-							wp_redirect( add_query_arg( array( 'dlm_action_done' => $action ), admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings&tab=status&section=misc' ) ) );
+							$this->display_admin_action_message( $action );
+							wp_safe_redirect( admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings&tab=general&section=misc' ) );
 							exit;
 						}
 						break;
 				}
 			}
 
-			if ( isset( $_GET['dlm_action_done'] ) ) {
-				add_action( 'admin_notices', array( $this, 'display_admin_action_message' ), 8 );
-			}
-
 			$screen = get_current_screen();
 
-			if ( $screen->base == 'dlm_download_page_download-monitor-settings' ) {
+			if ( 'dlm_download_page_download-monitor-settings' === $screen->base ) {
 				$ep_value   = get_option( 'dlm_download_endpoint' );
 				$page_check = get_page_by_path( $ep_value, 'ARRAY_A', array( 'page', 'post' ) );
 				$cpt_check  = post_type_exists( $ep_value );
 
 				if ( $page_check || $cpt_check ) {
-					add_action( 'admin_notices', array( $this, 'display_admin_invalid_ep' ), 8 );
+					$notice = array(
+						'title'       => esc_html__( 'Endpoint already in use!', 'download-monitor' ),
+						// translators: %s is replaced with the endpoint.
+						'message'     => sprintf( esc_html__( 'The Download Monitor endpoint "%s" is already in use by a page or post. Please change the endpoint to something else.', 'download-monitor' ), get_option( 'dlm_download_endpoint' ) ),
+						'status'      => 'error',
+						'source'      => array(
+							'slug' => 'download-monitor',
+							'name' => 'Download Monitor',
+						),
+						'dismissible' => false,
+					);
+
+					WPChill_Notifications::add_notification( 'dlm-endpoint-in-use', $notice );
+				} else {
+					WPChill_Notifications::remove_notification( 'dlm-endpoint-in-use' );
 				}
 			}
 		}
 
 		/**
-		 * Display the admin action success mesage
+		 * Display the admin action success message
 		 */
-		public function display_admin_action_message() {
-			// Check if we have a message to display
-			if ( ! isset( $_GET['dlm_action_done'] ) ) {
-				return;
+		public function display_admin_action_message( $action ) {
+
+			$notice = array(
+				'status' => 'success',
+				'source' => array(
+					'slug' => 'download-monitor',
+					'name' => 'Download Monitor',
+				),
+				'timed'  => 5000,
+			);
+
+			switch ( $action ) {
+				case 'dlm_regenerate_protection':
+					$notice['title']   = esc_html__( 'Regenerated .htaccess file', 'download-monitor' );
+					$notice['message'] = esc_html__( '.htaccess file successfully regenerated!', 'download-monitor' );
+					break;
+				case 'dlm_regenerate_robots':
+					$notice['title']   = esc_html__( 'Regenerated robots.txt', 'download-monitor' );
+					$notice['message'] = esc_html__( 'Robots.txt file successfully regenerated!', 'download-monitor' );
+					break;
+				default:
+					$notice['title']   = esc_html__( 'Action completed', 'download-monitor' );
+					$notice['message'] = esc_html__( 'Download Monitor action completed!', 'download-monitor' );
+					break;
 			}
 
-			?>
-			<div
-				class="notice notice-success">
-				<?php
-				// Cycle through actions and echo correct message
-				switch ( $_GET['dlm_action_done'] ) {
-					case 'dlm_regenerate_protection':
-						echo "<p>" . esc_html__( '.htaccess file successfully regenerated!', 'download-monitor' ) . "</p>";
-						break;
-					case 'dlm_regenerate_robots':
-						echo "<p>" . esc_html__( 'Robots.txt file successfully regenerated!', 'download-monitor' ) . "</p>";
-						break;
-					default:
-						echo "<p>" . esc_html__( 'Download Monitor action completed!', 'download-monitor' ) . "</p>";
-						break;
-				}
-				?>
-			</div>
-			<?php
-		}
-
-		/**
-		 * Endpoint invalid admin notice
-		 */
-		public function display_admin_invalid_ep() {
-			?>
-			<div
-				class="notice notice-error">
-				<p><?php
-					echo esc_html__( 'The Download Monitor endpoint is already in use by a page or post. Please change the endpoint to something else.', 'download-monitor' ); ?></p>
-			</div>
-			<?php
+			WPChill_Notifications::add_notification( str_replace( '_', '-', $action ), $notice );
 		}
 
 		/**
@@ -173,8 +174,15 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 					<?php
 
 					if ( ! empty( $_GET['settings-updated'] ) ) {
+						$setting_transient = get_transient( 'dlm_allowed_paths_settings', false );
+						if ( $setting_transient ) {
+							echo '<div class="warning notice is-dismissible"><p>' . esc_html( $setting_transient ) . '</p></div>';
+							delete_transient( 'dlm_allowed_paths_settings' );
+						} else {
+							echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Settings successfully saved', 'download-monitor' ) . '</p></div>';
+						}
 						$this->need_rewrite_flush = true;
-						echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Settings successfully saved', 'download-monitor' ) . '</p></div>';
+
 
 						$dlm_settings_tab_saved = get_option( 'dlm_settings_tab_saved', 'general' );
 
@@ -187,7 +195,7 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 							?>
 							<div
 								class="wp-clearfix">
-								<ul class="subsubsub dlm-settings-sub-nav">
+								<ul class="dlm-settings-sub-nav">
 									<?php
 									foreach ( $settings[ $tab ]['sections'] as $section_key => $section ) : ?>
 										<?php
@@ -221,8 +229,10 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 							</h2>
 							<?php
 						}
+
+						$class =  isset( $settings[ $tab ]['sections'][ $active_section ]['contend_class'] ) ? $settings[ $tab ]['sections'][ $active_section ]['contend_class'] : 'dlm-content-tab';
 						// Begin tab content
-						echo '<div class="dlm-content-tab">';
+						echo '<div class="' . esc_attr( $class ) . '">';
 						if ( isset( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) && ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) {
 							// output correct settings_fields
 							// We change the output location so that it won't interfere with our upsells
@@ -232,7 +242,14 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 							echo '<table class="form-table">';
 
 							foreach ( $settings[ $tab ]['sections'][ $active_section ]['fields'] as $option ) {
-								$cs = 1;
+								$cs      = 1;
+								$tooltip = '';
+								if ( ! empty( $option['desc'] ) ) {
+									$tooltip = '
+									<div class="wpchill-tooltip"><span>[?]</span>
+										<div class="wpchill-tooltip-content"><p>' . wp_kses_post( $option['desc'] ) . '</p></div>
+									</div>';
+								}
 
 								if ( ! isset( $option['type'] ) ) {
 									$option['type'] = '';
@@ -241,16 +258,12 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 								$tr_class = 'dlm_settings dlm_' . $option['type'] . '_setting';
 								echo '<tr valign="top" data-setting="' . ( isset( $option['name'] ) ? esc_attr( $option['name'] ) : '' ) . '" class="' . esc_attr( $tr_class ) . '">';
 								if ( isset( $option['label'] ) && '' !== $option['label'] ) {
-									echo '<th scope="row"><label for="setting-' . esc_attr( $option['name'] ) . '">' . esc_attr( $option['label'] ) . '</a></th>';
+									echo '<th scope="row">' . wp_kses_post( $tooltip ) . '<label for="setting-' . esc_attr( $option['name'] ) . '">' . esc_attr( $option['label'] ) . '</a></th>';
 								} else {
 									$cs ++;
 								}
 
 								echo '<td colspan="' . esc_attr( $cs ) . '">';
-
-								if ( ! isset( $option['type'] ) ) {
-									$option['type'] = '';
-								}
 
 								// make new field object
 								$field = DLM_Admin_Fields_Field_Factory::make( $option );
@@ -259,10 +272,6 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 								if ( null !== $field ) {
 									// render field
 									$field->render();
-
-									if ( isset( $option['desc'] ) && '' !== $option['desc'] ) {
-										echo ' <p class="dlm-description description">' . wp_kses_post( $option['desc'] ) . '</p>';
-									}
 								}
 
 								echo '</td></tr>';
@@ -286,35 +295,50 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 						do_action( 'dlm_tab_section_content_' . $active_section, $settings );
 
 						echo '</div>';
-						// Check if we need to display the upsells on the right or full-width
-						$has_content = ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] );
-						echo '<div class="wpchill-upsells-wrapper ' . ( $has_content ? 'wpchill-right-upsells' : '' ) . '">';
 
-						/**
-						 * Hook to add content to the right side of tab. Used for upsells
-						 *
-						 * @param  array  $settings  The settings array
-						 *
-						 * @hooked DLM_Upsells - multiple methods on different tabs, attached on priorities 15 and 30
-						 */
-						do_action( 'dlm_tab_upsell_content_' . $tab, $settings );
+						// Check if we should display the upsells.
+						if( ! isset( $settings[ $tab ]['sections'][ $active_section ]['show_upsells'] ) || $settings[ $tab ]['sections'][ $active_section ]['show_upsells'] ){
+							// Check if we need to display the upsells on the right or full-width
+							$has_content = ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] );
+							echo '<div class="wpchill-upsells-wrapper ' . ( $has_content ? 'wpchill-right-upsells' : '' ) . '">';
 
-						/**
-						 * Hook to add content to the right side of the tab section. Used for upsells
-						 *
-						 * @param  array  $settings  The settings array
-						 *
-						 * @hooked DLM_Upsells - multiple methods on different tabs, attached on priorities 15 and 30
-						 */
-						do_action( 'dlm_tab_upsell_section_content_' . $active_section, $settings );
+							/**
+							 * Hook to add content to the right side of tab. Used for upsells
+							 *
+							 * @param  array  $settings  The settings array
+							 *
+							 * @hooked DLM_Upsells - multiple methods on different tabs, attached on priorities 15 and 30
+							 */
+							do_action( 'dlm_tab_upsell_content_' . $tab, $settings );
 
-						echo '</div>';
+							/**
+							 * Hook to add content to the right side of the tab section. Used for upsells
+							 *
+							 * @param  array  $settings  The settings array
+							 *
+							 * @hooked DLM_Upsells - multiple methods on different tabs, attached on priorities 15 and 30
+							 */
+							do_action( 'dlm_tab_upsell_section_content_' . $active_section, $settings );
+
+							echo '</div>';
+						}
 					}
 					?>
 					<div
 						class="wp-clearfix"></div>
 					<?php
-					if ( isset( $settings[ $tab ] ) && ( isset( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) && ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) && 'templates' !== $active_section ) {
+					/**
+					 * Hook to show the save settings button
+					 *
+					 * @hook dlm_show_save_settings_button
+					 *
+					 * @param  bool  $show  Show the save settings button
+					 * @param  array  $settings  The settings array
+					 * @param  string  $active_section  The active section
+					 *
+					 * @since 5.0.0
+					 */
+					if ( isset( $settings[ $tab ] ) && ( isset( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) && ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) && apply_filters( 'dlm_show_save_settings_button', true, $settings, $active_section ) ) {
 						?>
 						<p class="submit">
 							<input
@@ -382,32 +406,15 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 			<div
 				class="dlm-page-header <?php
 				echo ( $extra_class ) ? esc_attr( $extra_class ) : ''; ?>">
-				<div
-					class="dlm-header-logo">
-
-					<img
-						src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA1IiBoZWlnaHQ9IjEwNSIgdmlld0JveD0iMCAwIDEwNSAxMDUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik01Mi41IDAuMDAwNTk5Njc0QzM4LjU3NTYgMC4wMDA1OTk2NzQgMjUuMjIxOSA1LjUzMjAzIDE1LjM3NzYgMTUuMzc4MUM1LjUzMTQ2IDI1LjIyMjkgMCAzOC41NzY2IDAgNTIuNTAwM0MwIDY2LjQyNCA1LjUzMTQ2IDc5Ljc3ODMgMTUuMzc3NiA4OS42MjI1QzI1LjIyMjUgOTkuNDY4NiAzOC41NzYyIDEwNSA1Mi41IDEwNUM2Ni40MjM4IDEwNSA3OS43NzgxIDk5LjQ2ODYgODkuNjIyNCA4OS42MjI1Qzk5LjQ2ODUgNzkuNzc3NyAxMDUgNjYuNDI0IDEwNSA1Mi41MDAzQzEwNSA0My4yODQ1IDEwMi41NzQgMzQuMjMwOCA5Ny45NjY0IDI2LjI1MDJDOTMuMzU4NyAxOC4yNjk1IDg2LjczMDQgMTEuNjQxNiA3OC43NDk3IDcuMDMzNTRDNzAuNzY5IDIuNDI1ODEgNjEuNzE1MiAwIDUyLjQ5OTQgMEw1Mi41IDAuMDAwNTk5Njc0Wk00MC40Nzc3IDM4LjI3MThMNDcuMjQ5OSA0NS4wOTY5VjI2LjI0OTZINTcuNzUwMVY0NS4wOTY5TDY0LjUyMjMgMzguMzI0Nkw3MS45MjUyIDQ1LjcyNzVMNTIuNSA2NS4xNTI2TDMzLjAyMiA0NS42NzQ3TDQwLjQ3NzcgMzguMjcxOFpNNzguNzQ5MSA3OC43NTExSDI2LjI0ODVWNjguMjUxSDc4Ljc0OTFWNzguNzUxMVoiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl8zN184NSkiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhcl8zN184NSIgeDE9Ii0zNy41MjkzIiB5MT0iMS4wOTMzNGUtMDYiIHgyPSI5NS45NzY2IiB5Mj0iMTA3Ljg3MSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBvZmZzZXQ9IjAuMTEwMTEzIiBzdG9wLWNvbG9yPSIjNURERUZCIi8+CjxzdG9wIG9mZnNldD0iMC40NDM1NjgiIHN0b3AtY29sb3I9IiM0MTlCQ0EiLz4KPHN0b3Agb2Zmc2V0PSIwLjYzNjEyMiIgc3RvcC1jb2xvcj0iIzAwOENENSIvPgo8c3RvcCBvZmZzZXQ9IjAuODU1OTk3IiBzdG9wLWNvbG9yPSIjMDI1RUEwIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAyNTM4RCIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo="
+				<div class="dlm-header-logo">
+					<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iNjQuMDAwMDAwcHQiIGhlaWdodD0iNjQuMDAwMDAwcHQiIHZpZXdCb3g9IjAgMCA2NC4wMDAwMDAgNjQuMDAwMDAwIgogcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCI+Cgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCw2NC4wMDAwMDApIHNjYWxlKDAuMTAwMDAwLC0wLjEwMDAwMCkiCmZpbGw9IiMwMDAwMDAiIHN0cm9rZT0ibm9uZSI+CjxwYXRoIGQ9Ik0yMjYgNjIzIGMtMTAxIC0zMSAtMTgzIC0xMTEgLTIxMSAtMjA3IC03MiAtMjQwIDE0MiAtNDY2IDM4MCAtNDA0CjczIDIwIDEzMyA1NiAxNjggMTAyIDk0IDEyMiAxMDAgMjYzIDE2IDM4OSAtNzMgMTExIC0yMjAgMTYxIC0zNTMgMTIweiBtMTQ0Ci0xNTggYzAgLTExIC0xMiAtMTUgLTUwIC0xNSAtMzggMCAtNTAgNCAtNTAgMTUgMCAxMSAxMiAxNSA1MCAxNSAzOCAwIDUwIC00CjUwIC0xNXogbTAgLTUwIGMwIC0xMSAtMTIgLTE1IC01MCAtMTUgLTM4IDAgLTUwIDQgLTUwIDE1IDAgMTEgMTIgMTUgNTAgMTUKMzggMCA1MCAtNCA1MCAtMTV6IG0yIC04MiBjMyAtMzcgNCAtMzggNTEgLTQzIGw0OCAtNSAtNzYgLTc1IC03NSAtNzQgLTc1IDc0Ci03NiA3NSA0OCA1IGM0NyA1IDQ4IDYgNTEgNDMgbDMgMzcgNDkgMCA0OSAwIDMgLTM3eiIvPgo8L2c+Cjwvc3ZnPgo="
 						class="dlm-logo"/>
+						<h2 class="dlm-header-logo-text"><?php echo wp_kses_post( apply_filters( 'dlm_header_logo_text', '' ) ); ?></h2>
 				</div>
 				<div
 					class="dlm-header-links">
 					<?php
 					do_action( 'dlm_page_header_links' ); ?>
-					<a href="https://www.download-monitor.com/kb/"
-					   target="_blank"
-					   rel="noreferrer nofollow"
-					   id="get-help"
-					   class="button button-secondary"><span
-							class="dashicons dashicons-external"></span><?php
-						esc_html_e( 'Documentation', 'download-monitor' ); ?>
-					</a>
-					<a class="button button-secondary"
-					   href="https://www.download-monitor.com/contact/"
-					   target="_blank"
-					   rel="noreferrer nofollow"><span
-							class="dashicons dashicons-email-alt"></span><?php
-						echo esc_html__( 'Contact us for support!', 'download-monitor' ); ?>
-					</a>
 				</div>
 			</div>
 			<?php
@@ -508,24 +515,27 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 		 * @since 4.5.5
 		 */
 		private function regenerate_protection() {
-			$upload_dir = wp_upload_dir();
+			$upload_dir      = wp_upload_dir();
+			$server_software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
+			$is_iis          = stristr( $server_software, 'Microsoft-IIS' ) !== false;
+			$protection_file = $is_iis ? 'web.config' : '.htaccess';
 
-			$htaccess_path = $upload_dir['basedir'] . '/dlm_uploads/.htaccess';
-			$index_path    = $upload_dir['basedir'] . '/dlm_uploads/index.html';
+			$protection_path = $upload_dir['basedir'] . '/dlm_uploads/' . $protection_file;
+			$index_path      = $upload_dir['basedir'] . '/dlm_uploads/index.html';
 
-			//remove old htaccess and index files
-			if ( file_exists( $htaccess_path ) ) {
-				unlink( $htaccess_path );
+			//remove old protection and index files
+			if ( file_exists( $protection_path ) ) {
+				unlink( $protection_path );
 			}
 			if ( file_exists( $index_path ) ) {
 				unlink( $index_path );
 			}
 
-			//generate new htaccess and index files
+			//generate new protection and index files
 			$this->directory_protection();
 
 			//check if the files were created.
-			if ( file_exists( $htaccess_path ) && file_exists( $index_path ) ) {
+			if ( file_exists( $protection_path ) && file_exists( $index_path ) ) {
 				return true;
 			}
 
@@ -537,7 +547,7 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 		 *
 		 * @param  Array  $settings
 		 *
-		 * @return void
+		 * @return array
 		 *
 		 * @since 4.5.5
 		 */
@@ -546,28 +556,49 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 				return $settings;
 			}
 
-			$upload_dir    = wp_upload_dir();
-			$htaccess_path = $upload_dir['basedir'] . '/dlm_uploads/.htaccess';
-			$icon          = 'dashicons-dismiss';
-			$icon_color    = '#f00';
-			$icon_text     = __( 'Htaccess is missing.', 'download-monitor' );
+			$upload_dir      = wp_upload_dir();
+			$server_software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
+			$is_iis          = stristr( $server_software, 'Microsoft-IIS' ) !== false;
+			$is_nginx        = stristr( $server_software, 'nginx' ) !== false;
 
-			if ( file_exists( $htaccess_path ) ) {
-				$icon       = 'dashicons-yes-alt';
-				$icon_color = '#00A32A';
-				$icon_text  = __( 'You are protected by htaccess.', 'download-monitor' );
+			if ( $is_iis ) {
+				$protection_path = $upload_dir['basedir'] . '/dlm_uploads/web.config';
+				$icon            = 'dashicons-dismiss';
+				$icon_color      = '#f00';
+				$icon_text       = __( 'Web.config is missing.', 'download-monitor' );
+
+				if ( file_exists( $protection_path ) ) {
+					$icon       = 'dashicons-yes-alt';
+					$icon_color = '#00A32A';
+					$icon_text  = __( 'You are protected by web.config.', 'download-monitor' );
+				}
+			} else {
+				$htaccess_path = $upload_dir['basedir'] . '/dlm_uploads/.htaccess';
+				$icon          = 'dashicons-dismiss';
+				$icon_color    = '#f00';
+				$icon_text     = __( 'Htaccess is missing.', 'download-monitor' );
+
+				if ( file_exists( $htaccess_path ) ) {
+					$icon       = 'dashicons-yes-alt';
+					$icon_color = '#00A32A';
+					$icon_text  = __( 'You are protected by htaccess.', 'download-monitor' );
+				}
+
+				if ( $is_nginx ) {
+					$upload_path = str_replace( sanitize_text_field( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) ), '', $upload_dir['basedir'] );
+					$nginx_rules = "<code class='dlm-code-nginx-rules'>location " . $upload_path . "/dlm_uploads {<br />deny all;<br />return 403;<br />}</code>";
+
+					$nginx_text = sprintf( __( 'Please add the following rules to your nginx config to disable direct file access: %s', 'download-monitor' ), wp_kses_post( $nginx_rules ) );
+
+					$icon       = 'dashicons-dismiss';
+					$icon_color = '#f00';
+					$icon_text  = sprintf( __( 'Because your server is running on nginx, our .htaccess file can\'t protect your downloads. %s', 'download-monitor' ), $nginx_text );
+					$disabled   = true;
+				}
 			}
 
-			if ( stristr( sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'nginx' ) !== false ) {
-				$upload_path = str_replace( sanitize_text_field( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) ), '', $upload_dir['basedir'] );
-				$nginx_rules = "<code class='dlm-code-nginx-rules'>location " . $upload_path . "/dlm_uploads {<br />deny all;<br />return 403;<br />}</code>";
-
-				$nginx_text = sprintf( __( 'Please add the following rules to your nginx config to disable direct file access: %s', 'download-monitor' ), wp_kses_post( $nginx_rules ) );
-
-				$icon       = 'dashicons-dismiss';
-				$icon_color = '#f00';
-				$icon_text  = sprintf( __( 'Because your server is running on nginx, our .htaccess file can\'t protect your downloads. %s', 'download-monitor' ), $nginx_text );
-				$disabled   = true;
+			if ( ! isset( $settings['general']['sections']['misc']['title'] ) ) {
+				$settings['general']['sections']['misc']['title']    = __( 'Miscellaneous', 'download-monitor' );
 			}
 
 			$settings['general']['sections']['misc']['fields'][] = array(
@@ -596,9 +627,43 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 		 */
 		private function directory_protection() {
 			// Install files and folders for uploading files and prevent hotlinking
-			$upload_dir = wp_upload_dir();
+			$upload_dir      = wp_upload_dir();
+			$server_software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
+			$is_iis          = stristr( $server_software, 'Microsoft-IIS' ) !== false;
 
-			$htaccess_content = "# Apache 2.4 and up
+			if ( $is_iis ) {
+				$webconfig_content = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
+				                     '<configuration>' . "\n" .
+				                     '    <system.web>' . "\n" .
+				                     '        <authorization>' . "\n" .
+				                     '            <deny users="*" />' . "\n" .
+				                     '        </authorization>' . "\n" .
+				                     '    </system.web>' . "\n" .
+				                     '    <system.webServer>' . "\n" .
+				                     '        <security>' . "\n" .
+				                     '            <requestFiltering>' . "\n" .
+				                     '                <denyUrlSequences>' . "\n" .
+				                     '                    <add sequence="dlm_uploads" />' . "\n" .
+				                     '                </denyUrlSequences>' . "\n" .
+				                     '            </requestFiltering>' . "\n" .
+				                     '        </security>' . "\n" .
+				                     '    </system.webServer>' . "\n" .
+				                     '</configuration>';
+
+				$files = array(
+					array(
+						'base'    => $upload_dir['basedir'] . '/dlm_uploads',
+						'file'    => 'web.config',
+						'content' => $webconfig_content,
+					),
+					array(
+						'base'    => $upload_dir['basedir'] . '/dlm_uploads',
+						'file'    => 'index.html',
+						'content' => '',
+					),
+				);
+			} else {
+				$htaccess_content = "# Apache 2.4 and up
 	<IfModule mod_authz_core.c>
 	Require all denied
 	</IfModule>
@@ -609,18 +674,19 @@ if ( ! class_exists( 'DLM_Settings_Page' ) ) {
 	Deny from all
 	</IfModule>";
 
-			$files = array(
-				array(
-					'base'    => $upload_dir['basedir'] . '/dlm_uploads',
-					'file'    => '.htaccess',
-					'content' => $htaccess_content,
-				),
-				array(
-					'base'    => $upload_dir['basedir'] . '/dlm_uploads',
-					'file'    => 'index.html',
-					'content' => '',
-				),
-			);
+				$files = array(
+					array(
+						'base'    => $upload_dir['basedir'] . '/dlm_uploads',
+						'file'    => '.htaccess',
+						'content' => $htaccess_content,
+					),
+					array(
+						'base'    => $upload_dir['basedir'] . '/dlm_uploads',
+						'file'    => 'index.html',
+						'content' => '',
+					),
+				);
+			}
 
 			foreach ( $files as $file ) {
 				if ( wp_mkdir_p( $file['base'] ) && ! file_exists( trailingslashit( $file['base'] ) . $file['file'] ) ) {

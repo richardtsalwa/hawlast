@@ -1,7 +1,7 @@
 <?php
 require '../config.php';
 require '../hawlastke.php';
-require_once('../AfricasTalkingGateway.php');
+require_once dirname(__DIR__) . '/libraries.php';
 ob_start();
 ?>
 <!DOCTYPE html>

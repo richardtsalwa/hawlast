@@ -58,7 +58,7 @@ class OMAPI_Actions {
 		$this->set();
 
 		// Add validation messages.
-		add_action( 'admin_init', array( $this, 'maybe_fetch_missing_data' ), 99 );
+		add_action( 'admin_init', array( $this, 'maybe_fetch_missing_data_admin' ), 99 );
 
 		// We can run upgrade routines on cron runs and admin requests.
 		if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
@@ -79,9 +79,34 @@ class OMAPI_Actions {
 	}
 
 	/**
+	 * The admin_init entry point for the data backfill.
+	 *
+	 * The admin_init hook fires for any logged-in user, so gate the backfill
+	 * here. Other callers (the notifications REST route) authorize themselves
+	 * before calling maybe_fetch_missing_data(), so the guard lives on this
+	 * wrapper rather than on the shared method (mirrors
+	 * check_upgrade_routines_admin()).
+	 *
+	 * @since 2.17.0
+	 *
+	 * @return void
+	 */
+	public function maybe_fetch_missing_data_admin() {
+		if ( ! $this->base->can_access() ) {
+			return;
+		}
+
+		$this->maybe_fetch_missing_data();
+	}
+
+	/**
 	 * When the plugin is first installed
 	 * Or Migrated from a pre-1.8.0 version
 	 * We need to fetch some additional data
+	 *
+	 * Shared implementation — callers are responsible for the capability check
+	 * (admin_init via maybe_fetch_missing_data_admin(), REST via its route
+	 * permission callback).
 	 *
 	 * @since 1.8.0
 	 *
@@ -92,9 +117,23 @@ class OMAPI_Actions {
 		$option  = $this->base->get_option();
 		$changed = false;
 
+		// Set some onboarding connection related variables.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$onboarding_connect    = empty( $_GET['onboardingConnect'] ) ? 'false' : sanitize_key( wp_unslash( $_GET['onboardingConnect'] ) );
+		$connection_token      = $this->base->get_option( 'connectionToken' );
+		$is_onboarding_connect = ! empty( $connection_token ) && wp_validate_boolean( $onboarding_connect );
+
+		// Determine if we're missing API key credentials.
+		$missing_api_key = ! OMAPI_ApiKey::has_credentials();
+
 		// If we don't have an API Key yet, we can't fetch anything else.
-		if ( empty( $creds['apikey'] ) && empty( $creds['user'] ) && empty( $creds['key'] ) ) {
+		if ( $missing_api_key && ! $is_onboarding_connect ) {
 			return;
+		}
+
+		// Set the onboarding credentials if we don't already have credentials.
+		if ( empty( $creds ) ) {
+			$creds = array( 'onboardingApiKey' => 'omwpoct_' . $connection_token );
 		}
 
 		// Fetch the userId and accountId, if we don't have them.
@@ -112,6 +151,10 @@ class OMAPI_Actions {
 				$changed = true;
 				$option  = $result;
 			}
+		}
+
+		if ( $changed && ! empty( $option['connectionToken'] ) ) {
+			unset( $option['connectionToken'] );
 		}
 
 		// Fetch the SiteIds for this site, if we don't have them.
@@ -163,6 +206,12 @@ class OMAPI_Actions {
 	 * @return void
 	 */
 	public function check_upgrade_routines_admin() {
+		// Cron uses check_upgrade_routines() directly (no user); this admin
+		// wrapper runs on admin_init for any logged-in user, so gate it.
+		if ( ! $this->base->can_access() ) {
+			return;
+		}
+
 		$refresh = $this->check_upgrade_routines();
 		if ( $refresh ) {
 			wp_safe_redirect( esc_url_raw( add_query_arg( 'om', 1 ) ) );
@@ -202,9 +251,6 @@ class OMAPI_Actions {
 		}
 
 		if ( (string) $plugin_version !== (string) $upgrade_completed ) {
-			if ( empty( $this->base->notifications ) ) {
-				$this->base->notifications = new OMAPI_Notifications();
-			}
 			$this->base->notifications->update();
 			update_option( 'optinmonster_upgrade_completed', $plugin_version );
 		}
@@ -262,10 +308,10 @@ class OMAPI_Actions {
 	 * @return bool  Whether upgrade routine was completed successfully.
 	 */
 	public function v290_upgrades() {
-		$creds  = $this->base->get_api_credentials();
-		$siteId = $this->base->get_site_id();
+		$creds   = $this->base->get_api_credentials();
+		$site_id = $this->base->get_site_id();
 
-		if ( empty( $creds['apikey'] ) || empty( $siteId ) ) {
+		if ( empty( $creds['apikey'] ) || empty( $site_id ) ) {
 			return false;
 		}
 
@@ -273,7 +319,7 @@ class OMAPI_Actions {
 			'admin_url' => esc_url_raw( get_admin_url() ),
 		);
 
-		$api     = OMAPI_Api::build( 'v2', 'sites/' . $siteId, 'PUT', $creds );
+		$api     = OMAPI_Api::build( 'v2', 'sites/' . $site_id, 'PUT', $creds );
 		$results = $api->request( $args );
 
 		return ! is_wp_error( $results );

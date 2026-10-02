@@ -404,12 +404,13 @@ class Post extends Model {
 		self::updatePostMeta( $postId, $data );
 
 		$thePost->save();
-		$thePost->reset();
 
-		$lastError = aioseo()->core->db->lastError();
+		$lastError = $thePost->lastError;
 		if ( ! empty( $lastError ) ) {
 			return $lastError;
 		}
+
+		$thePost->reset();
 
 		// Fires once an AIOSEO post has been saved.
 		do_action( 'aioseo_insert_post', $postId );
@@ -460,12 +461,13 @@ class Post extends Model {
 	/**
 	 * Sanitize the keyphrases posted data.
 	 *
-	 * @since 4.2.8
+	 * @since   4.2.8
+	 * @version 5.0.1 Strip HTML from string values to prevent stored XSS.
 	 *
 	 * @param  array $data An array containing the keyphrases field data.
 	 * @return array       The sanitized data.
 	 */
-	private static function sanitizeKeyphrases( $data ) {
+	public static function sanitizeKeyphrases( $data ) {
 		if (
 			! empty( $data['focus']['analysis'] ) &&
 			is_array( $data['focus']['analysis'] )
@@ -493,39 +495,65 @@ class Post extends Model {
 					}
 				}
 			}
+			unset( $additional, $additionalAnalysis );
 		}
 
-		return $data;
+		return self::sanitizeStrings( $data );
 	}
 
 	/**
 	 * Sanitize the page_analysis posted data.
 	 *
-	 * @since 4.2.7
+	 * @since   4.2.7
+	 * @version 5.0.1 Strip HTML from string values to prevent stored XSS.
 	 *
 	 * @param  array $data An array containing the page_analysis field data.
 	 * @return array       The sanitized data.
 	 */
-	private static function sanitizePageAnalysis( $data ) {
+	public static function sanitizePageAnalysis( $data ) {
 		if (
-			empty( $data['analysis'] ) ||
-			! is_array( $data['analysis'] )
+			! empty( $data['analysis'] ) &&
+			is_array( $data['analysis'] )
 		) {
-			return $data;
-		}
-
-		foreach ( $data['analysis'] as &$analysis ) {
-			foreach ( $analysis as $key => $result ) {
-				// Remove unnecessary data.
-				foreach ( [ 'title', 'description', 'highlightSentences' ] as $keyToRemove ) {
-					if ( isset( $analysis[ $key ][ $keyToRemove ] ) ) {
-						unset( $analysis[ $key ][ $keyToRemove ] );
+			foreach ( $data['analysis'] as &$analysis ) {
+				foreach ( $analysis as $key => $result ) {
+					// Remove unnecessary data.
+					foreach ( [ 'title', 'description', 'highlightSentences' ] as $keyToRemove ) {
+						if ( isset( $analysis[ $key ][ $keyToRemove ] ) ) {
+							unset( $analysis[ $key ][ $keyToRemove ] );
+						}
 					}
 				}
 			}
+			unset( $analysis );
 		}
 
-		return $data;
+		return self::sanitizeStrings( $data );
+	}
+
+	/**
+	 * Recursively sanitizes string leaves with sanitize_text_field() while preserving
+	 * the structure and non-string scalars (null, int, float, bool) untouched.
+	 *
+	 * Unlike {@see \AIOSEO\Plugin\Common\Utils\Helpers::sanitize()}, null and other
+	 * non-scalar leaves are left as-is rather than coerced to false, so the keyphrases
+	 * and page_analysis payloads keep the exact shape the editor expects.
+	 *
+	 * @since 5.0.1
+	 *
+	 * @param  mixed $data The value to sanitize.
+	 * @return mixed       The sanitized value.
+	 */
+	private static function sanitizeStrings( $data ) {
+		if ( is_array( $data ) ) {
+			foreach ( $data as $key => $value ) {
+				$data[ $key ] = self::sanitizeStrings( $value );
+			}
+
+			return $data;
+		}
+
+		return is_string( $data ) ? sanitize_text_field( $data ) : $data;
 	}
 
 	/**
@@ -1352,7 +1380,12 @@ class Post extends Model {
 	 * in theirs as a list of `{ word, score }` entries. Writers that produce the legacy nested
 	 * keyphrases structure map it through here so both representations stay in sync.
 	 *
-	 * @since 5.0.0
+	 * Keywords are sanitized here rather than left to the caller. This is the only producer of
+	 * both column values, and some callers pass structures that predate the keyphrases column
+	 * being sanitized at all, so the rows they carry can still hold markup.
+	 *
+	 * @since   5.0.0
+	 * @version 5.0.1 Strip HTML from the keywords to prevent stored XSS.
 	 *
 	 * @param  array|object|string $keyphrases The legacy keyphrases structure.
 	 * @return array                           The focus_keyword and additional_keywords column values.
@@ -1371,8 +1404,10 @@ class Post extends Model {
 			return $columns;
 		}
 
+		// Sanitize before the emptiness test — a keyword that is nothing but markup has to read
+		// as no keyword at all, not as an empty string.
 		$focusKeyword = isset( $keyphrases['focus']['keyphrase'] ) && is_scalar( $keyphrases['focus']['keyphrase'] )
-			? trim( (string) $keyphrases['focus']['keyphrase'] )
+			? trim( sanitize_text_field( (string) $keyphrases['focus']['keyphrase'] ) )
 			: '';
 
 		if ( '' !== $focusKeyword ) {
@@ -1384,7 +1419,7 @@ class Post extends Model {
 		$additionalKeywords = [];
 		foreach ( $additional as $keyphrase ) {
 			$word = isset( $keyphrase['keyphrase'] ) && is_scalar( $keyphrase['keyphrase'] )
-				? trim( (string) $keyphrase['keyphrase'] )
+				? trim( sanitize_text_field( (string) $keyphrase['keyphrase'] ) )
 				: '';
 
 			if ( '' === $word ) {

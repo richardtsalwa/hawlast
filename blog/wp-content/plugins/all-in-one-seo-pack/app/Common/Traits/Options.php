@@ -485,8 +485,11 @@ trait Options {
 
 		// Refactor options.
 		$resetValues = $this->resetValues( $defaults, $this->defaultsMerged, $keys, $include, $exclude );
-		// We need to call our helper method instead of the built-in array_replace_recursive() function here because we want values to be replaced with empty arrays.
-		$defaults = aioseo()->helpers->arrayReplaceRecursive( $defaults, $resetValues );
+		// resetValues() returns every key it touched in full, so replacing the top-level keys is enough.
+		// A recursive merge would overwrite list values item by item, leaving the tail of a longer stored value behind.
+		if ( is_array( $defaults ) && is_array( $resetValues ) ) {
+			$defaults = array_replace( $defaults, $resetValues );
+		}
 
 		$originalDefaults = json_decode( wp_json_encode( $cachedOptions[ $originalGroupKey ] ), true );
 		$pointer          = &$originalDefaults; // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable

@@ -55,8 +55,8 @@ echo '<br/>Sales from 20 Dec  KES ' . $totalsales->total_sales;
     Database::disconnect();
     
     
-    // Be sure to include the file you've just downloaded
-require_once('AfricasTalkingGateway.php');
+    // Be sure to include the library loader
+require_once dirname(__DIR__) . '/libraries.php';
 
 // Specify your login credentials
 $username = "hawlast";

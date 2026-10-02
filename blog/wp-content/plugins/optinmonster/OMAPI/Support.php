@@ -1,8 +1,11 @@
 <?php
 /**
- * Suppor Class, handles generating info for support.
+ * Support Class, handles generating info for support.
  *
  * @since 1.9.10
+ *
+ * @package OMAPI
+ * @author  Justin Sternberg
  */
 
 // Exit if accessed directly.
@@ -39,6 +42,9 @@ class OMAPI_Support {
 	 * Combine Support data together.
 	 *
 	 * @since 1.9.10
+	 *
+	 * @param string $format The format to return the data in.
+	 *
 	 * @return array
 	 */
 	public function get_support_data( $format = 'raw' ) {
@@ -53,6 +59,8 @@ class OMAPI_Support {
 	 * Build Current Optin data array to localize
 	 *
 	 * @since 1.9.10
+	 *
+	 * @param string $format The format to return the data in.
 	 *
 	 * @return array
 	 */
@@ -84,7 +92,7 @@ class OMAPI_Support {
 				'Categories'                       => get_post_meta( $campaign->ID, '_omapi_categories', true ),
 				'Taxonomies'                       => get_post_meta( $campaign->ID, '_omapi_taxonomies', true ),
 				'Template types to Show on'        => get_post_meta( $campaign->ID, '_omapi_show', true ),
-				'Shortcodes Synced and Recognized' => get_post_meta( $campaign->ID, '_omapi_shortcode', true ) ? htmlspecialchars_decode( get_post_meta( $campaign->ID, '_omapi_shortcode_output', true ) ) : 'None recognized',
+				'Shortcodes Synced and Recognized' => get_post_meta( $campaign->ID, '_omapi_shortcode', true ) ? OMAPI_Save::decode_shortcode( get_post_meta( $campaign->ID, '_omapi_shortcode_output', true ) ) : 'None recognized',
 			);
 
 			if ( OMAPI_Utils::is_inline_type( $design_type ) ) {
@@ -104,6 +112,8 @@ class OMAPI_Support {
 	 * Build array of server information to localize
 	 *
 	 * @since 1.9.10
+	 *
+	 * @param string $format The format to return the data in.
 	 *
 	 * @return array
 	 */
@@ -135,6 +145,7 @@ class OMAPI_Support {
 				'Parent Theme'     => $theme_data->{'Parent Theme'},
 			)
 			: $theme_data->Name . ' ' . $theme_data->Version;
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		$active_plugins = get_option( 'active_plugins', array() );
 		$plugins        = 'raw' === $format ? array() : "\n";
@@ -150,12 +161,12 @@ class OMAPI_Support {
 			}
 		}
 
-		$api_ping = wp_remote_request( OPTINMONSTER_APP_URL . '/v1/ping' );
+		$api_ping = wp_remote_request( OPTINMONSTER_API_URL . '/v2/ping' );
 
 		$array = array(
 			'Plugin Version'      => esc_html( $this->base->version ),
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			'Server Info'         => esc_html( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ),
+			'Server Info'         => esc_html( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ?? '' ) ),
 			'PHP Version'         => function_exists( 'phpversion' ) ? esc_html( phpversion() ) : 'Unable to check.',
 			'Error Log Location'  => function_exists( 'ini_get' ) ? ini_get( 'error_log' ) : 'Unable to locate.',
 			'Default Timezone'    => date_default_timezone_get(),
@@ -177,7 +188,6 @@ class OMAPI_Support {
 		if ( 'raw' !== $format ) {
 			$array['Multisite'] = $array['Multisite'] ? 'Multisite Enabled' : 'Not Multisite';
 		}
-		// phpcs:enable
 
 		return $array;
 	}
@@ -191,9 +201,93 @@ class OMAPI_Support {
 	 */
 	public function get_settings_data() {
 		$options = $this->base->get_option();
+
+		// Remove the optins key. We don't need this in the settings data.
 		unset( $options['optins'] );
+
+		// List of keys to mask in the settings array.
+		$sensitive_keys = array(
+			array( 'api', 'apikey' ),
+			array( 'api', 'key' ),
+			array( 'api', 'user' ),
+			array( 'edd', 'key' ),
+			array( 'edd', 'token' ),
+			array( 'woocommerce', 'key_id' ),
+		);
+
+		/**
+		 * Filters the extra keys array, allowing additional keys to be added.
+		 *
+		 * @since 2.16.3
+		 *
+		 * @param array $extra_keys The list of sensitive keys. Defaults to an empty array.
+		 */
+		$extra_keys = (array) apply_filters( 'optin_monster_redacted_sensitive_keys', array() );
+
+		$this->mask_sensitive_data_recursive( $options, array_merge( $sensitive_keys, $extra_keys ) );
 
 		return $options;
 	}
 
+	/**
+	 * Recursively mask sensitive data in an array.
+	 *
+	 * @since 2.16.3
+	 *
+	 * @param array $data           The data array.
+	 * @param array $sensitive_keys The list of sensitive keys.
+	 *
+	 * @return void
+	 */
+	public function mask_sensitive_data_recursive( &$data, $sensitive_keys = array() ) {
+		foreach ( $sensitive_keys as $path ) {
+			$ref        = &$data;
+			$path_count = 0;
+
+			foreach ( (array) $path as $key ) {
+				++$path_count;
+
+				// If the key doesn't exist, break out of the loop.
+				if ( ! isset( $ref[ $key ] ) ) {
+					break;
+				}
+
+				// Set a reference to the next level of the array.
+				$ref = &$ref[ $key ];
+
+				// If we're at the end of the path array, mask the value.
+				if ( count( $path ) === $path_count && ! empty( $ref ) ) {
+					$ref = self::mask_value( (string) $ref );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Mask a sensitive value, revealing only its first and last two characters.
+	 *
+	 * Values four characters or shorter are masked entirely: revealing the
+	 * leading and trailing two characters would expose the whole value, and
+	 * for values shorter than four str_repeat() would also throw a ValueError
+	 * on PHP 8.0+ for the negative count it would produce.
+	 *
+	 * @since 2.17.0
+	 *
+	 * @param  string $value The value to mask.
+	 *
+	 * @return string
+	 */
+	public static function mask_value( $value ) {
+		$value  = (string) $value;
+		$length = strlen( $value );
+
+		// Too short to partially reveal without leaking the whole value; mask entirely.
+		if ( $length <= 4 ) {
+			return str_repeat( '*', $length );
+		}
+
+		return substr( $value, 0, 2 )
+			. str_repeat( '*', $length - 4 )
+			. substr( $value, -2 );
+	}
 }

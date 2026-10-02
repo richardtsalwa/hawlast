@@ -189,5 +189,4 @@ abstract class OMAPI_Promos_Base {
 
 		return $classes;
 	}
-
 }

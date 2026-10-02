@@ -270,8 +270,8 @@ class PostsTerms {
 		if ( ! empty( $error ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => 'Failed update query: ' . $error
-			], 401 );
+				'message' => 'Failed to update the post data.'
+			], 500 );
 		}
 
 		return new \WP_REST_Response( [
@@ -424,16 +424,15 @@ class PostsTerms {
 
 		$aioseoPost->save();
 
-		// Trigger the action hook so we can create a revision.
-		do_action( 'aioseo_insert_post', $postId );
-
-		$lastError = aioseo()->core->db->lastError();
-		if ( ! empty( $lastError ) ) {
+		if ( ! empty( $aioseoPost->lastError ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => 'Failed update query: ' . $lastError
-			], 401 );
+				'message' => 'Failed to update the post data.'
+			], 500 );
 		}
+
+		// Trigger the action hook so we can create a revision.
+		do_action( 'aioseo_insert_post', $postId );
 
 		return new \WP_REST_Response( [
 			'success'     => true,
@@ -448,6 +447,7 @@ class PostsTerms {
 	 *
 	 * @since   4.0.0
 	 * @version 5.0.0.1 Mirrors keywords into the focus_keyword/additional_keywords columns.
+	 * @version 5.0.1 Derives the mirrored keyword columns from the sanitized keyphrases.
 	 *
 	 * @param  \WP_REST_Request  $request The REST Request
 	 * @return \WP_REST_Response          The response.
@@ -474,17 +474,18 @@ class PostsTerms {
 
 		$thePost->post_id = $postId;
 		if ( ! empty( $body['keyphrases'] ) ) {
-			$thePost->keyphrases = wp_json_encode( $body['keyphrases'] );
+			$thePost->keyphrases = Models\Post::sanitizeKeyphrases( $body['keyphrases'] );
 
 			// The editor and every keyword feature read the dedicated columns, so a legacy-only
-			// write here would be invisible to them.
-			$columns                      = Models\Post::getKeywordColumnsFromKeyphrases( $body['keyphrases'] );
+			// write here would be invisible to them. Derived from the sanitized structure, not the
+			// request body, so all three columns hold the same keywords.
+			$columns                      = Models\Post::getKeywordColumnsFromKeyphrases( $thePost->keyphrases );
 			$thePost->focus_keyword       = $columns['focus_keyword'];
 			$thePost->additional_keywords = $columns['additional_keywords'];
 		}
 
 		if ( ! empty( $body['page_analysis'] ) ) {
-			$thePost->page_analysis = wp_json_encode( $body['page_analysis'] );
+			$thePost->page_analysis = Models\Post::sanitizePageAnalysis( $body['page_analysis'] );
 		}
 
 		if ( ! empty( $body['seo_score'] ) ) {
@@ -494,12 +495,11 @@ class PostsTerms {
 		$thePost->updated = gmdate( self::MYSQL_DATETIME_FORMAT );
 		$thePost->save();
 
-		$lastError = aioseo()->core->db->lastError();
-		if ( ! empty( $lastError ) ) {
+		if ( ! empty( $thePost->lastError ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => 'Failed update query: ' . $lastError
-			], 401 );
+				'message' => 'Failed to update the post data.'
+			], 500 );
 		}
 
 		return new \WP_REST_Response( [
@@ -581,11 +581,10 @@ class PostsTerms {
 		$thePost->updated = gmdate( self::MYSQL_DATETIME_FORMAT );
 		$thePost->save();
 
-		$lastError = aioseo()->core->db->lastError();
-		if ( ! empty( $lastError ) ) {
+		if ( ! empty( $thePost->lastError ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
-				'message' => 'Failed update query: ' . $lastError
+				'message' => 'Failed to update the post data.'
 			], 500 );
 		}
 

@@ -92,6 +92,11 @@ class OMAPI_Refresh {
 	public function set() {
 		self::$instance = $this;
 		$this->base     = OMAPI::get_instance();
+
+		// If WPML is enabled, add the language domains to the parameter.
+		if ( OMAPI_Utils::is_wpml_active() ) {
+			$this->api_args['wpml_domains'] = json_encode( OMAPI_Utils::get_wpml_language_domains() );
+		}
 	}
 
 	/**
@@ -115,11 +120,11 @@ class OMAPI_Refresh {
 			$limit       = absint( wp_remote_retrieve_header( $this->api->response, 'limit' ) );
 			$page        = absint( wp_remote_retrieve_header( $this->api->response, 'page' ) );
 			$total       = absint( wp_remote_retrieve_header( $this->api->response, 'total' ) );
-			$total_pages = ceil( $total / $limit );
+			$total_pages = self::total_pages( $total, $limit );
 			$results     = array_merge( $results, (array) $body );
 
 			// If we've reached the end, prevent any further requests.
-			if ( $page >= $total_pages || $limit === 0 ) {
+			if ( $page >= $total_pages || 0 === $limit ) {
 				break;
 			}
 
@@ -135,7 +140,7 @@ class OMAPI_Refresh {
 			// Store the optin data.
 			$this->base->save->store_optins( $results );
 
-			// Update our sites as well
+			// Update our sites as well.
 			$result = $this->base->sites->fetch( $api_key );
 
 			// Update the option to remove stale error messages.
@@ -154,6 +159,25 @@ class OMAPI_Refresh {
 		}
 
 		return $this->error ? $this->error : true;
+	}
+
+	/**
+	 * Number of pages for a paginated API response.
+	 *
+	 * A missing or empty `limit` response header resolves to `0`; dividing by
+	 * it is a fatal DivisionByZeroError on PHP 8.0+, so a non-positive limit
+	 * yields 0 pages and the pagination loop terminates via its `0 === $limit`
+	 * guard.
+	 *
+	 * @since 2.17.0
+	 *
+	 * @param  int $total Total item count reported by the API.
+	 * @param  int $limit Items-per-page reported by the API.
+	 *
+	 * @return int
+	 */
+	public static function total_pages( $total, $limit ) {
+		return $limit > 0 ? (int) ceil( $total / $limit ) : 0;
 	}
 
 	/**
@@ -205,15 +229,16 @@ class OMAPI_Refresh {
 	public function get_info_args( $args = array() ) {
 
 		// Set additional flags.
-		$args['wp'] = $GLOBALS['wp_version'];
-		$args['av'] = $this->base->asset_version();
-		$args['v']  = $this->base->version;
+		$args['wp']  = $GLOBALS['wp_version'];
+		$args['php'] = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
+		$args['av']  = $this->base->asset_version();
+		$args['v']   = $this->base->version;
 
 		if ( OMAPI_WooCommerce::is_active() ) {
 			$args['wc'] = OMAPI_WooCommerce::version();
 		}
 
-		$args = array_merge( $args, OMAPI_Api::getUrlArgs() );
+		$args = array_merge( $args, OMAPI_Api::get_url_args() );
 
 		return $args;
 	}
@@ -270,5 +295,4 @@ class OMAPI_Refresh {
 
 		return $this;
 	}
-
 }

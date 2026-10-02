@@ -1,10 +1,10 @@
 === All in One SEO – AI SEO Plugin to Boost SEO Rankings & Traffic (Schema, Local SEO, Sitemap & SEO Insights) ===
 Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, AI, schema, XML Sitemap, redirect
-Tested up to: 7.0.2
+Tested up to: 7.1
 Requires at least: 5.7
 Requires PHP: 7.2
-Stable tag: 5.0.0.1
+Stable tag: 5.0.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -192,6 +192,18 @@ AIOSEO&reg; is a registered trademark of Semper Plugins LLC. When writing about 
 
 == Changelog ==
 
+**New in Version 5.0.1**
+
+- New: TruSEO content analysis for taxonomy terms, starting with WooCommerce product categories.
+- Fixed: SEO Analysis now shows a clear "Preview unavailable" message when a firewall blocks the homepage or competitor screenshot.
+- Fixed: Sitemap image URLs being duplicated on WordPress subdirectory installations.
+- Fixed: Redirects no longer create cache entries on sites that don't use the Redirects feature.
+- Fixed: Overlapping redirects now apply in the correct order.
+- Fixed: A textdomain loading notice that could appear when checking for addon updates on WordPress 6.7 and later.
+- Fixed: Table of Contents block sometimes reset custom heading text and pointed to incorrect links.
+- Fixed: Added a warning when a redirect's destination URL contains invalid characters in the domain.
+- Fixed: Redirects from child pages to parent pages not working for smart 404 redirects.
+
 **New in Version 5.0.0.1**
 
 - Updated: Made Search Appearance and Social Appearance cards in metabox collapsible.
@@ -207,46 +219,6 @@ AIOSEO&reg; is a registered trademark of Semper Plugins LLC. When writing about 
 - New: Actionable AI-powered fixes for TruSEO — let AI help you rewrite sentences or paragraphs to fix readability and SEO issues in your content.
 - Updated: AIOSEO blocks to add support for WordPress 6.3+ iFrame editor.
 - Fixed: MCP setup snippets for Claude Desktop, Cursor, and Gemini CLI so the connection no longer fails.
-
-**New in Version 4.9.10**
-
-- New: Added a new ability to list terms that are missing SEO data.
-- Fixed: PHP 8.5 deprecation notice when decoding HTML entities from empty content.
-- Fixed: High CPU usage caused by the translations check on sites with large user tables.
-- Fixed: Fatal error in breadcrumbs on PHP 8 when a third-party plugin added an invalid entry to the breadcrumb trail.
-- Fixed: PHP error in redirects when a request URL contained array-style (bracketed) query parameters.
-- Fixed: Keyword density displaying "Infinity%" in the TruSEO analysis when the content had no readable text (e.g. some Divi pages in the block editor).
-- Fixed: Various security hardening improvements across the plugin.
-
-**New in Version 4.9.9**
-
-* New: SEO Alerts feature to notify site owners of critical SEO issues via email and Slack.
-* New: New `#event_start_date` and `#event_end_date` smart tags for events when The Events Calendar plugin is active.
-* Updated: Sitemap hreflang alternates when using the Universally translation plugin.
-* Updated: .htaccess editor error messages are now clearer and more actionable.
-* Updated: Setup wizard now triggers after bulk plugin activation instead of being skipped.
-* Updated: Improved the posts-list URL Inspection status with clearer messages and a Refresh Status action.
-* Fixed: PHP 8.2+ dynamic property creation deprecation notice when loading addons.
-* Fixed: PHP 8.5 deprecation notice when generating descriptions from classic or freeform post content.
-* Fixed: Elementor's internal post type was included in LLMs.txt by default.
-* Fixed: Primary Category dropdown was clipped when WooCommerce was active.
-* Fixed: PHP warnings on taxonomy archives when get_queried_object() returned a WP_Post_Type.
-* Fixed: Fatal error on the WordPress dashboard when the SEO News widget returned an unexpected response.
-* Fixed: Divi 5+ layouts displaying stray borders, padding, or alignment issues when AIOSEO Pro is active.
-* Fixed: PHP warning in sitemap generation for sitemap types that don't support taxonomies.
-* Fixed: Multisite sub-sites with "Discourage search engines from indexing this site" enabled were missing from the Domain Activation list in Network Admin.
-* Fixed: Console errors in the Avada Frontend Editor during initialization.
-* Fixed: PHP warning in Social Networks image handling on non-singular pages.
-* Fixed: REST API clients can now update the custom canonical using the snake_case field name in addition to the camelCase version.
-* Fixed: WooCommerce Product schema's valueAddedTaxIncluded now reflects the store's actual tax configuration, and is omitted when taxes are disabled.
-* Fixed: Editing a page via the Classic Editor could show another post's content when a third-party page builder ran a post loop on the same page.
-* Fixed: Site Audit scan fatal error on servers where the PHP intl extension is not installed.
-* Fixed: A conflict where third-party plugins filtering could rename the generated llms.txt or llms-full.txt files.
-* Fixed: Opening the redirect modal from the side panel when the Metabox Redirects tab is active.
-* Fixed: Regex redirects no longer produce double slashes mid-path when a capture group matches an empty string.
-* Fixed: Regex redirects for media files.
-* Fixed: Regex redirects producing a double trailing slash when the target URL contains a capture group placeholder.
-* Fixed: Keyword Cannibalization checker was displaying private posts in the results list.
 
 **See our [changelog on aioseo.com](https://aioseo.com/changelog/?utm_source=wprepo&utm_medium=link&utm_campaign=aioseo) for previous releases.**
 
@@ -323,6 +295,6 @@ AIOSEO can easily help you get your sitemaps listed inside Google Search Console
 
 == Upgrade Notice ==
 
-= 5.0.0.1 =
+= 5.0.1 =
 
 This update adds major improvements and bug fixes.

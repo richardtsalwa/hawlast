@@ -73,7 +73,7 @@ $headers = 'From: support@hawlast.com' . "\r\n" .
 if (mail($email, $subject, $duetodaymessage, $headers)) {
 
 // SEND ME THE SMS 
-require_once('hawlastsms.php');
+require_once dirname(__DIR__, 2) . '/libraries.php';
 
 // Specify your login credentials
 $username = "hawlast";

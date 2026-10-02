@@ -15,8 +15,7 @@ require 'config.php';
 <link rel="canonical" href="https://www.hawlast.com/airtime.php">
 <link rel="shortcut icon" href=images/favicon.ico type=image/x-icon />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
-<link rel=stylesheet type=text/css href=style.css />
-<link rel="stylesheet" type="text/css" href="responsive.css">
+<link rel="stylesheet" type="text/css" href="style.css" />
 
 <script  type="application/ld+json" id="website-json-ld">
 {
@@ -61,18 +60,18 @@ require 'config.php';
 <meta property="fb:app_id" content="202015096126" />
 
 <?php
-require("includes/header.txt");
+require __DIR__ . "/includes/header.php";
 ?>
 </div>
 <div class=center_content><div class=left_content>
-<?php require("includes/airtime_main.txt"); ?>
+<?php require __DIR__ . "/includes/airtime_main.php"; ?>
 </div>
 
 <div class=right_content>
 <?php
-require("includes/other_left.txt");
+require __DIR__ . "/includes/other_left.php";
 ?>
 </div>
 <?php
-require("includes/footer.txt");
+require __DIR__ . "/includes/footer.php";
 ?></body></html>

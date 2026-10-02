@@ -77,12 +77,10 @@ class OMAPI_Urls {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param  array $args Array of query args.
-	 *
 	 * @return string
 	 */
-	public static function wizard( $args = array() ) {
-		return self::om_admin( 'onboarding-wizard', $args );
+	public static function wizard() {
+		return self::dashboard( array( 'onboarding' => true ) );
 	}
 
 	/**
@@ -132,14 +130,10 @@ class OMAPI_Urls {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param  array $args Array of query args.
-	 *
 	 * @return string
 	 */
-	public static function onboarding( $args = array() ) {
-		$args = array_merge( $args, array( 'info' => true ) );
-
-		return self::dashboard( $args );
+	public static function onboarding() {
+		return self::wizard();
 	}
 
 	/**
@@ -295,7 +289,10 @@ class OMAPI_Urls {
 	 */
 	public static function om_api() {
 		$custom_api_url = OMAPI::get_instance()->get_option( 'customApiUrl' );
-		return ! empty( $custom_api_url ) ? $custom_api_url : OPTINMONSTER_APIJS_URL;
+		if ( empty( $custom_api_url ) || 'https' !== strtolower( (string) wp_parse_url( $custom_api_url, PHP_URL_SCHEME ) ) ) {
+			return OPTINMONSTER_APIJS_URL;
+		}
+		return $custom_api_url;
 	}
 
 	/**
@@ -310,12 +307,6 @@ class OMAPI_Urls {
 	protected static function get_partner_params( $destination_url = '' ) {
 		$args = array();
 
-		// Add the partner id attribution query arg, if it exists.
-		$id = OMAPI_Partners::get_id();
-		if ( ! empty( $id ) ) {
-			$args['sscid'] = $id;
-		}
-
 		// Next, let's parse the partner url for additional query args
 		// stuffed on the urllink query arg redirect url.
 		$partner_url = OMAPI_Partners::has_partner_url();
@@ -327,7 +318,7 @@ class OMAPI_Urls {
 		}
 
 		// No params, no problem.
-		$parsed = parse_url( $partner_url );
+		$parsed = wp_parse_url( $partner_url );
 		if ( empty( $parsed['query'] ) ) {
 			return $args;
 		}
@@ -354,7 +345,7 @@ class OMAPI_Urls {
 		}
 
 		// No args, do not pass go, do not collect $200.
-		$bits = parse_url( $url );
+		$bits = wp_parse_url( $url );
 		if ( empty( $bits['query'] ) ) {
 			return $args;
 		}
@@ -366,5 +357,27 @@ class OMAPI_Urls {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Filters the `allowed_redirect_hosts`.
+	 *
+	 * Adds the OptinMonster app and OptinMonster site to the allowed hosts.
+	 *
+	 * @since 2.16.3
+	 *
+	 * @param array $hosts Array of allowed hosts.
+	 *
+	 * @return array The allowed hosts.
+	 */
+	public static function allowed_redirect_hosts( $hosts = array() ) {
+		if ( ! is_array( $hosts ) ) {
+			$hosts = array();
+		}
+
+		$hosts[] = str_replace( 'https://', '', OPTINMONSTER_APP_URL );
+		$hosts[] = str_replace( 'https://', '', OPTINMONSTER_URL );
+
+		return $hosts;
 	}
 }

@@ -2,7 +2,7 @@
 ob_start();
 require '../config.php';
 require '../hawlastke.php';
-require_once('../AfricasTalkingGateway.php');
+require_once dirname(__DIR__) . '/libraries.php';
 
 // Specify your login credentials
 $username = "hawlast";
