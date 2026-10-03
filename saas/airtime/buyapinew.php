@@ -18,7 +18,7 @@ use AfricasTalking\SDK\AfricasTalking;
 
 //constants should not have '' or ""
 $username = ATUSER;
-$apiKey   = ATPASSWORD; 
+$apiKey   = ATAPIKEY; 
 $AT       = new AfricasTalking($username, $apiKey);
 
 // Get the application service
