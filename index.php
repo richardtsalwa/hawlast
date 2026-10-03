@@ -1,6 +1,16 @@
 <?php
 require 'hawlastke.php';
 require 'config.php';
+
+/**
+ * Escape a URL for output as an HTML attribute.
+ *
+ * The application is not WordPress, so esc_url() is unavailable here.
+ */
+function hawlast_e( string $url ): string {
+    return htmlspecialchars( $url, ENT_QUOTES, 'UTF-8' );
+}
+
 if(isset($_GET['a'])) {
 $cookie_name = "affiliate";
 $cookie_value = $_GET['a'];
@@ -18,9 +28,9 @@ setcookie($cookie_name, $cookie_value, time() + (86400 * 60), "/");
 <meta name="description" content="Kenyan business, run on modern software. Website, email, M-Pesa, WhatsApp and ERP, designed well and kept running at 99.95% uptime." />
 <title>Hawlast Ventures | Kenyan business, run on modern software</title>
 
-<link rel="icon" href="images/hawlast-mark-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="images/hawlast-mark.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="images/hawlast-mark-192.png">
+<link rel="icon" href="images/hawlast-mark-32.png?v=2" sizes="32x32" type="image/png">
+<link rel="icon" href="images/hawlast-mark.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="images/hawlast-mark-192.png?v=2">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,7 +88,7 @@ setcookie($cookie_name, $cookie_value, time() + (86400 * 60), "/");
   ga('send', 'pageview');
 </script><style>
 :root{
-  --ink:#0B0F14; --paper:#FFFFFF; --card:#FFFFFF; --soft:#FBF7F1; --muted:#5B6470; --line:#E6E1D8; --orange:#E8590C;
+  --ink:#10204A; --paper:#FFFFFF; --card:#FFFFFF; --soft:#FBF7F1; --muted:#5B6470; --line:#E6E1D8; --orange:#E8590C;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -126,10 +136,10 @@ nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-conte
 .proof strong{display:block;font-family:Inter,system-ui,sans-serif;font-size:32px;font-weight:700;letter-spacing:-.02em}
 .proof span{color:var(--muted);font-size:14px}
 /* mission */
-.mission{background:var(--soft);padding:96px 0;border-bottom:1px solid var(--line)}
+.mission{background:var(--ink);color:#FFFFFF;padding:96px 0}
 .mission .wrap{border-left:6px solid var(--orange);padding-left:32px}
 .mission p{font-family:Inter,system-ui,sans-serif;font-size:clamp(26px,3.6vw,44px);line-height:1.2;max-width:28ch;margin:0 0 24px;letter-spacing:-.015em}
-.mission p.small{font-family:Inter,system-ui,sans-serif;font-size:18px;max-width:58ch;color:var(--muted);line-height:1.6}
+.mission p.small{font-family:Inter,system-ui,sans-serif;font-size:18px;max-width:58ch;color:#C9D1E6;line-height:1.6}
 
 /* solutions */
 section.pad{padding:96px 0}
@@ -179,7 +189,7 @@ footer a{margin-left:18px}
 
 <header>
   <nav aria-label="Main">
-    <a class="logo" href="#top"><img src="images/hawlast-logo.svg" alt="Hawlast Ventures" height="40"></a>
+    <a class="logo" href="#top"><img src="<?php echo hawlast_e( hawlast_url( 'images/hawlast-logo.svg' ) . '?v=2' ); ?>" alt="Hawlast Ventures" width="168" height="40"></a>
     <div class="links">
       <a href="#solutions">Solutions</a>
       <a href="#golderp">AlbaERP</a>
@@ -187,8 +197,8 @@ footer a{margin-left:18px}
       <a href="#pricing">Pricing</a>
     </div>
     <div class="actions">
-      <a class="btn btn-line hide-s" href="/login">Client login</a>
-      <a class="btn btn-fill" href="/book">Book a call</a>
+      <a class="btn btn-line hide-s" href="<?php echo hawlast_e( hawlast_url( 'login' ) ); ?>">Client login</a>
+      <a class="btn btn-fill" href="<?php echo hawlast_e( hawlast_url( 'book' ) ); ?>">Book a call</a>
     </div>
   </nav>
 </header>
@@ -199,7 +209,7 @@ footer a{margin-left:18px}
       <h1>Kenyan business, run on modern software.</h1>
       <p class="sub">Website, email, M-Pesa, WhatsApp and ERP, designed well and kept running at 99.95% uptime, so you can get on with your business.</p>
       <div class="cta">
-        <a class="btn btn-fill btn-lg" href="/book">Book a 15-minute call</a>
+        <a class="btn btn-fill btn-lg" href="<?php echo hawlast_e( hawlast_url( 'book' ) ); ?>">Book a 15-minute call</a>
         <a class="btn btn-line btn-lg" href="#solutions">See what we run</a>
       </div>
     </div>
@@ -249,7 +259,7 @@ footer a{margin-left:18px}
     <div>
       <h2>AlbaERP connects sales, stock and money.</h2>
       <p>Built for how Kenyan businesses trade: M-Pesa, WhatsApp orders, multiple branches and KRA compliance in one place.</p>
-      <a class="btn btn-fill btn-lg" href="/albaerp">See the AlbaERP demo</a>
+      <a class="btn btn-fill btn-lg" href="<?php echo hawlast_e( hawlast_url( 'albaerp' ) ); ?>">See the AlbaERP demo</a>
     </div>
     <div class="flow" aria-label="How AlbaERP connects">
       <div>WhatsApp order <small>arrives</small></div>
@@ -264,15 +274,15 @@ footer a{margin-left:18px}
   <div class="wrap">
     <h2>Tell us what is slowing you down.</h2>
     <p>Fifteen minutes. We will tell you what to fix first, whether or not you hire us.</p>
-    <a class="btn btn-fill btn-lg" href="/book">Book a 15-minute call</a>
+    <a class="btn btn-fill btn-lg" href="<?php echo hawlast_e( hawlast_url( 'book' ) ); ?>">Book a 15-minute call</a>
   </div>
 </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>Hawlast Ventures, Nairobi. Remote-first.</span>
-    <span><a href="/domain-hosting/">Domains and hosting</a><a href="/support">Support</a><a href="/login">Client login</a></span>
+    <span>Hawlast Ventures, Nairobi.</span>
+    <span><a href="<?php echo hawlast_e( hawlast_url( 'domain-hosting' ) ); ?>">Domains and hosting</a><a href="<?php echo hawlast_e( hawlast_url( 'blog' ) ); ?>">Blog</a><a href="<?php echo hawlast_e( hawlast_url( 'airtime.php' ) ); ?>">Buy airtime</a><a href="<?php echo hawlast_e( hawlast_url( 'login' ) ); ?>">Client login</a></span>
   </div>
 </footer>
 
