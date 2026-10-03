@@ -27,8 +27,7 @@ $_SESSION['airtime_token'] = bin2hex(random_bytes(16));
 <section class="pad-y">
   <div class="wrap">
     <div class="steps">
-
-      <!-- STEP 1 : recipient number -->
+<!-- STEP 1 : recipient number -->
       <div class="step" id="step1">
         <div class="step-top">
           <span class="step-n">1</span>
@@ -50,7 +49,9 @@ $_SESSION['airtime_token'] = bin2hex(random_bytes(16));
         <div class="row">
           <button type="button" class="btn btn-fill btn-lg" id="b1">Continue</button>
         </div>
-<!-- STEP 2 : confirm the number and set the amount -->
+      </div>
+
+      <!-- STEP 2 : confirm the number and set the amount -->
       <div class="step" id="step2" hidden>
         <div class="step-top">
           <span class="step-n">2</span>
@@ -81,8 +82,7 @@ $_SESSION['airtime_token'] = bin2hex(random_bytes(16));
           <button type="button" class="btn btn-line" id="b2back">Change number</button>
         </div>
       </div>
-
-      <!-- STEP 3 : pay on the phone -->
+<!-- STEP 3 : pay on the phone -->
       <div class="step" id="step3" hidden>
         <div class="step-top">
           <span class="step-n">3</span>
@@ -114,6 +114,34 @@ $_SESSION['airtime_token'] = bin2hex(random_bytes(16));
             <span>
               <span class="lbl">Amount to pay</span><br>
               <span class="big" id="amtNo">KES 100</span>
+            </span>
+            <span style="margin-left:auto;font-size:14px;color:var(--muted);max-width:34ch">
+              We top up a little extra to refund your M-PESA charge.
+            </span>
+          </div>
+        </div>
+
+        <p class="hint" style="margin-bottom:16px">
+          Paying less than KES 101? No top-up bonus. You get the exact amount you paid.
+          For help, WhatsApp or SMS Hawlast Ventures on 0720 401869.
+        </p>
+
+        <div class="row">
+          <button type="button" class="btn btn-fill btn-lg" id="b3">I have paid, check my airtime</button>
+          <button type="button" class="btn btn-line" id="b3back">Start over</button>
+        </div>
+
+        <div class="loading" id="wheel">
+          <span class="spinner" aria-hidden="true"></span>
+          <p><b>Waiting for Safaricom</b>
+             Confirm the payment on your phone. We check with the network every few seconds,
+             so please keep this page open.</p>
+        </div>
+
+        <p class="msg" id="m3" role="alert"></p>
+      </div>
+
+    </div>
 <!-- delivery receipt, filled from the airtime_transactions row -->
     <div class="receipt" id="receipt" aria-live="polite">
       <h3 id="rTitle">Airtime delivered.</h3>
@@ -136,7 +164,6 @@ $_SESSION['airtime_token'] = bin2hex(random_bytes(16));
     </div>
   </div>
 </section>
-
 <script>
 jQuery(function ($) {
   'use strict';
@@ -155,10 +182,12 @@ jQuery(function ($) {
   }
 
   function show(step) {
-    ['#step1', '#step2', '#step3'].each(function (i) {
-      $(['#step1', '#step2', '#step3'][i]).prop('hidden', i !== step);
+    var ids = ['#step1', '#step2', '#step3'];
+    ids.forEach(function (sel, i) {
+      $(sel).prop('hidden', i !== step);
     });
-    $('.step:visible')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var visible = document.querySelector('.step:not([hidden])');
+    if (visible) { visible.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   }
 
   function spin(on) {
@@ -177,8 +206,7 @@ jQuery(function ($) {
       done({ ok: false, error: (xhr.responseJSON && xhr.responseJSON.error) || 'Something went wrong. Please try again.' });
     });
   }
-
-  /* ---- step 1 : the number ---------------------------------------- */
+/* ---- step 1 : the number ---------------------------------------- */
   $('#phone').on('input', function () {
     $(this).val($(this).val().replace(/[^0-9]/g, ''));
     say('m1', '');
@@ -245,8 +273,7 @@ jQuery(function ($) {
     $('#amount').val('');
     show(0);
   });
-
-  /* ---- step 3 : wait for the airtime_transactions row ------------- */
+/* ---- step 3 : wait for the airtime_transactions row ------------- */
   function stopPolling() {
     if (state.timer) { clearTimeout(state.timer); state.timer = null; }
   }
@@ -284,8 +311,7 @@ jQuery(function ($) {
     var r = res.record;
     var failed = !!res.failed;
 
-    // <dl> is built from named fields, so no user string is ever pasted in as markup.
-<?php require __DIR__ . '/includes/site_foot.php'; ?>
+    // Text only. No server string is ever written into the page as markup.
     $('#rTitle').text(failed ? 'Airtime could not be delivered.' : 'Airtime delivered.');
     $('#rWhen').text(r.date);
     $('#rPhone').text(state.phone);
@@ -307,32 +333,4 @@ jQuery(function ($) {
   });
 });
 </script>
-            </span>
-            <span style="margin-left:auto;font-size:14px;color:var(--muted);max-width:34ch">
-              We top up a little extra to refund your M-PESA charge.
-            </span>
-          </div>
-        </div>
-
-        <p class="hint" style="margin-bottom:16px">
-          Paying less than KES 101? No top-up bonus. You get the exact amount you paid.
-          For help, WhatsApp or SMS Hawlast Ventures on 0720 401869.
-        </p>
-
-        <div class="row">
-          <button type="button" class="btn btn-fill btn-lg" id="b3">I have paid, check my airtime</button>
-          <button type="button" class="btn btn-line" id="b3back">Start over</button>
-        </div>
-
-        <div class="loading" id="wheel">
-          <span class="spinner" aria-hidden="true"></span>
-          <p><b>Waiting for Safaricom</b>
-             Confirm the payment on your phone. We check with the network every few seconds,
-             so please keep this page open.</p>
-        </div>
-
-        <p class="msg" id="m3" role="alert"></p>
-      </div>
-
-    </div>
-      </div>
+<?php require __DIR__ . '/includes/site_foot.php'; ?>
