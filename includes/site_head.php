@@ -165,20 +165,5 @@ footer a{margin-left:18px}
 </head>
 <body>
 
-<header>
-  <nav aria-label="Main">
-    <a class="logo" href="<?php echo hawlast_url(); ?>"><img src="<?php echo hawlast_url( 'images/hawlast-logo.svg' ) . '?v=2'; ?>" alt="Hawlast Ventures" width="168" height="40"></a>
-    <div class="links">
-      <a href="<?php echo hawlast_url( 'domain-registration' ); ?>">Domains</a>
-      <a href="<?php echo hawlast_url( 'buyairtime.php' ); ?>">Buy airtime</a>
-      <a href="<?php echo hawlast_url( 'blog' ); ?>">Blog</a>
-      <a href="<?php echo hawlast_url( 'terms-of-service.php' ); ?>">Terms</a>
-      <a href="<?php echo hawlast_url( 'privacy-policy.php' ); ?>">Privacy</a>
-    </div>
-    <div class="actions">
-      <a class="btn btn-line hide-s" href="<?php echo hawlast_url( 'login' ); ?>">Client login</a>
-      <a class="btn btn-fill" href="<?php echo hawlast_url( 'contactus.php' ); ?>">Contact us</a>
-    </div>
-  </nav>
-</header>
+<?php require __DIR__ . '/site_nav.php'; ?>
 <main>

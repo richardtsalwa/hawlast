@@ -11,6 +11,9 @@ $pageDesc   = 'Buy Safaricom, Airtel or Telkom airtime using M-PESA paybill 8224
 
 require_once __DIR__ . '/includes/site_head.php';
 
+// buyairtime.php runs its AJAX steps on jQuery, so the shared footer loads it.
+$pageJquery = true;
+
 // Token issued with the page and echoed back by the AJAX calls (checked with hash_equals).
 $_SESSION['airtime_token'] = bin2hex(random_bytes(16));
 ?>

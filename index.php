@@ -187,21 +187,7 @@ footer a{margin-left:18px}
 </head>
 <body>
 
-<header>
-  <nav aria-label="Main">
-    <a class="logo" href="#top"><img src="<?php echo hawlast_e( hawlast_url( 'images/hawlast-logo.svg' ) . '?v=2' ); ?>" alt="Hawlast Ventures" width="168" height="40"></a>
-    <div class="links">
-      <a href="#solutions">Solutions</a>
-      <a href="#golderp">AlbaERP</a>
-      <a href="#work">Work</a>
-      <a href="#pricing">Pricing</a>
-    </div>
-    <div class="actions">
-      <a class="btn btn-line hide-s" href="<?php echo hawlast_e( hawlast_url( 'login' ) ); ?>">Client login</a>
-      <a class="btn btn-fill" href="<?php echo hawlast_e( hawlast_url( 'book' ) ); ?>">Book a call</a>
-    </div>
-  </nav>
-</header>
+<?php require __DIR__ . '/includes/site_nav.php'; ?>
 <main id="top">
 <section class="hero">
   <div class="wrap hero-grid">
@@ -279,13 +265,6 @@ footer a{margin-left:18px}
 </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <span>Hawlast Ventures, Nairobi.</span>
-    <span><a href="<?php echo hawlast_e( hawlast_url( 'domain-hosting' ) ); ?>">Domains and hosting</a><a href="<?php echo hawlast_e( hawlast_url( 'blog' ) ); ?>">Blog</a><a href="<?php echo hawlast_e( hawlast_url( 'buyairtime.php' ) ); ?>">Buy airtime</a><a href="<?php echo hawlast_e( hawlast_url( 'login' ) ); ?>">Client login</a></span>
-  </div>
-</footer>
-
 <!-- Facebook SDK / pixel - app id and site id preserved from the previous homepage -->
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
@@ -296,4 +275,8 @@ footer a{margin-left:18px}
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-</body></html>
+<?php
+// index.php already closed <main> above so the pixel scripts sit outside it.
+$mainClosed = true;
+require __DIR__ . '/includes/site_foot.php';
+?>
