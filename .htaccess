@@ -4,8 +4,12 @@ RewriteRule .* - [F,L]
 
 ErrorDocument 404 https://www.hawlast.com/dated.html
 
+# Force HTTPS on production ONLY.
+# Local XAMPP has no SSL vhost, so forcing https://localhost made every
+# asset and link fail. Guard on the production host.
 RewriteEngine On 
 RewriteCond %{HTTPS} off 
+RewriteCond %{HTTP_HOST} ^(www\.)?hawlast\.com$ [NC]
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 

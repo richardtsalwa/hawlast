@@ -26,6 +26,28 @@ define( 'HAWLAST_GA_PROPERTY', 'UA-16346251-1' );
 define( 'HAWLAST_SITE_URL', 'https://www.hawlast.com' );
 
 /**
+ * Brand name used whenever the `blogname` option is empty.
+ */
+define( 'HAWLAST_SITE_NAME', 'Hawlast Ventures' );
+
+/**
+ * Fall back to the brand name when the Site Title option is empty or blank.
+ *
+ * Without this, an empty `blogname` renders a blank logo alt, an empty
+ * `og:site_name`, a title tag of just the tagline, and a footer of
+ * " , Nairobi.".
+ *
+ * @param string $name The stored Site Title.
+ * @return string
+ */
+function hawlast_filter_blogname( $name ) {
+	$name = trim( (string) $name );
+
+	return '' === $name ? HAWLAST_SITE_NAME : $name;
+}
+add_filter( 'option_blogname', 'hawlast_filter_blogname' );
+
+/**
  * Cache-busting version for an asset, based on its last modification time.
  *
  * @param string $relative Path relative to the theme root, without a leading slash.
