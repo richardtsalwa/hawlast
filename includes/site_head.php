@@ -118,6 +118,10 @@ nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-conte
 .loading{display:none;align-items:center;gap:16px;border:1px solid var(--line);border-radius:16px;padding:20px;background:var(--soft)}
 .loading.on{display:flex}
 .spinner{flex:0 0 42px;width:42px;height:42px;border-radius:50%;border:4px solid rgba(232,89,12,.18);border-top-color:var(--orange);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{margin:0;font-size:15px;color:var(--muted)}
+.loading b{color:var(--ink);display:block;font-size:16px}
+
 /* delivery receipt */
 .receipt{display:none;border:1px solid var(--line);border-top:5px solid var(--orange);border-radius:18px;padding:26px;background:var(--card);box-shadow:0 10px 26px rgba(11,15,20,.07);max-width:760px}
 .receipt.on{display:block}
@@ -178,6 +182,3 @@ footer a{margin-left:18px}
   </nav>
 </header>
 <main>
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading p{margin:0;font-size:15px;color:var(--muted)}
-.loading b{color:var(--ink);display:block;font-size:16px}
