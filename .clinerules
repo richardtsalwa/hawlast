@@ -78,3 +78,43 @@
 - **Frontend Assets:** Use raw/vanilla JavaScript AJAX and keep styles in existing bundles (`style.css`, `responsive.css`, `js/`).
 - **Error Handling:** Log errors to `php_errors.log`. Ensure `display_errors` is OFF in production.
 - **Linting:** Validate modified PHP files via PHP CLI (e.g., `"d:\xampp\php\php.exe" -l <file>`). If unavailable, explicitly state that linting was skipped.
+
+### 🌐 URL Construction (MANDATORY)
+
+**The site is served from a different document root locally than in production, so every internal link and asset path must be built from the base URL. Never hard-code a root-relative path.**
+
+| Context | Document root | Effective base path | `hawlast_url('blog')` |
+| --- | --- | --- | --- |
+| Local (XAMPP) | `d:\xampp\htdocs` | `/hawlast` | `http://localhost/hawlast/blog` |
+| Production (cPanel) | site root | `` (empty) | `https://www.hawlast.com/blog` |
+
+- **Always use `hawlast_url('blog')`** (or `BASE_URL`) for internal links. Never write `href="/blog"`, `href="/login"`, `src="/images/..."`.
+  - **Wrong:** `<a href="/blog">` → resolves to `http://localhost/blog` locally (the `/hawlast` prefix is missing) → 404. On production it happens to work, which is exactly why this bug is easy to miss.
+- **Correct:**
+  ```php
+  <a href="<?php echo esc_url( hawlast_url( 'book' ) ); ?>">Book a call</a>
+  <img src="<?php echo esc_url( hawlast_url( 'images/hawlast-logo.svg' ) ); ?>" alt="">
+  ```
+- **The base URL must be derived from `DOCUMENT_ROOT`**, not from scheme + host. Deriving it from `HTTP_HOST` yields `http://localhost` with no subdirectory, which reproduces the very bug this rule prevents:
+  ```php
+  // config.php — keep this form
+  $docRoot   = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+  $configDir = str_replace( '\\', '/', __DIR__ ); // folder containing config.php
+  $basePath  = str_replace( $docRoot, '', $configDir );
+  if ( ! defined( 'BASE_URL' ) ) {
+      define( 'BASE_URL', rtrim( $basePath, '/' ) . '/' );
+  }
+
+  function hawlast_url( string $path = '' ): string {
+      $base = rtrim( BASE_URL, '/' );
+      $path = trim( (string) $path, '/' );
+      return $path === '' ? $base : $base . '/' . $path;
+  }
+  ```
+  This yields `/hawlast/` locally and `/` in production, so one expression is correct in both.
+  - Files needing these links must `require`/`include` `config.php` first (adjusting the relative path for module depth).
+  - Do not reintroduce a scheme + `HTTP_HOST` helper as the sole base: it is correct on production but silently broken locally.
+- **WordPress blog (`blog/`) is a separate install.** Never use `hawlast_url()` inside `blog/wp-content/themes/`. Use WordPress APIs: `home_url()`, `get_template_directory_uri()`, `wp_get_attachment_url()`. Links that cross back to the main site use the full `https://www.hawlast.com/...` URL.
+- **Third-party absolute URLs** (analytics, CDNs, schema.org) use full `https://` literals. Never prefix them with `BASE_URL`.
+- **Before finishing any change that adds a link**, re-read the diff and confirm every `href="/..."` / `src="/..."` you introduced is either wrapped in `hawlast_url()` or is an intentional external `https://` URL.
+
