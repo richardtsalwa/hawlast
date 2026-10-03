@@ -1,0 +1,872 @@
+/*
+Theme Name: HAWLAST
+Theme URI: https://www.hawlast.com/blog
+Author: Hawlast Ventures
+Author URI: https://www.hawlast.com
+Description: Fast, minimal classic theme for the HAWLAST blog. Matches the hawlast.com homepage design: navy and orange, self-hosted Inter, no jQuery and no render-blocking CSS.
+Version: 1.0.0
+Requires at least: 6.3
+Tested up to: 7.0
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: hawlast
+Tags: blog, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, wide-blocks
+*/
+
+/* --------------------------------------------------------------------------
+   1. Design tokens.
+   These values are duplicated in the inline critical CSS printed in header.php
+   so the first screen paints before this file arrives. Keep the two in sync.
+   -------------------------------------------------------------------------- */
+:root {
+	--ink: #10204A;
+	--paper: #FFFFFF;
+	--soft: #FBF7F1;
+	--muted: #5B6470;
+	--line: #E6E1D8;
+	--orange: #E8590C;
+	--on-orange: #0B0F14;
+	--wrap: 1120px;
+	--read: 720px;
+	--radius: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   2. Base
+   -------------------------------------------------------------------------- */
+body {
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+	font-size: 17px;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+video {
+	max-width: 100%;
+	height: auto;
+}
+
+img {
+	display: block;
+}
+
+a {
+	color: inherit;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0 0 28px;
+	font-size: 16px;
+}
+
+th,
+td {
+	border: 1px solid var(--line);
+	padding: 10px 14px;
+	text-align: left;
+}
+
+blockquote {
+	margin: 32px 0;
+	padding: 4px 0 4px 24px;
+	border-left: 6px solid var(--orange);
+	color: var(--muted);
+	font-size: 19px;
+}
+
+code,
+kbd,
+pre {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 0.92em;
+}
+
+pre {
+	background: var(--soft);
+	border: 1px solid var(--line);
+	border-radius: 14px;
+	padding: 18px 20px;
+	overflow-x: auto;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid var(--line);
+	margin: 40px 0;
+}
+
+figure {
+	margin: 32px 0;
+}
+
+figcaption {
+	color: var(--muted);
+	font-size: 14px;
+	margin-top: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Accessibility helpers
+   -------------------------------------------------------------------------- */
+.skip-link {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 100;
+	background: var(--ink);
+	color: var(--paper);
+	padding: 14px 22px;
+	border-radius: 0 0 14px 0;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.skip-link:focus {
+	left: 0;
+}
+
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+	background: var(--paper);
+	clip: auto;
+	clip-path: none;
+	color: var(--ink);
+	display: block;
+	font-size: 15px;
+	height: auto;
+	left: 8px;
+	padding: 14px 22px;
+	text-decoration: none;
+	top: 8px;
+	width: auto;
+	z-index: 100000;
+	border-radius: 14px;
+}
+
+:focus-visible {
+	outline: 3px solid var(--orange);
+	outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Layout
+   -------------------------------------------------------------------------- */
+.wrap {
+	max-width: var(--wrap);
+	margin: 0 auto;
+	padding: 0 24px;
+}
+
+.read {
+	max-width: var(--read);
+	margin: 0 auto;
+	padding: 0 24px;
+}
+
+.site-main {
+	min-height: 40vh;
+}
+
+/* --------------------------------------------------------------------------
+   5. Navigation
+   -------------------------------------------------------------------------- */
+.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	padding: 14px 16px 0;
+	background: linear-gradient(to bottom, var(--paper) 72%, rgba(255, 255, 255, 0));
+}
+
+.nav-pill {
+	max-width: var(--wrap);
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	background: var(--paper);
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	padding: 10px 12px 10px 22px;
+	box-shadow: 0 6px 24px rgba(11, 15, 20, 0.08);
+}
+
+.nav-logo {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	flex-shrink: 0;
+}
+
+.nav-logo img {
+	height: 40px;
+	width: auto;
+}
+
+.nav-links {
+	display: flex;
+	gap: 30px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.nav-links a {
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 15px;
+	color: var(--muted);
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+	color: var(--ink);
+}
+
+.nav-actions {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.nav-toggle {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	width: 42px;
+	height: 42px;
+	padding: 0;
+	background: var(--paper);
+	border: 1.5px solid var(--line);
+	border-radius: 999px;
+	color: var(--ink);
+	cursor: pointer;
+}
+
+.nav-toggle svg {
+	width: 20px;
+	height: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   6. Buttons
+   -------------------------------------------------------------------------- */
+.btn {
+	display: inline-block;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 15px;
+	padding: 10px 20px;
+	border-radius: 999px;
+	border: 1.5px solid transparent;
+	white-space: nowrap;
+}
+
+.btn-fill {
+	background: var(--orange);
+	color: var(--on-orange);
+}
+
+.btn-fill:hover {
+	filter: brightness(1.08);
+	color: var(--on-orange);
+}
+
+.btn-line {
+	border-color: var(--ink);
+	color: var(--ink);
+}
+
+.btn-line:hover {
+	background: var(--ink);
+	color: var(--paper);
+}
+
+.btn-lg {
+	padding: 15px 28px;
+	font-size: 17px;
+}
+
+.link-arrow {
+	color: var(--ink);
+	font-weight: 600;
+	text-decoration: none;
+	border-bottom: 2px solid var(--orange);
+	padding-bottom: 2px;
+}
+
+.link-arrow:hover,
+.link-arrow:focus-visible {
+	color: var(--orange);
+}
+
+/* --------------------------------------------------------------------------
+   7. Page titles
+   -------------------------------------------------------------------------- */
+.page-head {
+	padding: 72px 0 40px;
+	border-bottom: 1px solid var(--line);
+	margin-bottom: 56px;
+}
+
+.page-head .eyebrow {
+	color: var(--orange);
+	font-weight: 600;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin: 0 0 14px;
+}
+
+.page-head h1 {
+	font-size: clamp(34px, 6vw, 60px);
+	line-height: 1.08;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	margin: 0;
+	max-width: 18ch;
+}
+
+.page-head .lede {
+	max-width: 60ch;
+	font-size: 19px;
+	color: var(--muted);
+	margin: 20px 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   8. Post cards
+   -------------------------------------------------------------------------- */
+.post-list {
+	list-style: none;
+	margin: 0;
+	padding: 0 0 24px;
+}
+
+.post-card {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0;
+	padding: 36px 0;
+	border-bottom: 1px solid var(--line);
+}
+
+.post-card:last-child {
+	border-bottom: 0;
+}
+
+.card__media {
+	margin: 0 0 22px;
+	border-radius: var(--radius);
+	overflow: hidden;
+	background: var(--soft);
+}
+
+.card__media img {
+	width: 100%;
+	border-radius: var(--radius);
+}
+
+.card__title {
+	font-size: clamp(24px, 3vw, 32px);
+	line-height: 1.14;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	margin: 0 0 10px;
+}
+
+.card__title a {
+	text-decoration: none;
+}
+
+.card__title a:hover,
+.card__title a:focus-visible {
+	color: var(--orange);
+}
+
+.card__meta {
+	color: var(--muted);
+	font-size: 14px;
+	margin: 0 0 12px;
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.card__meta .sep {
+	color: var(--line);
+}
+
+.card__excerpt {
+	color: var(--muted);
+	margin: 0 0 16px;
+	max-width: 62ch;
+}
+
+@media (min-width: 861px) {
+	.post-card {
+		grid-template-columns: 320px 1fr;
+		gap: 36px;
+		align-items: start;
+	}
+
+	.card__media {
+		margin: 0;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   9. Single post
+   -------------------------------------------------------------------------- */
+.entry-hero {
+	padding: 64px 0 0;
+}
+
+.entry-hero h1 {
+	font-size: clamp(34px, 5.4vw, 56px);
+	line-height: 1.08;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	margin: 14px 0 16px;
+}
+
+.entry-meta {
+	color: var(--muted);
+	font-size: 15px;
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.entry-figure {
+	margin: 36px 0 0;
+}
+
+.entry-figure img {
+	width: 100%;
+	border-radius: var(--radius);
+}
+
+.entry-content {
+	padding: 40px 0 8px;
+	font-size: 18px;
+	line-height: 1.7;
+}
+
+.entry-content > * {
+	margin: 0 0 26px;
+}
+
+.entry-content > h2 {
+	font-size: clamp(26px, 3.4vw, 34px);
+	line-height: 1.14;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	margin: 48px 0 16px;
+}
+
+.entry-content > h3 {
+	font-size: 22px;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	margin: 38px 0 12px;
+}
+
+.entry-content > ul,
+.entry-content > ol {
+	padding-left: 22px;
+}
+
+.entry-content li {
+	margin-bottom: 10px;
+}
+
+.entry-content a {
+	color: var(--ink);
+	text-decoration: underline;
+	text-decoration-color: var(--orange);
+	text-underline-offset: 3px;
+}
+
+.entry-content a:hover,
+.entry-content a:focus-visible {
+	color: var(--orange);
+}
+
+.entry-footer {
+	border-top: 1px solid var(--line);
+	margin-top: 48px;
+	padding: 28px 0 8px;
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.post-nav {
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	border-top: 1px solid var(--line);
+	padding: 28px 0 0;
+	margin-top: 36px;
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.post-nav a {
+	text-decoration: none;
+	max-width: 45%;
+}
+
+.post-nav a:hover,
+.post-nav a:focus-visible {
+	color: var(--orange);
+}
+
+.post-nav .next {
+	text-align: right;
+	margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   10. Comments
+   -------------------------------------------------------------------------- */
+.comments-area {
+	border-top: 1px solid var(--line);
+	padding: 48px 0 72px;
+}
+
+.comment-list {
+	list-style: none;
+	margin: 0 0 48px;
+	padding: 0;
+}
+
+.comment-list .children {
+	list-style: none;
+	margin: 0;
+	padding-left: 24px;
+	border-left: 2px solid var(--line);
+}
+
+.comment-body {
+	padding: 22px 0;
+	border-bottom: 1px solid var(--line);
+}
+
+.comment-author {
+	font-weight: 600;
+}
+
+.comment-author img {
+	border-radius: 999px;
+	float: left;
+	margin-right: 14px;
+}
+
+.comment-meta {
+	color: var(--muted);
+	font-size: 14px;
+}
+
+.comment-metadata {
+	clear: both;
+	padding-top: 6px;
+}
+
+.comment-respond {
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	padding: 28px;
+	background: var(--soft);
+}
+
+.comment-reply-title {
+	font-size: 24px;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	margin: 0 0 8px;
+}
+
+.comment-form label {
+	display: block;
+	font-weight: 500;
+	font-size: 15px;
+	margin: 14px 0 6px;
+}
+
+.comment-form input[type="text"],
+.comment-form input[type="email"],
+.comment-form input[type="url"],
+.comment-form textarea {
+	width: 100%;
+	max-width: 100%;
+	padding: 12px 14px;
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	background: var(--paper);
+	color: var(--ink);
+	font: inherit;
+	font-size: 16px;
+}
+
+.comment-form textarea {
+	min-height: 150px;
+}
+
+.comment-form .submit {
+	background: var(--orange);
+	color: var(--on-orange);
+	border: 0;
+	border-radius: 999px;
+	padding: 13px 26px;
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	margin-top: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   11. Search, 404, pagination
+   -------------------------------------------------------------------------- */
+.search-form {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	max-width: 520px;
+	margin: 0 0 40px;
+}
+
+.search-form label {
+	flex: 1 1 240px;
+}
+
+.search-form .search-field {
+	width: 100%;
+	padding: 14px 18px;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	font: inherit;
+	font-size: 16px;
+	background: var(--paper);
+	color: var(--ink);
+}
+
+.search-form .search-submit {
+	background: var(--ink);
+	color: var(--paper);
+	border: 0;
+	border-radius: 999px;
+	padding: 14px 26px;
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.search-none {
+	color: var(--muted);
+}
+
+.notice-404 {
+	padding: 120px 0 140px;
+	text-align: center;
+}
+
+.notice-404 h1 {
+	font-size: clamp(48px, 10vw, 110px);
+	line-height: 1;
+	letter-spacing: -0.04em;
+	margin: 0 0 20px;
+	color: var(--orange);
+}
+
+.notice-404 p {
+	color: var(--muted);
+	max-width: 44ch;
+	margin: 0 auto 28px;
+}
+
+.pagination {
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	align-items: center;
+	margin: 48px 0 72px;
+	list-style: none;
+	padding: 0;
+	flex-wrap: wrap;
+}
+
+.pagination .page-numbers,
+.pagination a {
+	display: inline-block;
+	min-width: 42px;
+	text-align: center;
+	text-decoration: none;
+	padding: 10px 14px;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	font-weight: 600;
+	font-size: 15px;
+	color: var(--ink);
+}
+
+.pagination .page-numbers.current {
+	background: var(--ink);
+	color: var(--paper);
+	border-color: var(--ink);
+}
+
+.pagination a:hover,
+.pagination a:focus-visible {
+	border-color: var(--orange);
+	color: var(--orange);
+}
+
+/* --------------------------------------------------------------------------
+   12. Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+	border-top: 1px solid var(--line);
+	padding: 28px 0 40px;
+	color: var(--muted);
+	font-size: 14px;
+}
+
+.site-footer .wrap {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.footer-menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.footer-menu a {
+	margin: 0;
+}
+
+.footer-menu a:hover,
+.footer-menu a:focus-visible {
+	color: var(--orange);
+}
+
+/* --------------------------------------------------------------------------
+   13. Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+	.nav-pill {
+		position: relative;
+		padding-left: 16px;
+	}
+
+	.nav-links {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 16px;
+		right: 16px;
+		flex-direction: column;
+		gap: 0;
+		background: var(--paper);
+		border: 1px solid var(--line);
+		border-radius: 20px;
+		box-shadow: 0 10px 30px rgba(11, 15, 20, 0.1);
+		padding: 8px;
+	}
+
+	.nav-links.is-open {
+		display: flex;
+	}
+
+	.nav-links a {
+		display: block;
+		padding: 12px 16px;
+		font-size: 16px;
+	}
+
+	.nav-toggle {
+		display: inline-flex;
+	}
+
+	.nav-logo img {
+		height: 34px;
+	}
+
+	.btn-line.hide-s {
+		display: none;
+	}
+
+	.page-head {
+		padding-top: 48px;
+	}
+}
+
+@media (max-width: 480px) {
+	body {
+		font-size: 16px;
+	}
+
+	.wrap,
+	.read {
+		padding: 0 18px;
+	}
+
+	.entry-content {
+		font-size: 17px;
+	}
+
+	.site-header {
+		padding: 10px 12px 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+@media print {
+	.site-header,
+	.site-footer,
+	.comments-area,
+	.post-nav {
+		display: none;
+	}
+}
