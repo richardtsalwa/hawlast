@@ -1,31 +1,16 @@
 # ============================================================================
 #  /blog  (WordPress)
-#  Ignore EVERYTHING in blog/ EXCEPT wp-content/themes and wp-content/plugins.
+#  Ignore EVERYTHING in blog/ EXCEPT wp-content/themes/hawlast
 #  Those two are your own work and stay in version control.
 #  WordPress core, wp-content/uploads, cache and wflogs are not tracked.
 # ============================================================================
-# Ignore every direct child of /blog (wp-admin, wp-includes, root *.php, ...).
-/blog/*
-# Re-open wp-content so its children can be evaluated.
-!/blog/wp-content/
-# Ignore every direct child of wp-content (uploads, cache, wflogs, ...).
-/blog/wp-content/*
-# Re-open ONLY the two folders you own. Git does not descend into an ignored
-# directory, so these two negations are what keep your themes and plugins.
-/blog/wp-content/themes/
-!/blog/wp-content/themes/
-/blog/wp-content/plugins/
-!/blog/wp-content/plugins/
 
-# Never commit the blog database credentials.
-/blog/wp-config.php
-# Wordfence and plugin generated data.
-/blog/wp-content/uploads/
-/blog/wp-content/cache/
-/blog/wp-content/wfcache/
-/blog/wp-content/w3tc-config/
-/blog/wp-content/w3tc/
-/blog/wp-content/wflogs/
+/blog/*
+!/blog/wp-content/
+/blog/wp-content/*
+!/blog/wp-content/themes/
+/blog/wp-content/themes/*
+!/blog/wp-content/themes/hawlast/
 
 
 # Exclude environment or runtime logs

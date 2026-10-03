@@ -47,12 +47,15 @@ Today the business runs **disconnected systems**:
 ### 2.2 Client Dashboard Features
 | Module | Capability |
 |---|---|
-| **Domains** | View all registered domains, registrar status, expiry date, auto-renew flag, renew action, nameservers |
-| **Hosting** | View hosting packages, server hostname (masked), cPanel login link, due date, suspend/reactivate request |
+| **Domains** | View **all** registered domains (portfolio view), registrar status, expiry date, auto-renew flag, renew action, nameservers |
+| **Hosting** | View hosting packages, server hostname (masked), cPanel login link, due date, suspend/reactivate request, **upgrade / downgrade package**, **add storage (disk quota) add-on** |
 | **Invoices** | View paid & outstanding invoices, download, online payment (M-Pesa) |
-| **SMS/Airtime Balance** | View **KES** balance, top up via M-Pesa Paybill, transaction history |
+| **SMS/Airtime Balance** | View **KES** balance, top up via M-Pesa Paybill, transaction history, **buy SMS credit bundles**, **run bulk SMS campaigns**, **order & manage SMS Sender IDs** |
+| **WhatsApp** | Buy a WhatsApp Business API number/subscription and **send WhatsApp messages to their own customers** from the dashboard |
 | **Service Orders** | Order **SEO Services**, **AI Integration**, **Business Automation Consultancy** |
 | **Support** | Raise tickets, see ticket status |
+
+> Full roadmap and rules for the self-service portal in **§18**.
 
 ### 2.3 Admin Control Panel Features
 | Module | Capability |
@@ -404,6 +407,8 @@ All DB access follows the project rules: `require_once` the module's `config.php
 | **6.5** | Pillar landing pages & copy written to §14 (cloud migration, fintech/M-Pesa, AI automation, data sovereignty). |
 | **7** | Admin control panel polish, job monitor, audit log, go-live. |
 | **8** | Public API hardening, token auth, FCM push wiring — Android app becomes buildable. |
+| **9** | **Client self-service portal (§18)** — multi-domain portfolio, self-serve renewals, hosting package change + storage add-ons. |
+| **10** | **Messaging products (§18.5–§18.7)** — SMS credit bundles, bulk SMS campaigns, Sender ID ordering, WhatsApp Business API subscription + sending. |
 
 ---
 
@@ -1019,4 +1024,153 @@ the S16 hero redesign work.
 
 ---
 
-*Document created as a planning artefact only. No database changes have been executed.*
+## 18. Client Self-Service Portal — Future Roadmap
+
+> **Business driver:** renewal reminders are currently sent **to the client by the admin**, which is
+> manual, easy to forget, and does not scale. The strategic fix is to stop chasing clients by hand and
+> instead give every client a dashboard where they **manage their own domains, renewals, hosting,
+> storage and messaging** — 24/7, without a phone call. Admin moves from *doing the work* to
+> *approving exceptions*.
+>
+> **Status:** planning artefact only. No code, no database changes. Every `CREATE TABLE` / `ALTER TABLE`
+> implied here is **blocked until the exact SQL is shown and explicitly approved** (`.clinerules`).
+
+### 18.1 What Changes For The Admin Today
+
+| Today (manual) | Tomorrow (self-service) |
+|---|---|
+| Admin emails/SMS's "your domain `example.co.ke` expires in 15 days, please renew" | Dashboard shows the client an **expiry countdown** + a **Pay & Renew** button with the amount |
+| Admin renews the domain on Sav.com on the client's behalf | Client clicks **Renew**, pays via M-Pesa, the renewal fires on the backend |
+| Admin quotes a bigger hosting plan over the phone | Client clicks **Upgrade**, price difference prorated, invoice raised, account auto-provisioned |
+| Admin resells SMS credit manually, one client at a time | Client tops up the **KES wallet** and buys **SMS bundles** from the dashboard |
+| Admin never runs campaigns for the client | Client creates a **bulk SMS campaign** and sends it to their own list |
+| "Do you have a Sender ID?" — never formalised | Client **orders a Sender ID** in the dashboard and tracks approval status |
+| WhatsApp outreach is a consultancy project each time | Client buys a **WhatsApp Business API** subscription and **sends to their own customers** |
+
+**Admin keeps control** of: price approval, refunds, disputes, abuse/complaint escalation, and any
+high-value or out-of-policy action (see §18.8).
+
+### 18.2 Multi-Domain Portfolio
+
+- A client may hold **any number of domains** under **one account / one login** (§2.1).
+- The dashboard's default landing module is a **portfolio table**, not a single-domain form:
+  `domain · registrar · expiry date · days remaining · auto-renew · status · actions`.
+- Filters and sorting: expiring soonest, auto-renew off, grace/suspended, by TLD, by registrar status.
+- **Bulk actions** on the portfolio (select many → renew all / toggle auto-renew) — each action
+  produces its own invoice line so money is never bundled ambiguously.
+- Domain search & registration stays on the §3 Sav.com flow, but the **cart may hold several domains**,
+  paid in one M-Pesa transaction and registered each idempotently (§3.2).
+- **Nameservers** editable by the client from the dashboard, validated against the zone format before
+  being pushed to the registrar; a zone/ownership check is required before any nameserver change.
+- **Transfer in:** the client starts an inbound transfer, pays the 1-year renewal, and the platform
+  monitors the transfer until the registrar confirms, then flips the record to `active`.
+- Guard: a domain may never be renewed, transferred or released without an explicit confirmation step
+  showing the **amount in KES** and the **resulting expiry date**.
+
+### 18.3 Self-Serve Renewals
+
+- Every service row carries `renewal_price_kes`, `expires_at`, `auto_renew` and `grace_days`.
+- **Renew action** on any service: shows price + resulting expiry, then M-Pesa checkout; on confirmed
+  payment a **renewal job** calls the registrar / host (§3, §4) and writes the new expiry back.
+- **Auto-renew**: opt-in per service with an explicit consent tick and a saved payment method; the daily
+  cron attempts the charge inside the renewal window (§5) and warns the client before it fires.
+- If auto-renew fails (insufficient balance, declined STK), the client sees a **retry** banner and the
+  service follows the existing escalation policy `grace` → `suspended` (§5.2).
+- The §5 reminder ladder (90/60/30/15) remains, but it now **points the client at the dashboard** rather
+  than asking them to reply to a person — reminders deep-link to the service's renewal screen.
+
+### 18.4 Hosting Self-Service — Package Change & Storage Add-Ons
+
+- **Change package** (upgrade or downgrade) directly from the dashboard:
+  `current package → target package` → show **prorated cost** and the new due date → M-Pesa payment →
+  WHM/cPanel change-package call (§4). Downgrades past a usage threshold require admin approval.
+- **Add storage** as a metered add-on: extra disk quota (GB) purchased per service, priced per GB per
+  year and shown as `used / total` in the dashboard; the purchase is instant and lands on the invoice.
+- Add-on catalogue (covering the storage requirement above): **extra disk space**, extra bandwidth,
+  extra databases, extra mailboxes, dedicated IP — priced in a `hawlast_addons` catalogue so pricing is
+  data, not code.
+- The client can also self-request **suspend** of their own hosting; **reactivate remains admin-only**
+  until §15 item 2 is decided (§18.9).
+- All changes are idempotent and logged; a failed WHM call leaves the package unchanged and raises an
+  admin task — the client is never charged for a change that did not happen.
+
+### 18.5 Buy SMS Credit & Bulk SMS
+
+- **Wallet-funded SMS**: the client tops up the **KES** wallet (§6.3), then buys **SMS bundles**
+  (e.g. 1k / 10k / 100k pages) at the configured markup; pages are credited to an SMS page balance
+  through a ledger row.
+- **Bulk SMS campaign** in the dashboard:
+  `create campaign → choose Sender ID (§18.6) → upload/list recipients → compose → review → send`.
+- Recipient lists are stored encrypted; every send writes a per-recipient status
+  (`queued → sent → delivered / failed`) surfaced as a campaign report and downloadable export.
+- Scheduling (send now / send at a time), a message-length guard (parts vs characters), and a hard
+  **cost preview** — the exact page count and KES cost are always shown and must be confirmed before
+  dispatch.
+- Every message must carry an **opt-out** instruction and honour a **STOP** reply that flips the
+  recipient to suppressed, consistent with the §17.B5 privacy/suppression design.
+- Abuse guardrails: per-client daily send ceiling, a complaint threshold that auto-pauses a campaign,
+  and an admin kill-switch both per client and platform-wide.
+
+### 18.6 Order SMS Sender ID
+
+- A **Sender ID** is the alphanumeric name shown to the recipient; it must be **registered and approved
+  by the telco/aggregator before use**, so the order is a *workflow*, not a checkout.
+- Order flow: `choose name + type (Alphanumeric / Numeric) → business name & registration details
+  → submit → pending_approval → approved (usable) | rejected (reason shown, may re-order)`.
+- The dashboard shows each Sender ID's **status, linked content type and monthly usage**; a campaign
+  can only select an **approved** Sender ID.
+- **Ownership:** a Sender ID belongs to one client account; names are unique platform-wide and are
+  validated against reserved/prohibited patterns before submission.
+- Registration details are PII → stored encrypted, never selected via `SELECT *`, and only ever rendered
+  to the owning client and to admins on an explicit action (consistent with §17).
+
+### 18.7 WhatsApp — Clients Message Their Own Customers
+
+- The platform becomes the **on-ramp for WhatsApp Business API**, not just a consultancy (this aligns
+  with the **AI Automation** pillar in §14.2).
+- **Subscribe:** the client buys a WhatsApp Business subscription and gets a linked number provisioned;
+  the platform holds the **WABA + phone number + API credentials** on the client's behalf.
+- **Send:** from the dashboard the client sends WhatsApp messages to **their own opted-in customers**
+  via a campaign composer similar to §18.5 (audience list, template, schedule, per-message status).
+- **Templates:** business-initiated messages must use **approved templates**; the platform keeps a
+  template library with approval status and rejects unapproved free-form sends outside the customer-
+  service window.
+- Chat **handoff**: a conversation can be escalated to a human agent or an AI agent (AI Automation
+  pillar), and keyword-triggered auto-replies are configured on the same screen.
+- Consent & compliance: recipients must be opted-in; the platform records consent proof, honours
+  opt-outs, enforces Meta's conversation categories/tiers, and surfaces 24-hour customer-service windows.
+- Credentials and message bodies are PII — content is **never** dumped into logs or exports; reports
+  carry only counts and statuses (§17.B display rules).
+
+### 18.8 Non-Functional & Guardrails
+
+- **Permissions:** every §18 action is role-checked (client vs admin) server-side; hiding UI is cosmetic.
+- **Money:** pricing, proration and cost previews are computed server-side in KES and shown before any
+  irreversible action; balances are derived from the ledger, never from a mutable cached field.
+- **Idempotency:** renewals, package changes, add-ons, campaigns and provisioning each get a request id
+  + job row, so retries never double-charge or double-send.
+- **Rate limits & abuse:** per-client send quotas, per-IP login throttling, and an admin kill-switch.
+- **Privacy/PII:** recipient numbers, message bodies, Sender ID business details and chat content are all
+  PII — encrypt at rest, mask in listings, never `SELECT *`, and honour the §17.B erasure/suppression
+  flows (an erasure request must also suppress that contact from future outbound campaigns).
+- **Audit:** every self-service mutation writes an audit row (who, what, amount, before/after status).
+
+### 18.9 Assumptions & Open Questions
+
+- **Reactivation:** allow clients to self-serve hosting reactivation, or keep it admin-only (§15 item 2)?
+- **Pricing/markup:** fixed KES vs % markup on domains, hosting, SMS pages, Sender IDs and the WhatsApp
+  subscription (§15 item 1)?
+- **Billing model:** are SMS pages sold **prepaid as bundles**, **post-paid on a monthly invoice**, or
+  both? Same question for storage add-ons (annual vs monthly).
+- **Reseller tier:** do larger clients get sub-accounts / resale pricing (wholesale pages, custom Sender
+  IDs), and may a client ever send **on behalf of** another client?
+- **Sender ID provider:** which telco/aggregator handles registration and approval turnaround?
+- **WhatsApp:** Meta-hosted (WABA) vs an aggregator/BSP — who owns the number and who bills?
+- **Proration:** how are mid-term upgrades/downgrades and storage add-ons prorated and refunded?
+- **Compliance:** confirm retention/consent rules for recipient lists, message bodies and chat logs so
+  they align with §17.B and current data-protection expectations.
+
+---
+
+*Section 18 added as a planning artefact only. No database or code changes have been executed; all
+implied schema changes remain blocked pending explicit SQL approval.*
