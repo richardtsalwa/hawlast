@@ -802,3 +802,115 @@ function hawlast_primary_menu_fallback() {
 
 	echo '</ul>';
 }
+
+/**
+ * Login screen branding (blog/wp-login.php).
+ *
+ * `wp-login.php` is a core file, so nothing here edits it. The logo is injected
+ * through the `login_headertext` / `login_headerurl` filters and the colours
+ * are printed on `login_head`, both of which are the supported extension points
+ * for the login screen.
+ *
+ * The colours below mirror the design tokens in style.css. Keep the two in sync.
+ *
+ * @package Hawlast
+ */
+
+/**
+ * The logo markup shown above the login form.
+ *
+ * Prefers the logo uploaded in the Customizer so the login screen always matches
+ * whatever the site header is showing, and falls back to the logo bundled with
+ * the theme when none has been set.
+ *
+ * `wp-admin/css/login.css` clips the header link to an 84px square and hides the
+ * link text with `text-indent: -9999px`, so hawlast_login_styles() has to undo
+ * both before an image of any proportion can be seen.
+ *
+ * @return string
+ */
+function hawlast_login_logo_markup() {
+	$logo_id = (int) get_theme_mod( 'custom_logo' );
+
+	if ( $logo_id ) {
+		$image = wp_get_attachment_image(
+			$logo_id,
+			'full',
+			false,
+			array(
+				'class'         => 'hawlast-login-logo',
+				'decoding'      => 'async',
+				'loading'       => 'eager',
+				'fetchpriority' => 'high',
+			)
+		);
+
+		if ( $image ) {
+			return $image;
+		}
+	}
+
+	return sprintf(
+		'<img class="hawlast-login-logo" src="%s" width="168" height="40" alt="%s" decoding="async">',
+		esc_url( HAWLAST_URI . '/assets/img/hawlast-logo.svg' ),
+		esc_attr( get_bloginfo( 'name', 'display' ) )
+	);
+}
+
+/**
+ * Replace the "Powered by WordPress" login logo text with the Hawlast logo.
+ *
+ * @param string $text Login header logo link text.
+ * @return string
+ */
+function hawlast_login_headertext( $text ) {
+	return hawlast_login_logo_markup();
+}
+add_filter( 'login_headertext', 'hawlast_login_headertext' );
+
+/**
+ * Point the login logo at the blog home instead of wordpress.org.
+ *
+ * @param string $url Login header logo link URL.
+ * @return string
+ */
+function hawlast_login_headerurl( $url ) {
+	return hawlast_home_url();
+}
+add_filter( 'login_headerurl', 'hawlast_login_headerurl' );
+
+/**
+ * Brand the login screen.
+ *
+ * Runs on `login_head` at priority 20, after core's own print_admin_styles()
+ * at priority 9, so these rules win without needing !important.
+ */
+function hawlast_login_styles() {
+	printf(
+		'<style id="hawlast-login">
+		@font-face{font-family:Inter;font-style:normal;font-weight:100 900;font-display:swap;src:url(%s) format("woff2")}
+		body.login{background:#FBF7F1;color:#10204A;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+		#login{width:380px;padding:6vh 24px 24px;margin:auto}
+		#login .wp-login-logo a{background-image:none;width:auto;height:auto;line-height:1;text-indent:0;overflow:visible;display:inline-block}
+		#login .wp-login-logo img{display:block;width:auto;height:auto;max-width:280px;max-height:72px;margin:0 auto}
+		#login .wp-login-logo a:hover{opacity:.9}
+		#login form{margin:28px 0 0;padding:28px 26px;background:#fff;border:1px solid #E6E1D8;border-radius:20px;box-shadow:0 8px 30px rgba(16,32,74,.08);overflow:visible}
+		#login form label{font-size:14px;font-weight:600;color:#10204A;margin-bottom:6px}
+		#login .forgetmenot label{font-weight:400;color:#5B6470}
+		#login form .input,#login input[type=text],#login input[type=password]{font-family:inherit;font-size:16px;line-height:1.4;min-height:46px;margin:0 0 18px;padding:11px 14px;color:#10204A;background:#fff;border:1px solid #E6E1D8;border-radius:10px;box-shadow:none}
+		#login form .input:focus,#login input[type=text]:focus,#login input[type=password]:focus{border-color:#E8590C;box-shadow:0 0 0 3px rgba(232,89,12,.18);outline:2px solid transparent}
+		#login .wp-pwd .wp-hide-pw{color:#5B6470}
+		#login form .submit{padding:0;margin:24px 0 0}
+		#login .button:not(.wp-hide-pw){background:#E8590C;border:1px solid #E8590C;color:#0B0F14;font-size:15px;font-weight:600;border-radius:999px;min-height:46px;padding:0 24px;box-shadow:none;cursor:pointer}
+		#login .button:not(.wp-hide-pw):hover,#login .button:not(.wp-hide-pw):focus{background:#D14E08;border-color:#D14E08;color:#0B0F14}
+		#login .message{border-left:4px solid #E8590C;background:#fff;color:#10204A;border-radius:0 10px 10px 0}
+		#login .notice-error{border-left-color:#CC1818}
+		#login .success{border-left-color:#4AB866}
+		#login #nav a,#login #backtoblog a{color:#5B6470}
+		#login #nav a:hover,#login #backtoblog a:hover{color:#10204A}
+		#login #backtoblog{margin:22px 0 0}
+		</style>',
+		esc_url( HAWLAST_URI . '/assets/fonts/inter-var-latin.woff2' )
+	);
+}
+add_action( 'login_head', 'hawlast_login_styles', 20 );
