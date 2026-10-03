@@ -10,7 +10,8 @@ $c = '<?php
 
 header("Content-Type: application/json");
 
-require_once __DIR__ . "/../config.php";
+require_once dirname(__DIR__, 2) . "/config.php";
+require_once dirname(__DIR__) . "/auth.php";
 require_once __DIR__ . "/../database.php";
 require_once dirname(__DIR__, 2) . "/hawlastke.php";
 require_once __DIR__ . "/../../libraries.php";

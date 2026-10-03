@@ -34,9 +34,8 @@
 .txt
 .md 
 
-# Exclude per-folder config.php (database credentials)
+# Exclude root config.php (database credentials)
 /config.php
-/saas/config.php
 ads.txt
 .user.ini
 domain.jpg

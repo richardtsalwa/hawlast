@@ -2,7 +2,8 @@
 if ( !empty($_POST)) {
 //THIS FILES IS USED BY THE MPESA CONFIRMATION SCRIPT
 
-require '../config.php';
+require_once dirname(__DIR__, 2) . '/config.php';
+require_once dirname(__DIR__) . '/auth.php';
 require '../database.php';
 require_once dirname(__DIR__, 2) . '/hawlastke.php';
 

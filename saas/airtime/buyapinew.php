@@ -1,5 +1,6 @@
 <?php
-require '../config.php';
+require_once dirname(__DIR__, 2) . '/config.php';
+require_once dirname(__DIR__) . '/auth.php';
 require '../database.php';
 require_once dirname(__DIR__, 2) . '/hawlastke.php';
 
