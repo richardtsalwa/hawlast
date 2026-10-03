@@ -1,4 +1,42 @@
 <?php
+
+/*
+ * BASE_URL is derived from DOCUMENT_ROOT, NOT from scheme + HTTP_HOST.
+ * Locally XAMPP serves this project from d:\xampp\htdocs\hawlast, so the base
+ * path is "/hawlast"; in production the project sits at the site root, so the
+ * base path is empty. Deriving it from the host alone yields
+ * http://localhost/images/... locally (the /hawlast segment is missing) and
+ * 404s every asset and link.
+ */
+function hawlast_base_url(): string {
+    $docRoot   = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
+    $configDir = rtrim(str_replace('\\', '/', __DIR__), '/');
+
+    $basePath = '';
+    if ($docRoot !== '' && $docRoot !== '/' && stripos($configDir . '/', $docRoot . '/') === 0) {
+        $basePath = substr($configDir, strlen($docRoot));
+    }
+
+    $isHttps = (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
+        || (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
+
+    $scheme = $isHttps ? 'https' : 'http';
+    $host   = $_SERVER['HTTP_HOST'] ?? 'www.hawlast.com';
+
+    return rtrim($scheme . '://' . $host . rtrim($basePath, '/'), '/');
+}
+
+if (!defined('BASE_URL')) {
+    define('BASE_URL', hawlast_base_url());
+}
+
+function hawlast_url(string $path = ''): string {
+    $base = rtrim(BASE_URL, '/');
+    $path = trim((string) $path, '/');
+    return $path === '' ? $base : $base . '/' . $path;
+}
+
+
 // This is used in the mpesa/confirmation.php to record commissions
 function addCommission(PDO $pdo, int $lastid, string $affiliate, float $amount): bool {
     $stmt = $pdo->prepare("INSERT INTO airtime_commission (mpesaId, affiliate, amount) VALUES (?,?,?)");

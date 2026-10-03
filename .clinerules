@@ -75,6 +75,7 @@
 ### Codebase Organization
 - **Environment:** PHP 8.2.12 | MySQL 8.2.12 (mysqlnd) | Apache/2.4.58 (Win64 XAMPP local / cPanel production).
 - **Routing:** Entry points stay in the root (e.g., `index.php`, `hawlastke.php`). Feature modules reside in `admin/`, `blog/`, `saas/`, `teachers/`, `deliveries/`, `lish/`, etc.
+- **Shared Helpers:** All non-secret shared functions belong in `hawlastke.php` (root) — e.g. `hawlast_url()`, `hawlast_base_url()`, `addCommission()`. `config.php` is reserved strictly for credentials and the `$pdo` connection. Files in module folders include it with `require_once dirname(__DIR__) . '/hawlastke.php';`.
 - **Frontend Assets:** Use raw/vanilla JavaScript AJAX and keep styles in existing bundles (`style.css`, `responsive.css`, `js/`).
 - **Error Handling:** Log errors to `php_errors.log`. Ensure `display_errors` is OFF in production.
 - **Linting:** Validate modified PHP files via PHP CLI (e.g., `"d:\xampp\php\php.exe" -l <file>`). If unavailable, explicitly state that linting was skipped.
@@ -95,14 +96,23 @@
   <a href="<?php echo esc_url( hawlast_url( 'book' ) ); ?>">Book a call</a>
   <img src="<?php echo esc_url( hawlast_url( 'images/hawlast-logo.svg' ) ); ?>" alt="">
   ```
-- **The base URL must be derived from `DOCUMENT_ROOT`**, not from scheme + host. Deriving it from `HTTP_HOST` yields `http://localhost` with no subdirectory, which reproduces the very bug this rule prevents:
+- **The base URL must be derived from `DOCUMENT_ROOT`**, not from scheme + host alone. Deriving it from `HTTP_HOST` yields `http://localhost` with no subdirectory, which reproduces the very bug this rule prevents.
+- **`hawlast_base_url()` and `hawlast_url()` live in `hawlastke.php` (root), NOT in `config.php`.** They are not credentials, secrets, tokens or passwords, so they belong with the other shared helpers. `config.php` is gitignored and holds secrets only — never move these helpers back into it, and never move any secret into `hawlastke.php`.
   ```php
-  // config.php — keep this form
-  $docRoot   = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
-  $configDir = str_replace( '\\', '/', __DIR__ ); // folder containing config.php
-  $basePath  = str_replace( $docRoot, '', $configDir );
+  // hawlastke.php — keep this form
+  function hawlast_base_url(): string {
+      $docRoot   = rtrim( str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? '' ), '/' );
+      $configDir = rtrim( str_replace( '\\', '/', __DIR__ ), '/' ); // folder containing hawlastke.php
+      $basePath  = '';
+      if ( $docRoot !== '' && stripos( $configDir . '/', $docRoot . '/' ) === 0 ) {
+          $basePath = substr( $configDir, strlen( $docRoot ) ); // '/hawlast' locally, '' in production
+      }
+      // ...scheme + host prepended to $basePath...
+      return rtrim( $scheme . '://' . $host . rtrim( $basePath, '/' ), '/' );
+  }
+
   if ( ! defined( 'BASE_URL' ) ) {
-      define( 'BASE_URL', rtrim( $basePath, '/' ) . '/' );
+      define( 'BASE_URL', hawlast_base_url() );
   }
 
   function hawlast_url( string $path = '' ): string {
@@ -111,9 +121,9 @@
       return $path === '' ? $base : $base . '/' . $path;
   }
   ```
-  This yields `/hawlast/` locally and `/` in production, so one expression is correct in both.
-  - Files needing these links must `require`/`include` `config.php` first (adjusting the relative path for module depth).
-  - Do not reintroduce a scheme + `HTTP_HOST` helper as the sole base: it is correct on production but silently broken locally.
+  This yields `http://localhost/hawlast` locally and `https://www.hawlast.com` in production, so one expression is correct in both.
+  - Files needing these links must `require`/`include` `hawlastke.php` first (adjusting the relative path for module depth), e.g. `require_once __DIR__ . '/hawlastke.php';` from the root or `require_once dirname(__DIR__) . '/hawlastke.php';` from a module folder. `config.php` no longer defines these — guard every existing call site with a `hawlastke.php` include.
+  - Scheme + host may be prepended to the `DOCUMENT_ROOT`-derived base path, but the **subdirectory segment must always come from `DOCUMENT_ROOT`**. A helper built from scheme + `HTTP_HOST` alone is correct on production but silently broken locally — never reintroduce that.
 - **WordPress blog (`blog/`) is a separate install.** Never use `hawlast_url()` inside `blog/wp-content/themes/`. Use WordPress APIs: `home_url()`, `get_template_directory_uri()`, `wp_get_attachment_url()`. Links that cross back to the main site use the full `https://www.hawlast.com/...` URL.
 - **Third-party absolute URLs** (analytics, CDNs, schema.org) use full `https://` literals. Never prefix them with `BASE_URL`.
 - **Before finishing any change that adds a link**, re-read the diff and confirm every `href="/..."` / `src="/..."` you introduced is either wrapped in `hawlast_url()` or is an intentional external `https://` URL.
