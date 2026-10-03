@@ -2,7 +2,8 @@ RewriteEngine On
 RewriteCond %{HTTP_USER_AGENT} ^.*(facebookexternalhit|meta-externalagent).*$ [NC]
 RewriteRule .* - [F,L]
 
-ErrorDocument 404 https://www.hawlast.com/dated.html
+# Playful 404 page (Swahili). Same absolute-URL convention used by the rest of this file.
+ErrorDocument 404 https://www.hawlast.com/404.php
 
 # Force HTTPS on production ONLY.
 # Local XAMPP has no SSL vhost, so forcing https://localhost made every
