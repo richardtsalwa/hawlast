@@ -110,6 +110,33 @@ function hawlast_content_width() {
 add_action( 'after_setup_theme', 'hawlast_content_width', 0 );
 
 /**
+ * Point the custom logo at the main site instead of the blog home.
+ *
+ * header.php calls `the_custom_logo()`, which links the logo to
+ * `home_url( '/' )` — the blog itself. The logo is the brand mark, so it
+ * should return to the main site like the other cross-site header links.
+ *
+ * Only the href is swapped. The `<span>` variant core emits on the front page
+ * is not a concern here because `unlink-homepage-logo` is not registered, so
+ * the logo is always wrapped in an anchor.
+ *
+ * @param string $html Custom logo markup.
+ * @return string
+ */
+function hawlast_custom_logo_link( $html ) {
+	if ( ! is_string( $html ) || '' === $html ) {
+		return $html;
+	}
+
+	return str_replace(
+		'href="' . esc_url( home_url( '/' ) ) . '"',
+		'href="' . esc_url( HAWLAST_SITE_URL . '/' ) . '"',
+		$html
+	);
+}
+add_filter( 'get_custom_logo', 'hawlast_custom_logo_link' );
+
+/**
  * Remove WordPress bloat from the front end.
  */
 function hawlast_remove_bloat() {
