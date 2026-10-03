@@ -93,27 +93,27 @@ $recipients = explode(",", $phoneNormalized);
 $numberOfSMS = count($recipients);
 
 // Check User Balance
-$estimatedCost = $numberOfSMS * 0.50; // KES estimate per SMS
+$estimatedCost = $numberOfSMS * 0.80; // KES estimate per SMS
 
 if ($balance < $estimatedCost) {
     Database::disconnect();
     jsonResponse(false, "Insufficient balance. Required: KES {$estimatedCost}, Available: KES {$balance}");
 }
 
-// Send SMS via Africa's Talking Gateway
+// Send SMS via Africa's Talking SDK
 try {
-    $username = defined("ATUSER") ? ATUSER : "hawlast";
-    $apiKey   = defined("ATPASSWORD") ? ATPASSWORD : "d7b6173c4bd4f1396432cf94cb934eadd08716cd1df075f562cdd0456df423f8";
+$AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
+$from = "HAWLAST";
 
-    $gateway = new AfricasTalkingGateway($username, $apiKey);
-    $from = "HAWLAST";
-
-    $results = $gateway->sendMessage(implode(",", $recipients), $message, $from);
+$response = $AT->sms()->send(['to' => implode(",", $recipients), 'message' => $message, 'from' => $from]);
 
     $totalCost = 0.0;
     $successfulRecipients = 0;
     $failedRecipients = [];
     $logData = [];
+
+    $results = ($response['data']->SMSMessageData->Recipients ?? []);
+
 
     foreach ($results as $result) {
         $cost = (float) $result->cost;
@@ -164,7 +164,7 @@ try {
         ]);
     }
 
-} catch (AfricasTalkingGatewayException $e) {
+} catch (Throwable $e) {
     Database::disconnect();
     jsonResponse(false, "SMS gateway error: " . $e->getMessage());
 } catch (Exception $e) {

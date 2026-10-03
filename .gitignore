@@ -32,6 +32,7 @@
 .env
 *.log
 .txt
+.md 
 
 # Exclude per-folder config.php (database credentials)
 /config.php

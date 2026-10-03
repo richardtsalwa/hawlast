@@ -4,7 +4,7 @@ date_default_timezone_set("Africa/Nairobi");
 ob_start();
 $host = "http://www.hawlast.com";
 require '../database.php';
-require '../functions.php';
+require_once dirname(__DIR__, 2) . '/hawlastke.php';
 
 //if ($_SERVER["REQUEST_METHOD"] <> "POST")  die("You can only reach this page by posting from the html form");
 
@@ -38,22 +38,23 @@ if(!$message) { $errors[] = "Please enter a message";}
 require_once dirname(__DIR__, 2) . '/libraries.php';
 
 // Specify your login credentials
-$username = "hawlast";
-$apiKey      = "d7b6173c4bd4f1396432cf94cb934eadd08716cd1df075f562cdd0456df423f8"; 
 
 $recipients = "$phonenumber";
 $from = "HAWLAST";
 // Create a new instance of our awesome gateway class
-$gateway  = new AfricaStalkingGateway($username, $apiKey);
+$AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
 
 try 
 { 
   // Thats it, hit send and we'll take care of the rest. 
-$results = $gateway->sendMessage($recipients, $message, $from);
+$response = $AT->sms()->send(['to' => $recipients, 'message' => $message, 'from' => $from]);
 $File =$user_id.".txt";
 $Handle = fopen($File, 'a');
 $date = date("Y-m-d H:i:s");
 $total = array ();
+
+$results = ($response['data']->SMSMessageData->Recipients ?? []);
+
 
 foreach($results as $result) {
 
@@ -103,7 +104,7 @@ exit;
 fclose($Handle);
 }
 
-catch ( AfricasTalkingGatewayException $e) { $senderrors [] = $e->getMessage(); }
+catch ( Throwable $e) { $senderrors [] = $e->getMessage(); }
 	
  if (!empty($senderrors)) {
     $txt = implode(" ",$senderrors);

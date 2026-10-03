@@ -1,7 +1,7 @@
 <?php
 require '../config.php';
 require '../database.php';
-require '../functions.php';
+require_once dirname(__DIR__, 2) . '/hawlastke.php';
 
 if ($_SERVER["REQUEST_METHOD"] <> "POST")  die("You can only reach this page by posting from the html form");
 	

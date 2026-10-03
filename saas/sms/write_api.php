@@ -12,7 +12,7 @@ header("Content-Type: application/json");
 
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../database.php";
-require_once __DIR__ . "/../functions.php";
+require_once dirname(__DIR__, 2) . "/hawlastke.php";
 require_once __DIR__ . "/../../libraries.php";
 
 /**
@@ -93,20 +93,20 @@ if ($balance < $estimatedCost) {
     jsonResponse(false, "Insufficient balance. Required: KES {$estimatedCost}, Available: KES {$balance}");
 }
 
-// Send SMS via Africa\'s Talking Gateway
+// Send SMS via the Africa\'s Talking SDK
 try {
-    $username = defined("ATUSER") ? ATUSER : "hawlast";
-    $apiKey   = defined("ATPASSWORD") ? ATPASSWORD : "d7b6173c4bd4f1396432cf94cb934eadd08716cd1df075f562cdd0456df423f8";
-
-    $gateway = new AfricasTalkingGateway($username, $apiKey);
+    $AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
     $from = "HAWLAST";
 
-    $results = $gateway->sendMessage(implode(",", $recipients), $message, $from);
+    $response = $AT->sms()->send([\'to\' => implode(",", $recipients), \'message\' => $message, \'from\' => $from]);
 
     $totalCost = 0.0;
     $successfulRecipients = 0;
     $failedRecipients = [];
     $logData = [];
+
+    $results = ($response[\'data\']->SMSMessageData->Recipients ?? []);
+
 
     foreach ($results as $result) {
         $cost = (float) $result->cost;
@@ -157,7 +157,7 @@ try {
         ]);
     }
 
-} catch (AfricasTalkingGatewayException $e) {
+} catch (Throwable $e) {
     Database::disconnect();
     jsonResponse(false, "SMS gateway error: " . $e->getMessage());
 } catch (Exception $e) {

@@ -4,7 +4,7 @@ if ( !empty($_POST)) {
 
 require '../config.php';
 require '../database.php';
-require '../functions.php';
+require_once dirname(__DIR__, 2) . '/hawlastke.php';
 
 $req_dump = print_r($_REQUEST, TRUE);
 $fp = fopen("anypost.txt", "a") or die("Unable to open file!");
@@ -67,22 +67,23 @@ if(count($errors) == 0){
 require_once dirname(__DIR__, 2) . '/libraries.php';
 
 // Specify your login credentials 
-$username = "hawlast";
-$apiKey      = "d7b6173c4bd4f1396432cf94cb934eadd08716cd1df075f562cdd0456df423f8"; 
 
 $recipients =$phonenumber;
 $mimi = "HAWLAST";
 // Create a new instance of our awesome gateway class
-$gateway  = new AfricaStalkingGateway($username, $apiKey);
+$AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
 
 try 
 { 
   // Thats it, hit send and we'll take care of the rest. 
-$results = $gateway->sendMessage($recipients,$message,$mimi);
+$response = $AT->sms()->send(['to' => $recipients, 'message' => $message, 'from' => $mimi]);
 $File =$user_id.".txt";
 $Handle = fopen($File, 'a');
 $date = date("Y-m-d H:i:s");
 $total = array ();
+
+$results = ($response['data']->SMSMessageData->Recipients ?? []);
+
 
 foreach($results as $result) {
 
@@ -138,7 +139,7 @@ exit;
 
 fclose($Handle);
 }
-catch ( AfricasTalkingGatewayException $e )
+catch ( Throwable $e )
 {
   echo "Encountered an error while sending: ".$e->getMessage();
 }

@@ -71,8 +71,6 @@ echo ("<p>Message delivery failed...$email</p>");
 require_once dirname(__DIR__) . '/libraries.php';
 
 // Specify your login credentials
-$username = "hawlast";
-$apiKey = "d7b6173c4bd4f1396432cf94cb934eadd08716cd1df075f562cdd0456df423f8"; 
 
 // Specify the numbers that you want to send to in a comma-separated list
 // Please ensure you include the country code (+254 for Kenya in this case)
@@ -84,10 +82,10 @@ $message = "Hello $firstname. $url expires in 5 days. Pay Ksh. $cost via MPESA P
 $from ="HAWLAST";
 
 // Create a new instance of our awesome gateway class
-$gateway  = new AfricaStalkingGateway($username, $apiKey);
+$AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
 
 // Thats it, hit send and we'll take care of the rest
-$results  = $gateway->sendMessage($recipients, $message,$from);
+$response = $AT->sms()->send(['to' => $recipients, 'message' => $message, 'from' => $from]);
 // SMS APP ENDS HERE.
 
 }

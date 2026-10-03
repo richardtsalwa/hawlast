@@ -17,7 +17,6 @@
  *   - PHPMailer 6.x        new PHPMailer(true)                     (global alias kept)
  *   - dompdf 3.x           new \Dompdf\Dompdf()
  *   - Africa's Talking SDK new AfricasTalking\SDK\AfricasTalking(...)
- *   - Legacy AT gateway    new AfricasTalkingGateway(...)          (global class, loaded once)
  *
  * Libraries themselves live in /vendor and are managed by Composer:
  *   composer require <pkg>      # add a package
@@ -42,15 +41,6 @@ if (!defined('HAWLAST_LIBRARIES')) {
     }
     if (!class_exists('SMTP', false) && class_exists('PHPMailer\PHPMailer\SMTP')) {
         class_alias('PHPMailer\PHPMailer\SMTP', 'SMTP');
-    }
-
-    // 3) Legacy Africa's Talking gateway (the 2014 plain-PHP class).
-    //    It is NOT a Composer package, so it lives in /lib. It carries its
-    //    own class_exists() guard, so loading it twice is harmless - that
-    //    is what previously caused "Cannot declare class AfricasTalkingGateway"
-    //    fatals when both libraries.php and hawlastsms.php were loaded.
-    if (!class_exists('AfricasTalkingGateway', false) && file_exists(__DIR__ . '/lib/legacy-at-gateway.php')) {
-        require_once __DIR__ . '/lib/legacy-at-gateway.php';
     }
 
     define('HAWLAST_LIBRARIES', true);

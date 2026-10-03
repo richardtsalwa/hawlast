@@ -1,7 +1,7 @@
 <?php
 require 'config.php';
 require 'database.php';
-require 'functions.php';
+require_once dirname(__DIR__) . '/hawlastke.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -5,7 +5,7 @@
 date_default_timezone_set("Africa/Nairobi");
 require 'database.php';
 require 'headers.php';
-require 'functions.php';
+require_once dirname(__DIR__) . '/hawlastke.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

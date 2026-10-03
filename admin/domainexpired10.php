@@ -1,6 +1,6 @@
 <?php
-require (dirname('_FILE_').'/config.php');
-require (dirname('_FILE_').'/functions.php');
+require_once dirname(__DIR__) . '/config.php';
+require_once dirname(__DIR__) . '/hawlastke.php';
 ob_start();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd><html xmlns=http://www.w3.org/1999/xhtml lang=en xml:lang=en><head><meta http-equiv=Content-Type content="text/html; charset=utf-8" /><link rel=stylesheet type=text/css href=style.css /><meta name=robots content=noindex,nofollow /></head><body>
@@ -52,8 +52,6 @@ echo ("<p>Delivered..</p>");
 require_once dirname(__DIR__) . '/libraries.php';
 
 // Specify your login credentials
-$username = "hawlast";
-$apiKey      = "d7b6173c4bd4f1396432cf94cb934eadd08716cd1df075f562cdd0456df423f8"; 
 
 // Specify the numbers that you want to send to in a comma-separated list
 // Please ensure you include the country code (+254 for Kenya in this case)
@@ -65,10 +63,10 @@ $from ="HAWLAST";
 $message = "Hello $firstname. $url expired 10 days ago.Pay Ksh. $cost to MPESA Paybill 822490 Account: HV$id  HAWLAST 0720401869";
 
 // Create a new instance of our awesome gateway class
-$gateway  = new AfricaStalkingGateway($username, $apiKey);
+$AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
 
 // Thats it, hit send and we'll take care of the rest
-$results  = $gateway->sendMessage($recipients, $message, $from);
+$response = $AT->sms()->send(['to' => $recipients, 'message' => $message, 'from' => $from]);
 // SMS APP ENDS HERE.
 
 } else { echo ("<p>Message delivery failed...</p>");}

@@ -393,90 +393,154 @@ function sendEmail($email, $companyName, $subject, $mailContent, $attachments,$e
   }
 }
 
-function TumaSMS($message, $phone) {
+/**
+ * Builds a unique voucher reference, e.g. HV260301A1B2C3D.
+ * Used by saas/airtime/index.php
+ */
+function generateHVRandomString(): string {
+    date_default_timezone_set('Africa/Nairobi');
 
-//cURL result to space
-$result ="";
-//if email fails
-$mailerror ="";
-//log cURL errors 
-$curlerror ="";
+    // 1) Prefix (2 chars)
+    $prefix = 'HV';
 
-//Innocent user id at SAAS
-$user_id = "1";
+    // 2) Short timestamp: year, month, day (6 chars) e.g. 260301
+    $datePart = date('ymd');
 
-//Balance as the sms script expects me to have >1 balance
-$bal ="20";
+    // 3) Random characters (7 chars)
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randomPart = '';
+    for ($i = 0; $i < 7; $i++) {
+        $randomPart .= $characters[random_int(0, strlen($characters) - 1)];
+    }
 
-$mpesaapi ="hawlast";
-
-$url = 'https://www.hawlast.com/saas/sms/sendsms.php'; // cURL endpoint
-
-// Prepare POST data
-$fields = [
-    'user_id' => $user_id,
-    'bal' => $bal,
-    'phone' => $phone,
-    'mpesaapi' => $mpesaapi,
-    'message' => $message,
-];
-
-// Initialize cURL
-$ch = curl_init();
-
-// Set cURL options
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, TRUE); 
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2); 
-//curl_setopt($ch, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA);
-
-curl_setopt($ch, CURLOPT_USERAGENT, "HawlastApp/1.0 (+https://www.hawlast.com; support@hawlast.com)");
-curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); // Wait 10s to connect
-curl_setopt($ch, CURLOPT_TIMEOUT, 30);        // Wait 30s for total response
-
-curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, FALSE); 
-curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields)); // Automatically formats data for POST
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Get a response from the server
-curl_setopt ($ch, CURLOPT_POST, true); 
-// Add headers
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Content-Type: application/x-www-form-urlencoded',
-    'Accept: application/json',
-]);
-
-
-// Execute POST
-$result = curl_exec($ch);
-
-// Initialize success flag
-$isSuccessful = false;
-
-// Check for errors
-if ($result === false) {
-    $curlerror = "There was a cURL error: " . curl_error($ch);
-    $isSuccessful = false;
-} else {
-    $curlerror = ""; // Clear error message if successful
-    $isSuccessful = true;
+    // Total: HV (2) + date (6) + random (7) = 15
+    return $prefix . $datePart . $randomPart;
 }
 
+// GET COMMISSIONS FOR AIRTIME SELLER - saas/affiliates.php
+function getCommissionSum(PDO $pdo, string $affiliate): ?float {
+    try {
+        $stmt = $pdo->prepare("SELECT SUM(amount) AS total_amount
+                               FROM airtime_commission
+                               WHERE affiliate = ? AND status = 1");
+        $stmt->execute([$affiliate]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total_amount'] ?? 0;
+    } catch (PDOException $e) {
+        error_log("Error getting commission sum: " . $e->getMessage());
+        return null;
+    }
+}
 
-// Close cURL
-curl_close($ch);
+// saas/affiliates.php
+function markAllCommissionsPaid(PDO $pdo, string $affiliate, int $amount): bool {
+    try {
+        $stmt = $pdo->prepare("UPDATE airtime_commission SET status = '2' WHERE affiliate = ? AND status = '1'");
+        $stmt->execute([$affiliate]);
+        if ($stmt->rowCount() > 0) {
+            $logFilePath = 'commission_logs.txt';
+            $logData = date('Y-m-d H:i:s') . " - Affiliate: $affiliate - Sales:  $amount marked as paid.\n";
+            file_put_contents($logFilePath, $logData, FILE_APPEND);
+            return true;
+        } else {
+            return false;
+        }
+    } catch (PDOException $e) {
+        error_log("Error marking commissions paid for affiliate '$affiliate': " . $e->getMessage());
+        return false;
+    }
+}
 
+// Passthrough helper retained from saas/functions.php - saas/airtime/index.php
+function isInteger($input) {
+    return strval($input);
+}
 
-// Return based on success or error
-if ($isSuccessful) {
-    return true;
+// Get a number from a string (kept from saas/functions.php)
+function getnumberfromstringsum($string) {
+    $str = substr($string, 0, -3);
+    return preg_replace("/[^0-9]/", '', $str);
+}
+
+// Live KES/USD rate scrape - saas/pay.php, saas/pay2kes.php
+function exchange()
+{
+$string1 = file_get_contents("http://ke.equitybankgroup.com/");
+$needle = "KES";
+if(strpos($string1,"$needle") === false) {
+return "98.2";
 } else {
-  error_log($curlerror); // Log the error for debugging
-    //file_put_contents('smsError.log', "There was a cURL error: " . $curlerror . PHP_EOL, FILE_APPEND);
-    $fp = fopen("TumaSmsError.txt", "a") or die("Unable to open file!");
-	fwrite($fp, $curlerror);
-	fclose($fp);
-	
+$result_string = substr("$string1",strpos($string1,$needle)+17,strpos($string1,$needle)+strlen($string1));
+$result1 = trim(substr($result_string,0,-58000));
+$exch = str_replace("Buying: ", chr(8), $result1);
+$new =  floatval (preg_replace("/[^0-9\.]/","",$exch));
+if($new == 0) { return "98.3"; } else {return $new; }
+}
+}
+
+/**
+ * Send an SMS directly via the Africa's Talking SDK (no remote cURL round-trip).
+ *
+ * @param  string $message  SMS body.
+ * @param  string $phone    Recipient(s). Accepts 07xxxxxxxx, 2547xxxxxxxx or
+ *                          +2547xxxxxxxx. Multiple numbers may be comma separated.
+ * @param  string $senderID Alphanumeric sender ID. Defaults to "HAWLAST".
+ * @return bool             true when AT accepted the request, false on failure.
+ *                          Failures are written to TumaSmsError.txt.
+ */
+function TumaSMS($message, $phone, $senderID = 'HAWLAST') {
+
+  // AT credentials live in config.php. Not every caller loads it, so pull it in on demand.
+  if (!defined('ATUSER') || !defined('ATAPIKEY')) {
+    require_once __DIR__ . '/config.php';
+  }
+
+  // Central library loader: Composer autoloader for AfricasTalking\SDK\AfricasTalking.
+  require_once __DIR__ . '/libraries.php';
+
+  // Normalise every recipient to +2547XXXXXXXX (the old remote script did this too).
+  $recipients = [];
+  foreach (explode(',', (string) $phone) as $number) {
+    $number = add254($number);
+    if ($number !== false) {
+      $recipients[] = $number;
+    }
+  }
+
+  $message = trim((string) $message);
+
+  if ($message === '' || empty($recipients)) {
+    $error = 'TumaSMS: invalid message or recipient(s).';
+    error_log($error);
+    $fp = fopen(__DIR__ . '/TumaSmsError.txt', 'a');
+    if ($fp) { fwrite($fp, $error . PHP_EOL); fclose($fp); }
     return false;
-}
+  }
+
+  try {
+    $AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
+
+    $result = $AT->sms()->send([
+      'to'      => $recipients,
+      'message' => $message,
+      'from'    => $senderID,
+    ]);
+
+    if (isset($result['status']) && $result['status'] === 'success') {
+      return true;
+    }
+
+    $error = 'TumaSMS: AT rejected the request - ' . json_encode($result);
+
+  } catch (\Throwable $e) {
+    $error = 'TumaSMS: ' . $e->getMessage();
+  }
+
+  error_log($error);
+  $fp = fopen(__DIR__ . '/TumaSmsError.txt', 'a');
+  if ($fp) { fwrite($fp, $error . PHP_EOL); fclose($fp); }
+
+  return false;
 }
 
 ?>

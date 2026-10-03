@@ -43,8 +43,6 @@ if ( mail($email, $subject, $message, $headers) ) {
 require_once dirname(__DIR__) . '/libraries.php';
 
 //Specify your credentials
-$username = "hawlast";
-$apiKey = "d7b6173c4bd4f1396432cf94cb934eadd08716cd1df075f562cdd0456df423f8"; 
 
 // Specify the numbers that you want to send to in a comma-separated list
 // Please ensure you include the country code (+254 for Kenya in this case)
@@ -54,12 +52,14 @@ $recipients = "+254720401869";
 $message = "MPESA reference: $reference $ddomain $email $amount $phone";
 $from = "HAWLAST";
 // Create a new instance of our awesome gateway class
-$gateway  = new AfricaStalkingGateway($username, $apiKey);
+$AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
 
 try 
 { 
   // Thats it, hit send and we'll take care of the rest. 
-$results  = $gateway->sendMessage($recipients, $message, $from);
+$response = $AT->sms()->send(['to' => $recipients, 'message' => $message, 'from' => $from]);
+  $results = ($response['data']->SMSMessageData->Recipients ?? []);
+
   foreach($results as $result) {
     // Note that only the Status "Success" means the message was sent
     echo " Number: " .$result->number;
@@ -68,7 +68,7 @@ $results  = $gateway->sendMessage($recipients, $message, $from);
     echo " Cost: "   .$result->cost."\n";
   }
 }
-catch ( AfricasTalkingGatewayException $e )
+catch ( Throwable $e )
 {
   echo "Encountered an error while sending: ".$e->getMessage();
 }
@@ -86,10 +86,10 @@ $from = "HAWLAST";
 $message = "Thank you for paying on our website. We will confirm and renew the account if payment are successful.HAWLAST.COM";
         
 // Create a new instance of our awesome gateway class
-$gateway  = new AfricaStalkingGateway($username, $apiKey);
+$AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
 
 // Thats it, hit send and we'll take care of the rest
-$results  = $gateway->sendMessage($recipients, $message, $from);
+$response = $AT->sms()->send(['to' => $recipients, 'message' => $message, 'from' => $from]);
 // SMS APP ENDS HERE.
 
 session_unset();

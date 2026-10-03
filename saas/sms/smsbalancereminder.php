@@ -5,7 +5,7 @@ session_start();
 date_default_timezone_set("Africa/Nairobi");
 require '../database.php';
 require '../headers.php';
-require '../functions.php';
+require_once dirname(__DIR__, 2) . '/hawlastke.php';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
@@ -76,8 +76,6 @@ if (mail($email, $subject, $duetodaymessage, $headers)) {
 require_once dirname(__DIR__, 2) . '/libraries.php';
 
 // Specify your login credentials
-$username = "hawlast";
-$apiKey      = "d7b6173c4bd4f1396432cf94cb934eadd08716cd1df075f562cdd0456df423f8"; 
 
 // Specify the numbers that you want to send to in a comma-separated list
 // Please ensure you include the country code (+254 for Kenya in this case)
@@ -88,10 +86,10 @@ $from = "HAWLAST";
 $message = "Your airtime debt is $bal. Top up via Lipa na MPESA, Pay Bill 822490 Account no $account www.hawlast.com/saas.";
 
 // Create a new instance of our awesome gateway class
-$gateway  = new AfricaStalkingGateway($username, $apiKey);
+$AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
 
 // Thats it, hit send and we'll take care of the rest
-$results  = $gateway->sendMessage($recipients, $message,$from);
+$response = $AT->sms()->send(['to' => $recipients, 'message' => $message, 'from' => $from]);
 // SMS APP ENDS HERE.
 echo ("<p>Email delivered..</p>");
 

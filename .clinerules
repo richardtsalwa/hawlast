@@ -5,7 +5,7 @@
 ## 🛑 1. MANDATORY SECURITY & PRIVACY GUARDRAILS
 
 ### Secrets & Credentials Protection
-1. **Never Output Secrets:** NEVER show, echo, print, dump, or commit the contents of `config.php` (root, `/pos/`, `deliveries/`, `lish/`, `saas/`, `teachers/`, etc.) or files in `.clineignore`. This applies to chat output, diffs, PRs, logs, or code blocks.
+1. **Never Output Secrets:** NEVER show, echo, print, dump, or commit the contents of `config.php` (root, `deliveries/`, `lish/`, `saas/`, `teachers/`, etc.) or files in `.clineignore`. This applies to chat output, diffs, PRs, logs, or code blocks.
 2. **Redact Credentials:** Redact real credentials, hostnames, passwords, usernames, or connection strings as `********`. When discussing connections, state only: *"Credentials are defined in `config.php`."*
 3. **No Credential Duplication:** Never declare `$db_host`, `$db_user`, `$db_pass`, or new `new PDO()` instances outside your primary `config.php`. Always import the existing connection.
 4. **Surgical Config Editing:** If editing `config.php`, modify ONLY the requested lines and show diffs with redacted values. Never move secrets to a non-git-ignored location.
@@ -49,7 +49,7 @@
 ### MySQL Standards
 - **Engine & Charset:** Always use `InnoDB` engine with `utf8mb4` character set and `utf8mb4_unicode_ci` collation.
 - **Indexing & Constraints:** Apply proper indexes and foreign keys to optimize performance and enforce integrity. Set `UNIQUE` constraints on `email` or `phone` only when mandated by business logic.
-
+- **Health Check:** ALWAYS update the healthcheck.php to ensure a check that a user can never be deleted when they have dependent data.
 ---
 
 ## 🔒 3. PHP SECURITY & BEST PRACTICES
