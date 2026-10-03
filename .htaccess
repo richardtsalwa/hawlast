@@ -19,6 +19,7 @@ Redirect /blog/online-income/freelance-upwork.htm/comment-page-1 http://www.hawl
 Redirect /faq.html http://www.hawlast.com/faqs.html
 Redirect /hawlast/domain-registration/ http://www.hawlast.com/domain-registration
 Redirect /sms http://www.hawlast.com/saas
+Redirect /airtime.php https://www.hawlast.com/buyairtime.php
 Redirect /start http://www.hawlast.com/domain-registration
 
 Redirect /software.html https://www.hawlast.com/software.php

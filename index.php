@@ -282,7 +282,7 @@ footer a{margin-left:18px}
 <footer>
   <div class="wrap">
     <span>Hawlast Ventures, Nairobi.</span>
-    <span><a href="<?php echo hawlast_e( hawlast_url( 'domain-hosting' ) ); ?>">Domains and hosting</a><a href="<?php echo hawlast_e( hawlast_url( 'blog' ) ); ?>">Blog</a><a href="<?php echo hawlast_e( hawlast_url( 'airtime.php' ) ); ?>">Buy airtime</a><a href="<?php echo hawlast_e( hawlast_url( 'login' ) ); ?>">Client login</a></span>
+    <span><a href="<?php echo hawlast_e( hawlast_url( 'domain-hosting' ) ); ?>">Domains and hosting</a><a href="<?php echo hawlast_e( hawlast_url( 'blog' ) ); ?>">Blog</a><a href="<?php echo hawlast_e( hawlast_url( 'buyairtime.php' ) ); ?>">Buy airtime</a><a href="<?php echo hawlast_e( hawlast_url( 'login' ) ); ?>">Client login</a></span>
   </div>
 </footer>
 

@@ -37,6 +37,11 @@ function hawlast_url(string $path = ''): string {
 }
 
 
+// M-PESA paybill that receives airtime payments. Used by the public buy airtime page.
+if (!defined('AIRTIME_PAYBILL')) {
+    define('AIRTIME_PAYBILL', '822490');
+}
+
 // This is used in the mpesa/confirmation.php to record commissions
 function addCommission(PDO $pdo, int $lastid, string $affiliate, float $amount): bool {
     $stmt = $pdo->prepare("INSERT INTO airtime_commission (mpesaId, affiliate, amount) VALUES (?,?,?)");
@@ -576,6 +581,90 @@ function TumaSMS($message, $phone, $senderID = 'HAWLAST') {
 
   error_log($error);
   $fp = fopen(__DIR__ . '/TumaSmsError.txt', 'a');
+  if ($fp) { fwrite($fp, $error . PHP_EOL); fclose($fp); }
+
+  return false;
+}
+
+/**
+ * Send airtime to a recipient through Africa's Talking.
+ *
+ * Mirrors TumaSMS(): credentials come from config.php (ATUSER / ATAPIKEY) and the
+ * SDK is loaded through the central libraries.php loader.
+ *
+ * Extracted from the inline logic in saas/airtime/buyapinew.php and
+ * saas/airtime/buynew.php. The M-PESA callback (pesa/confirmation.php) posts to
+ * buyapinew.php, which in turn calls this.
+ *
+ * @param  string|array $phone        Recipient number. Accepts 07xxxxxxxx,
+ *                                    2547xxxxxxxx, +2547xxxxxxxx. An array sends
+ *                                    airtime to several numbers in one request.
+ * @param  string|int   $amount       Amount per recipient, in $currencyCode.
+ * @param  string       $currencyCode ISO currency code. Defaults to 'KES'.
+ * @return array|false                On success, the decoded result with a
+ *                                    'sent' key. False when validation or the
+ *                                    gateway call fails. Failures are appended to
+ *                                    TumaAirtimeError.txt.
+ */
+function tumaAirtime($phone, $amount, $currencyCode = 'KES') {
+
+  // AT credentials live in config.php. Not every caller loads it, so pull it in on demand.
+  if (!defined('ATUSER') || !defined('ATAPIKEY')) {
+    require_once __DIR__ . '/config.php';
+  }
+
+  // Central library loader: Composer autoloader for AfricasTalking\SDK\AfricasTalking.
+  require_once __DIR__ . '/libraries.php';
+
+  // Accept a single number or a list, and normalise every recipient to +2547XXXXXXXX.
+  $incoming = is_array($phone) ? $phone : explode(',', (string) $phone);
+
+  $recipients = [];
+  foreach ($incoming as $number) {
+    $number = add254($number);
+    if ($number !== false) {
+      $recipients[] = [
+        'phoneNumber'  => $number,
+        'currencyCode' => $currencyCode,
+        'amount'       => (string) $amount,
+      ];
+    }
+  }
+
+  if (empty($recipients) || !is_numeric($amount) || $amount <= 0) {
+    $error = 'tumaAirtime: invalid recipient(s) or amount.';
+    error_log($error);
+    $fp = fopen(__DIR__ . '/TumaAirtimeError.txt', 'a');
+    if ($fp) { fwrite($fp, $error . PHP_EOL); fclose($fp); }
+    return false;
+  }
+
+  // Idempotency key so a retried request is not double-sent by the gateway.
+  $idempotencyKey = substr(hash('sha256', uniqid((string) microtime(true), true)), 0, 16);
+
+  try {
+    $AT = new \AfricasTalking\SDK\AfricasTalking(ATUSER, ATAPIKEY);
+
+    $result = $AT->airtime()->send(
+      ['recipients' => $recipients],
+      ['idempotencyKey' => $idempotencyKey, 'maxNumRetry' => 3]
+    );
+
+    // Africa\'s Talking returns numSent / responses rather than a status string.
+    $result['sent'] = isset($result['data']->numSent) ? (int) $result['data']->numSent : 0;
+
+    if ($result['sent'] > 0) {
+      return $result;
+    }
+
+    $error = 'tumaAirtime: gateway sent no airtime - ' . json_encode($result);
+
+  } catch (\Throwable $e) {
+    $error = 'tumaAirtime: ' . $e->getMessage();
+  }
+
+  error_log($error);
+  $fp = fopen(__DIR__ . '/TumaAirtimeError.txt', 'a');
   if ($fp) { fwrite($fp, $error . PHP_EOL); fclose($fp); }
 
   return false;

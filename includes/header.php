@@ -27,7 +27,7 @@
 <ul>
 <li<?php $current = 'index.php'; page($current); ?>><a href=./>Home</a></li>
 <li<?php $current = 'domain-registration/index.php'; page($current); ?>><a href=domain-registration/>Domain Registration</a></li>
-<li<?php $current = 'airtime.php'; page($current); ?>><a href=airtime.php>Airtime</a></li>
+<li<?php $current = 'buyairtime.php'; page($current); ?>><a href=buyairtime.php>Airtime</a></li>
 <li><a href=blog/>Blog</a></li>
 <li<?php $current = 'online-marketing.php'; page($current); ?>><a href=online-marketing.php title="Online Marketing Kenya">Online Marketing</a></li>
 <li<?php $current = 'affiliates.php'; page($current); ?>><a href=affiliates.php>Affiliates</a></li>
